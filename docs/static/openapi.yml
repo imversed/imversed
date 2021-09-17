@@ -19102,6 +19102,572 @@ paths:
           format: uint64
       tags:
         - Query
+  '/metachain/nft/collections/{denomId}':
+    get:
+      summary: Collection queries the NFTs of the specified denom
+      operationId: MetachainNftCollection
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              collection:
+                type: object
+                properties:
+                  denom:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      schema:
+                        type: string
+                      creator:
+                        type: string
+                      symbol:
+                        type: string
+                      mintRestricted:
+                        type: boolean
+                      updateRestricted:
+                        type: boolean
+                    title: Denom defines a type of NFT
+                  nfts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        uri:
+                          type: string
+                        data:
+                          type: string
+                        owner:
+                          type: string
+                      title: BaseNFT defines a non-fungible token
+                title: Collection defines a type of collection
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+            title: >-
+              QueryCollectionResponse is the response type for the
+              Query/Collection RPC method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denomId
+          in: path
+          required: true
+          type: string
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/metachain/nft/collections/{denomId}/supply':
+    get:
+      summary: Supply queries the total supply of a given denom or owner
+      operationId: MetachainNftSupply
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              amount:
+                type: string
+                format: uint64
+            title: >-
+              QuerySupplyResponse is the response type for the Query/Supply RPC
+              method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denomId
+          in: path
+          required: true
+          type: string
+        - name: owner
+          in: query
+          required: false
+          type: string
+      tags:
+        - Query
+  /metachain/nft/denoms:
+    get:
+      summary: Denoms queries all the denoms
+      operationId: MetachainNftDenoms
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              denoms:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    schema:
+                      type: string
+                    creator:
+                      type: string
+                    symbol:
+                      type: string
+                    mintRestricted:
+                      type: boolean
+                    updateRestricted:
+                      type: boolean
+                  title: Denom defines a type of NFT
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+            title: >-
+              QueryDenomsResponse is the response type for the Query/Denoms RPC
+              method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/metachain/nft/denoms/{denomId}':
+    get:
+      summary: Denom queries the definition of a given denom
+      operationId: MetachainNftDenom
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              denom:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  schema:
+                    type: string
+                  creator:
+                    type: string
+                  symbol:
+                    type: string
+                  mintRestricted:
+                    type: boolean
+                  updateRestricted:
+                    type: boolean
+                title: Denom defines a type of NFT
+            title: >-
+              QueryDenomResponse is the response type for the Query/Denom RPC
+              method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denomId
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /metachain/nft/nfts:
+    get:
+      summary: Owner queries the NFTs of the specified owner
+      operationId: MetachainNftOwner
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              owner:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  idCollections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denomId:
+                          type: string
+                        tokenIds:
+                          type: array
+                          items:
+                            type: string
+                      title: >-
+                        IDCollection defines a type of collection with specified
+                        ID
+                title: Owner defines a type of owner
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+            title: >-
+              QueryOwnerResponse is the response type for the Query/Owner RPC
+              method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denomId
+          in: query
+          required: false
+          type: string
+        - name: owner
+          in: query
+          required: false
+          type: string
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/metachain/nft/nfts/{denomId}/{tokenId}':
+    get:
+      summary: NFT queries the NFT for the given denom and token ID
+      operationId: MetachainNftNft
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              nft:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  uri:
+                    type: string
+                  data:
+                    type: string
+                  owner:
+                    type: string
+                title: BaseNFT defines a non-fungible token
+            title: QueryNFTResponse is the response type for the Query/NFT RPC method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denomId
+          in: path
+          required: true
+          type: string
+        - name: tokenId
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
 definitions:
   cosmos.bank.v1beta1.DenomUnit:
     type: object
@@ -29268,3 +29834,331 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  metachain.nft.BaseNFT:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      uri:
+        type: string
+      data:
+        type: string
+      owner:
+        type: string
+    title: BaseNFT defines a non-fungible token
+  metachain.nft.Collection:
+    type: object
+    properties:
+      denom:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          schema:
+            type: string
+          creator:
+            type: string
+          symbol:
+            type: string
+          mintRestricted:
+            type: boolean
+          updateRestricted:
+            type: boolean
+        title: Denom defines a type of NFT
+      nfts:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            uri:
+              type: string
+            data:
+              type: string
+            owner:
+              type: string
+          title: BaseNFT defines a non-fungible token
+    title: Collection defines a type of collection
+  metachain.nft.Denom:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      schema:
+        type: string
+      creator:
+        type: string
+      symbol:
+        type: string
+      mintRestricted:
+        type: boolean
+      updateRestricted:
+        type: boolean
+    title: Denom defines a type of NFT
+  metachain.nft.IDCollection:
+    type: object
+    properties:
+      denomId:
+        type: string
+      tokenIds:
+        type: array
+        items:
+          type: string
+    title: IDCollection defines a type of collection with specified ID
+  metachain.nft.MsgBurnNFTResponse:
+    type: object
+    description: MsgBurnNFTResponse defines the Msg/BurnNFT response type.
+  metachain.nft.MsgEditNFTResponse:
+    type: object
+    description: MsgEditNFTResponse defines the Msg/EditNFT response type.
+  metachain.nft.MsgIssueDenomResponse:
+    type: object
+    description: MsgIssueDenomResponse defines the Msg/IssueDenom response type.
+  metachain.nft.MsgMintNFTResponse:
+    type: object
+    description: MsgMintNFTResponse defines the Msg/MintNFT response type.
+  metachain.nft.MsgTransferDenomResponse:
+    type: object
+    description: MsgTransferDenomResponse defines the Msg/TransferDenom response type.
+  metachain.nft.MsgTransferNFTResponse:
+    type: object
+    description: MsgTransferNFTResponse defines the Msg/TransferNFT response type.
+  metachain.nft.Owner:
+    type: object
+    properties:
+      address:
+        type: string
+      idCollections:
+        type: array
+        items:
+          type: object
+          properties:
+            denomId:
+              type: string
+            tokenIds:
+              type: array
+              items:
+                type: string
+          title: IDCollection defines a type of collection with specified ID
+    title: Owner defines a type of owner
+  metachain.nft.QueryCollectionResponse:
+    type: object
+    properties:
+      collection:
+        type: object
+        properties:
+          denom:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              schema:
+                type: string
+              creator:
+                type: string
+              symbol:
+                type: string
+              mintRestricted:
+                type: boolean
+              updateRestricted:
+                type: boolean
+            title: Denom defines a type of NFT
+          nfts:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                uri:
+                  type: string
+                data:
+                  type: string
+                owner:
+                  type: string
+              title: BaseNFT defines a non-fungible token
+        title: Collection defines a type of collection
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+    title: >-
+      QueryCollectionResponse is the response type for the Query/Collection RPC
+      method
+  metachain.nft.QueryDenomResponse:
+    type: object
+    properties:
+      denom:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          schema:
+            type: string
+          creator:
+            type: string
+          symbol:
+            type: string
+          mintRestricted:
+            type: boolean
+          updateRestricted:
+            type: boolean
+        title: Denom defines a type of NFT
+    title: QueryDenomResponse is the response type for the Query/Denom RPC method
+  metachain.nft.QueryDenomsResponse:
+    type: object
+    properties:
+      denoms:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            schema:
+              type: string
+            creator:
+              type: string
+            symbol:
+              type: string
+            mintRestricted:
+              type: boolean
+            updateRestricted:
+              type: boolean
+          title: Denom defines a type of NFT
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+    title: QueryDenomsResponse is the response type for the Query/Denoms RPC method
+  metachain.nft.QueryNFTResponse:
+    type: object
+    properties:
+      nft:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          uri:
+            type: string
+          data:
+            type: string
+          owner:
+            type: string
+        title: BaseNFT defines a non-fungible token
+    title: QueryNFTResponse is the response type for the Query/NFT RPC method
+  metachain.nft.QueryOwnerResponse:
+    type: object
+    properties:
+      owner:
+        type: object
+        properties:
+          address:
+            type: string
+          idCollections:
+            type: array
+            items:
+              type: object
+              properties:
+                denomId:
+                  type: string
+                tokenIds:
+                  type: array
+                  items:
+                    type: string
+              title: IDCollection defines a type of collection with specified ID
+        title: Owner defines a type of owner
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+    title: QueryOwnerResponse is the response type for the Query/Owner RPC method
+  metachain.nft.QuerySupplyResponse:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: uint64
+    title: QuerySupplyResponse is the response type for the Query/Supply RPC method

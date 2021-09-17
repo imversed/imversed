@@ -234,7 +234,7 @@ func GetCmdQueryNFT() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-			resp, err := queryClient.NFT(context.Background(), &types.QueryNFTRequest{
+			resp, err := queryClient.Nft(context.Background(), &types.QueryNFTRequest{
 				DenomId: args[0],
 				TokenId: args[1],
 			})

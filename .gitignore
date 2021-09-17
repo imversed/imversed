@@ -2,3 +2,7 @@ vue/node_modules
 vue/dist
 release/
 .idea
+vue/src/store/generated
+x/nft/types/*.pb.go
+x/nft/types/*.pb.gw.go
+go.sum

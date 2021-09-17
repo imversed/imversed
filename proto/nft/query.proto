@@ -36,7 +36,7 @@ service Query {
     }
 
     // NFT queries the NFT for the given denom and token ID
-    rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
+    rpc Nft(QueryNFTRequest) returns (QueryNFTResponse) {
         option (google.api.http).get = "/metachain/nft/nfts/{denom_id}/{token_id}";
     }
 }

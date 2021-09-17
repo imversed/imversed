@@ -115,7 +115,7 @@ func (k Keeper) Denoms(c context.Context, req *types.QueryDenomsRequest) (*types
 	}, nil
 }
 
-func (k Keeper) NFT(c context.Context, request *types.QueryNFTRequest) (*types.QueryNFTResponse, error) {
+func (k Keeper) Nft(c context.Context, request *types.QueryNFTRequest) (*types.QueryNFTResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	nft, err := k.GetNFT(ctx, request.DenomId, request.TokenId)
