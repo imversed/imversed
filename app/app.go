@@ -1,26 +1,17 @@
 package app
 
 import (
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/fulldivevr/metachain/x/nft"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/spf13/cast"
-	"github.com/tendermint/spm/openapiconsole"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	dbm "github.com/tendermint/tm-db"
-
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
@@ -50,26 +41,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/evidence"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	"github.com/cosmos/cosmos-sdk/x/feegrant"
+	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
+	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-
-	"github.com/cosmos/cosmos-sdk/x/feegrant"
-	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
-	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
-
-	"github.com/cosmos/ibc-go/modules/apps/transfer"
-	ibctransferkeeper "github.com/cosmos/ibc-go/modules/apps/transfer/keeper"
-	ibctransfertypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
-	ibc "github.com/cosmos/ibc-go/modules/core"
-	ibcclient "github.com/cosmos/ibc-go/modules/core/02-client"
-	ibcporttypes "github.com/cosmos/ibc-go/modules/core/05-port/types"
-	ibchost "github.com/cosmos/ibc-go/modules/core/24-host"
-	ibckeeper "github.com/cosmos/ibc-go/modules/core/keeper"
-
 	"github.com/cosmos/cosmos-sdk/x/mint"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
@@ -88,17 +68,30 @@ import (
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-
-	"github.com/fulldivevr/metachain/docs"
-	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
-	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
-
+	"github.com/cosmos/ibc-go/modules/apps/transfer"
+	ibctransferkeeper "github.com/cosmos/ibc-go/modules/apps/transfer/keeper"
+	ibctransfertypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
+	ibc "github.com/cosmos/ibc-go/modules/core"
+	ibcclient "github.com/cosmos/ibc-go/modules/core/02-client"
+	ibcporttypes "github.com/cosmos/ibc-go/modules/core/05-port/types"
+	ibchost "github.com/cosmos/ibc-go/modules/core/24-host"
+	ibckeeper "github.com/cosmos/ibc-go/modules/core/keeper"
+	"github.com/spf13/cast"
+	abci "github.com/tendermint/tendermint/abci/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
-
-	// tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	// this line is used by starport scaffolding # stargate/app/moduleImport
+	"github.com/tendermint/tendermint/libs/log"
+	tmos "github.com/tendermint/tendermint/libs/os"
+	dbm "github.com/tendermint/tm-db"
 
 	"github.com/tendermint/spm/cosmoscmd"
+	"github.com/tendermint/spm/openapiconsole"
+
+	"github.com/fulldivevr/metachain/docs"
+
+	"github.com/fulldivevr/metachain/x/nft"
+	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
+	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
+	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 const (
@@ -142,7 +135,6 @@ var (
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
 		slashing.AppModuleBasic{},
-		// Add feegrantmodule.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
@@ -214,7 +206,8 @@ type MetachainApp struct {
 	TransferKeeper   ibctransferkeeper.Keeper
 	FeeGrantKeeper   feegrantkeeper.Keeper
 
-	NFTKeeper nftkeeper.Keeper
+	NFTKeeper 		 nftkeeper.Keeper
+
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -223,8 +216,7 @@ type MetachainApp struct {
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
-	mm           *module.Manager
-	configurator module.Configurator
+	mm *module.Manager
 }
 
 // New returns a reference to an initialized Gaia.
@@ -240,7 +232,6 @@ func New(
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) cosmoscmd.App {
-
 	appCodec := encodingConfig.Marshaler
 	cdc := encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
@@ -253,9 +244,9 @@ func New(
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
-		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey,
-		upgradetypes.StoreKey, feegrant.StoreKey,
-		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey, nfttypes.StoreKey,
+		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
+		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
+		nfttypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -310,11 +301,8 @@ func New(
 		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
 	)
 
-	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)  // <--
-
+	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
-
-	app.registerUpgradeHandlers()
 
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
@@ -326,7 +314,6 @@ func New(
 
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
-		// Add app.UpgradeKeeper
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
 	)
 
@@ -358,8 +345,6 @@ func New(
 		&stakingKeeper, govRouter,
 	)
 
-	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
-
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
@@ -367,6 +352,8 @@ func New(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
+
+	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
 
 	/****  Module Options ****/
 
@@ -386,6 +373,7 @@ func New(
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
+		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
@@ -406,8 +394,9 @@ func New(
 	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
-		upgradetypes.ModuleName, minttypes.ModuleName, distrtypes.ModuleName, slashingtypes.ModuleName,
-		evidencetypes.ModuleName, stakingtypes.ModuleName, ibchost.ModuleName, feegrant.ModuleName,
+		upgradetypes.ModuleName, capabilitytypes.ModuleName, minttypes.ModuleName, distrtypes.ModuleName, slashingtypes.ModuleName,
+		evidencetypes.ModuleName, stakingtypes.ModuleName, ibchost.ModuleName,
+		feegrant.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName)
@@ -431,16 +420,12 @@ func New(
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
-		nfttypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-
-	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
-
-	app.mm.RegisterServices(app.configurator)
+	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -463,8 +448,8 @@ func New(
 	if err != nil {
 		panic(err)
 	}
-	app.SetAnteHandler(anteHandler)
 
+	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 
 	if loadLatest {
@@ -478,47 +463,6 @@ func New(
 	// this line is used by starport scaffolding # stargate/app/beforeInitReturn
 
 	return app
-}
-
-func (app *MetachainApp) registerUpgradeHandlers() {
-	app.UpgradeKeeper.SetUpgradeHandler("v0.44", func(ctx sdk.Context, plan upgradetypes.Plan, _ module.VersionMap) (module.VersionMap, error) {
-		// 1st-time running in-store migrations, using 1 as fromVersion to
-		// avoid running InitGenesis.
-		fromVM := map[string]uint64{
-			"auth":         1,
-			"bank":         1,
-			"capability":   1,
-			"crisis":       1,
-			"distribution": 1,
-			"evidence":     1,
-			"gov":          1,
-			"mint":         1,
-			"params":       1,
-			"slashing":     1,
-			"staking":      1,
-			"upgrade":      1,
-			"vesting":      1,
-			"ibc":          1,
-			"genutil":      1,
-			"transfer":     1,
-		}
-
-		return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-	})
-
-	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	if err != nil {
-		panic(err)
-	}
-
-	if upgradeInfo.Name == "v0.44" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		storeUpgrades := storetypes.StoreUpgrades{
-			Added: []string{"authz", "feegrant"},
-		}
-
-		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	}
 }
 
 // Name returns the name of the MetachainApp
