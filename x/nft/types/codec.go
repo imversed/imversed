@@ -55,7 +55,7 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 }
 
 // return supply protobuf code
-func MustMarshalSupply(cdc codec.Codec, supply uint64) []byte {
+func MustMarshalSupply(cdc codec.BinaryCodec, supply uint64) []byte {
 	supplyWrap := gogotypes.UInt64Value{Value: supply}
 	return cdc.MustMarshal(&supplyWrap)
 }
@@ -68,7 +68,7 @@ func MustUnMarshalSupply(cdc codec.BinaryCodec, value []byte) uint64 {
 }
 
 // return the tokenID protobuf code
-func MustMarshalTokenID(cdc codec.Codec, tokenID string) []byte {
+func MustMarshalTokenID(cdc codec.BinaryCodec, tokenID string) []byte {
 	tokenIDWrap := gogotypes.StringValue{Value: tokenID}
 	return cdc.MustMarshal(&tokenIDWrap)
 }
