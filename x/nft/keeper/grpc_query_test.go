@@ -1,8 +1,7 @@
-//package keeper_test
+package keeper_test
 //
 //import (
 //	gocontext "context"
-//
 //	"github.com/fulldivevr/metachain/x/nft/types"
 //)
 //

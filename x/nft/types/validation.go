@@ -6,12 +6,13 @@ import (
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 )
 
 const (
 	DoNotModify = "[do-not-modify]"
 	MinDenomLen = 3
-	MaxDenomLen = 64
+	MaxDenomLen = 128
 
 	MaxTokenURILen = 256
 
@@ -37,10 +38,11 @@ func ValidateDenomID(denomID string) error {
 	if len(denomID) < MinDenomLen || len(denomID) > MaxDenomLen {
 		return sdkerrors.Wrapf(ErrInvalidDenom, "the length of denom(%s) only accepts value [%d, %d]", denomID, MinDenomLen, MaxDenomLen)
 	}
-	if !IsBeginWithAlpha(denomID) || !IsAlphaNumeric(denomID) {
-		return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts alphanumeric characters, and begin with an english letter", denomID)
+	boolPrifix := strings.HasPrefix(denomID,"tibc-")
+	if !IsBeginWithAlpha(denomID) || !IsAlphaNumeric(denomID) && !boolPrifix {
+			return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts alphanumeric characters, and begin with an english letter", denomID)
 	}
-	return ValidateKeywords(denomID)
+	return nil
 }
 
 // ValidateTokenID verify that the tokenID is legal

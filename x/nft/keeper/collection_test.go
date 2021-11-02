@@ -1,10 +1,5 @@
-//package keeper_test
-//
-//import (
-//	"github.com/fulldivevr/metachain/x/nft/keeper"
-//	"github.com/fulldivevr/metachain/x/nft/types"
-//)
-//
+package keeper_test
+
 //func (suite *KeeperSuite) TestSetCollection() {
 //	nft := types.NewBaseNFT(tokenID, tokenNm, address, tokenURI, tokenData)
 //	// create a new NFT and add it to the collection created with the NFT mint

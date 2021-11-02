@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"math/rand"
+
 	//"math/rand"
 
 	"github.com/gorilla/mux"
@@ -22,7 +25,7 @@ import (
 	"github.com/fulldivevr/metachain/x/nft/client/cli"
 	"github.com/fulldivevr/metachain/x/nft/client/rest"
 	"github.com/fulldivevr/metachain/x/nft/keeper"
-	//"github.com/fulldivevr/metachain/x/nft/simulation"
+	"github.com/fulldivevr/metachain/x/nft/simulation"
 	"github.com/fulldivevr/metachain/x/nft/types"
 )
 
@@ -34,7 +37,7 @@ var (
 
 // AppModuleBasic defines the basic application module used by the NFT module.
 type AppModuleBasic struct {
-	cdc codec.BinaryCodec
+	cdc codec.Codec
 }
 
 // Name returns the NFT module's name.
@@ -161,28 +164,28 @@ func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.Validato
 // ____________________________________________________________________________
 
 // AppModuleSimulation functions
-//
-//// GenerateGenesisState creates a randomized GenState of the NFT module.
-//func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-//	simulation.RandomizedGenState(simState)
-//}
-//
-//// ProposalContents doesn't return any content functions for governance proposals.
-//func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
-//	return nil
-//}
-//
-//// RandomizedParams creates randomized NFT param changes for the simulator.
-//func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-//	return nil
-//}
-//
-//// RegisterStoreDecoder registers a decoder for NFT module's types
-//func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-//	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
-//}
-//
-//// WeightedOperations returns the all the NFT module operations with their respective weights.
-//func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-//	return simulation.WeightedOperations(simState.AppParams, simState.Cdc, am.keeper, am.accountKeeper, am.bankKeeper)
-//}
+
+// GenerateGenesisState creates a randomized GenState of the NFT module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.RandomizedGenState(simState)
+}
+
+// ProposalContents doesn't return any content functions for governance proposals.
+func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	return nil
+}
+
+// RandomizedParams creates randomized NFT param changes for the simulator.
+func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	return nil
+}
+
+// RegisterStoreDecoder registers a decoder for NFT module's types
+func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
+}
+
+// WeightedOperations returns the all the NFT module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return simulation.WeightedOperations(simState.AppParams, simState.Cdc, am.keeper, am.accountKeeper, am.bankKeeper)
+}
