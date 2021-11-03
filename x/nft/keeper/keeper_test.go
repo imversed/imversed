@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"bytes"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"testing"
 
 	metachainapp "github.com/fulldivevr/metachain/app"
@@ -87,13 +88,13 @@ func (suite *KeeperSuite) SetupTest() {
 
 	suite.app = app
 	suite.ctx = app.BaseApp.NewUncachedContext(false, tmproto.Header{})
+	suite.legacyAmino = app.LegacyAmino()
 
 	suite.keeper = app.NFTKeeper
 
-	//queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, app.InterfaceRegistry())
-	//types.RegisterQueryServer(queryHelper, app.NFTKeeper)
-	//suite.queryClient = types.NewQueryClient(queryHelper)
-	//
+	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, app.InterfaceRegistry())
+	types.RegisterQueryServer(queryHelper, app.NFTKeeper)
+	suite.queryClient = types.NewQueryClient(queryHelper)
 
 	err = suite.keeper.IssueDenom(suite.ctx, denomID, denomNm, schema, denomSymbol, address, false, false)
 	suite.NoError(err)
@@ -115,10 +116,6 @@ func TestKeeperSuite(t *testing.T) {
 	suite.Run(t, new(KeeperSuite))
 }
 
-//func TestKeeperSuite(t *testing.T) {
-//	suite.Run(t, new(KeeperSuite))
-//}
-//
 func (suite *KeeperSuite) TestMintNFT() {
 	// MintNFT shouldn't fail when collection does not exist
 	err := suite.keeper.MintNFT(suite.ctx, denomID, tokenID, tokenNm, tokenURI, tokenData, address)
