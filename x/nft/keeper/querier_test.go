@@ -2,12 +2,11 @@ package keeper_test
 
 import (
 	"encoding/binary"
-
-	abci "github.com/tendermint/tendermint/abci/types"
-
 	"github.com/fulldivevr/metachain/x/nft/exported"
 	keep "github.com/fulldivevr/metachain/x/nft/keeper"
 	"github.com/fulldivevr/metachain/x/nft/types"
+
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func (suite *KeeperSuite) TestNewQuerier() {
