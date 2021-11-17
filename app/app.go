@@ -86,17 +86,17 @@ import (
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/spm/openapiconsole"
 
-	"github.com/fulldivevr/metachain/docs"
+	"github.com/fulldivevr/imversed/docs"
 
-	"github.com/fulldivevr/metachain/x/nft"
-	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
-	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft"
+	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
+	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 const (
-	AccountAddressPrefix = "meta"
-	Name                 = "metachain"
+	AccountAddressPrefix = "imv"
+	Name                 = "imversed"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
@@ -159,8 +159,8 @@ var (
 )
 
 var (
-	_ cosmoscmd.CosmosApp     = (*MetachainApp)(nil)
-	_ servertypes.Application = (*MetachainApp)(nil)
+	_ cosmoscmd.CosmosApp     = (*ImversedApp)(nil)
+	_ servertypes.Application = (*ImversedApp)(nil)
 )
 
 func init() {
@@ -172,10 +172,10 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+Name)
 }
 
-// MetachainApp extends an ABCI application, but with most of its parameters exported.
+// ImversedApp extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
-type MetachainApp struct {
+type ImversedApp struct {
 	*baseapp.BaseApp
 
 	cdc               *codec.LegacyAmino
@@ -231,7 +231,7 @@ func New(
 	encodingConfig cosmoscmd.EncodingConfig,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *MetachainApp {
+) *ImversedApp {
 	appCodec := encodingConfig.Marshaler
 	cdc := encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
@@ -252,7 +252,7 @@ func New(
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
-	app := &MetachainApp{
+	app := &ImversedApp{
 		BaseApp:           bApp,
 		cdc:               cdc,
 		appCodec:          appCodec,
@@ -465,21 +465,21 @@ func New(
 	return app
 }
 
-// Name returns the name of the MetachainApp
-func (app *MetachainApp) Name() string { return app.BaseApp.Name() }
+// Name returns the name of the ImversedApp
+func (app *ImversedApp) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
-func (app *MetachainApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+func (app *ImversedApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 	return app.mm.BeginBlock(ctx, req)
 }
 
 // EndBlocker application updates every end block
-func (app *MetachainApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+func (app *ImversedApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	return app.mm.EndBlock(ctx, req)
 }
 
 // InitChainer application update at chain initialization
-func (app *MetachainApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *ImversedApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState GenesisState
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
@@ -489,12 +489,12 @@ func (app *MetachainApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain)
 }
 
 // LoadHeight loads a particular height
-func (app *MetachainApp) LoadHeight(height int64) error {
+func (app *ImversedApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MetachainApp) ModuleAccountAddrs() map[string]bool {
+func (app *ImversedApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -507,7 +507,7 @@ func (app *MetachainApp) ModuleAccountAddrs() map[string]bool {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MetachainApp) LegacyAmino() *codec.LegacyAmino {
+func (app *ImversedApp) LegacyAmino() *codec.LegacyAmino {
 	return app.cdc
 }
 
@@ -515,47 +515,47 @@ func (app *MetachainApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MetachainApp) AppCodec() codec.Codec {
+func (app *ImversedApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns Gaia's InterfaceRegistry
-func (app *MetachainApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *ImversedApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MetachainApp) GetKey(storeKey string) *sdk.KVStoreKey {
+func (app *ImversedApp) GetKey(storeKey string) *sdk.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MetachainApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
+func (app *ImversedApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *MetachainApp) GetMemKey(storeKey string) *sdk.MemoryStoreKey {
+func (app *ImversedApp) GetMemKey(storeKey string) *sdk.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MetachainApp) GetSubspace(moduleName string) paramstypes.Subspace {
+func (app *ImversedApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *MetachainApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *ImversedApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 	rpc.RegisterRoutes(clientCtx, apiSvr.Router)
 	// Register legacy tx routes.
@@ -575,12 +575,12 @@ func (app *MetachainApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *MetachainApp) RegisterTxService(clientCtx client.Context) {
+func (app *ImversedApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.BaseApp.Simulate, app.interfaceRegistry)
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *MetachainApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *ImversedApp) RegisterTendermintService(clientCtx client.Context) {
 	tmservice.RegisterTendermintService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.interfaceRegistry)
 }
 

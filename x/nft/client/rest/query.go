@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"net/http"
 
 	"github.com/gorilla/mux"

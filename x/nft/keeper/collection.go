@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"github.com/fulldivevr/metachain/x/nft/exported"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/exported"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 

@@ -2,9 +2,9 @@ package simapp
 
 import (
 	"encoding/json"
-	"github.com/fulldivevr/metachain/x/nft"
-	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
-	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft"
+	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
+	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
 	"io"
 	"net/http"
 	"os"

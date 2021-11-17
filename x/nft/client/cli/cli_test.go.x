@@ -15,9 +15,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	nftcli "github.com/fulldivevr/metachain/x/nft/client/cli"
-	nfttestutil "github.com/fulldivevr/metachain/x/nft/client/testutil"
-	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
+	nftcli "github.com/fulldivevr/imversed/x/nft/client/cli"
+	nfttestutil "github.com/fulldivevr/imversed/x/nft/client/testutil"
+	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
 	//"github.com/irisnet/irismod/simapp"
 )
 

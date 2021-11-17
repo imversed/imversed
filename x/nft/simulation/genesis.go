@@ -3,7 +3,7 @@ package simulation
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"math/rand"
 	"strings"
 

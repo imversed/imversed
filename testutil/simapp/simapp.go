@@ -55,8 +55,8 @@ package simapp
 //	"github.com/cosmos/cosmos-sdk/x/upgrade"
 //	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 //	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-//	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
-//	nfttypes "github.com/fulldivevr/metachain/x/nft/types"
+//	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
+//	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
 //	"github.com/spf13/cast"
 //	tmos "github.com/tendermint/tendermint/libs/os"
 //	"time"
@@ -69,7 +69,7 @@ package simapp
 //	tmtypes "github.com/tendermint/tendermint/types"
 //	tmdb "github.com/tendermint/tm-db"
 //
-//	"github.com/fulldivevr/metachain/app"
+//	"github.com/fulldivevr/imversed/app"
 //)
 //
 //type SimApp struct {
@@ -153,7 +153,7 @@ package simapp
 //	legacyAmino := encodingConfig.Amino
 //	interfaceRegistry := encodingConfig.InterfaceRegistry
 //
-//	bApp := baseapp.NewBaseApp("metachain-simapp", logger, db, encodingConfig.TxConfig.TxDecoder())
+//	bApp := baseapp.NewBaseApp("imversed-simapp", logger, db, encodingConfig.TxConfig.TxDecoder())
 //
 //	bApp.SetVersion(version.Version)
 //	bApp.SetInterfaceRegistry(interfaceRegistry)

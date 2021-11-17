@@ -2,8 +2,8 @@ package simulation
 
 import (
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/keeper"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/keeper"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"math/rand"
 	"strings"
 

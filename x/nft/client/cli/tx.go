@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"io/ioutil"
 	"strings"
 
@@ -14,7 +14,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	// "github.com/fulldivevr/metachain/x/nft/types"
+	// "github.com/fulldivevr/imversed/x/nft/types"
 )
 
 // NewTxCmd returns the transaction commands for this module

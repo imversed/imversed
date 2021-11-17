@@ -3,7 +3,7 @@ package cli
 import (
 	"context"
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 
 	"github.com/spf13/cobra"
 
@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	// "github.com/fulldivevr/metachain/x/nft/types"
+	// "github.com/fulldivevr/imversed/x/nft/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

@@ -2,7 +2,7 @@ package rest
 
 import (
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	//"github.com/fulldivevr/metachain/x/nft/types"
+	//"github.com/fulldivevr/imversed/x/nft/types"
 )
 
 func registerTxRoutes(cliCtx client.Context, r *mux.Router, queryRoute string) {

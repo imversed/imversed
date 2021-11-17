@@ -2,12 +2,12 @@ package keeper
 
 import (
 	"context"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	//"github.com/fulldivevr/metachain/x/nft/types"
+	//"github.com/fulldivevr/imversed/x/nft/types"
 )
 
 type msgServer struct {

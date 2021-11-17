@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 
-	nftcli "github.com/fulldivevr/metachain/x/nft/client/cli"
+	nftcli "github.com/fulldivevr/imversed/x/nft/client/cli"
 )
 
 // MsgRedelegateExec creates a redelegate message.

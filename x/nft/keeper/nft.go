@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/fulldivevr/metachain/x/nft/exported"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/exported"
+	"github.com/fulldivevr/imversed/x/nft/types"
 )
 
 // GetNFT gets the the specified NFT

@@ -1,10 +1,10 @@
 syntax = "proto3";
-package metachain.nft;
+package imversed.nft;
 
 import "gogoproto/gogo.proto";
 import "nft/nft.proto";
 
-option go_package = "github.com/fulldivevr/metachain/x/nft/types";
+option go_package = "github.com/fulldivevr/imversed/x/nft/types";
 
 // GenesisState defines the NFT module's genesis state
 message GenesisState {

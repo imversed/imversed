@@ -1,4 +1,4 @@
-module github.com/fulldivevr/metachain
+module github.com/fulldivevr/imversed
 
 go 1.16
 

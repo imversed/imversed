@@ -22,11 +22,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	//simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/fulldivevr/metachain/x/nft/client/cli"
-	"github.com/fulldivevr/metachain/x/nft/client/rest"
-	"github.com/fulldivevr/metachain/x/nft/keeper"
-	"github.com/fulldivevr/metachain/x/nft/simulation"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/client/cli"
+	"github.com/fulldivevr/imversed/x/nft/client/rest"
+	"github.com/fulldivevr/imversed/x/nft/keeper"
+	"github.com/fulldivevr/imversed/x/nft/simulation"
+	"github.com/fulldivevr/imversed/x/nft/types"
 )
 
 var (

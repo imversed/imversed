@@ -3,7 +3,7 @@ package types
 // DONTCOVER
 
 import (
-	"github.com/fulldivevr/metachain/x/nft/exported"
+	"github.com/fulldivevr/imversed/x/nft/exported"
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -26,15 +26,15 @@ func init() {
 
 // RegisterLegacyAminoCodec concrete types on codec
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgIssueDenom{}, "metachain/nft/MsgIssueDenom", nil)
-	cdc.RegisterConcrete(&MsgTransferNFT{}, "metachain/nft/MsgTransferNFT", nil)
-	cdc.RegisterConcrete(&MsgEditNFT{}, "metachain/nft/MsgEditNFT", nil)
-	cdc.RegisterConcrete(&MsgMintNFT{}, "metachain/nft/MsgMintNFT", nil)
-	cdc.RegisterConcrete(&MsgBurnNFT{}, "metachain/nft/MsgBurnNFT", nil)
-	cdc.RegisterConcrete(&MsgTransferDenom{}, "metachain/nft/MsgTransferDenom", nil)
+	cdc.RegisterConcrete(&MsgIssueDenom{}, "imversed/nft/MsgIssueDenom", nil)
+	cdc.RegisterConcrete(&MsgTransferNFT{}, "imversed/nft/MsgTransferNFT", nil)
+	cdc.RegisterConcrete(&MsgEditNFT{}, "imversed/nft/MsgEditNFT", nil)
+	cdc.RegisterConcrete(&MsgMintNFT{}, "imversed/nft/MsgMintNFT", nil)
+	cdc.RegisterConcrete(&MsgBurnNFT{}, "imversed/nft/MsgBurnNFT", nil)
+	cdc.RegisterConcrete(&MsgTransferDenom{}, "imversed/nft/MsgTransferDenom", nil)
 
 	cdc.RegisterInterface((*exported.NFT)(nil), nil)
-	cdc.RegisterConcrete(&BaseNFT{}, "metachain/nft/BaseNFT", nil)
+	cdc.RegisterConcrete(&BaseNFT{}, "imversed/nft/BaseNFT", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

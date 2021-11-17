@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"fmt"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	"github.com/fulldivevr/imversed/x/nft/types"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -27,7 +27,7 @@ func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey) Keeper {
 
 // Logger returns a module-specific logger.
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", fmt.Sprintf("metachaind/%s", types.ModuleName))
+	return ctx.Logger().With("module", fmt.Sprintf("imversedd/%s", types.ModuleName))
 }
 
 // IssueDenom issues a denom according to the given params

@@ -12501,10 +12501,10 @@ paths:
                         }
       tags:
         - Query
-  '/metachain/nft/collections/{denomId}':
+  '/imversed/nft/collections/{denomId}':
     get:
       summary: Collection queries the NFTs of the specified denom
-      operationId: MetachainNftCollection
+      operationId: ImversedNftCollection
       responses:
         '200':
           description: A successful response.
@@ -12657,10 +12657,10 @@ paths:
           type: boolean
       tags:
         - Query
-  '/metachain/nft/collections/{denomId}/supply':
+  '/imversed/nft/collections/{denomId}/supply':
     get:
       summary: Supply queries the total supply of a given denom or owner
-      operationId: MetachainNftSupply
+      operationId: ImversedNftSupply
       responses:
         '200':
           description: A successful response.
@@ -12702,10 +12702,10 @@ paths:
           type: string
       tags:
         - Query
-  /metachain/nft/denoms:
+  /imversed/nft/denoms:
     get:
       summary: Denoms queries all the denoms
-      operationId: MetachainNftDenoms
+      operationId: ImversedNftDenoms
       responses:
         '200':
           description: A successful response.
@@ -12836,10 +12836,10 @@ paths:
           type: boolean
       tags:
         - Query
-  '/metachain/nft/denoms/{denomId}':
+  '/imversed/nft/denoms/{denomId}':
     get:
       summary: Denom queries the definition of a given denom
-      operationId: MetachainNftDenom
+      operationId: ImversedNftDenom
       responses:
         '200':
           description: A successful response.
@@ -12892,10 +12892,10 @@ paths:
           type: string
       tags:
         - Query
-  /metachain/nft/nfts:
+  /imversed/nft/nfts:
     get:
       summary: Owner queries the NFTs of the specified owner
-      operationId: MetachainNftOwner
+      operationId: ImversedNftOwner
       responses:
         '200':
           description: A successful response.
@@ -13034,10 +13034,10 @@ paths:
           type: boolean
       tags:
         - Query
-  '/metachain/nft/nfts/{denomId}/{tokenId}':
+  '/imversed/nft/nfts/{denomId}/{tokenId}':
     get:
       summary: NFT queries the NFT for the given denom and token ID
-      operationId: MetachainNftNft
+      operationId: ImversedNftNft
       responses:
         '200':
           description: A successful response.
@@ -20402,7 +20402,7 @@ definitions:
       and
 
       freezing clients
-  metachain.nft.BaseNFT:
+  imversed.nft.BaseNFT:
     type: object
     properties:
       id:
@@ -20416,7 +20416,7 @@ definitions:
       owner:
         type: string
     title: BaseNFT defines a non-fungible token
-  metachain.nft.Collection:
+  imversed.nft.Collection:
     type: object
     properties:
       denom:
@@ -20454,7 +20454,7 @@ definitions:
               type: string
           title: BaseNFT defines a non-fungible token
     title: Collection defines a type of collection
-  metachain.nft.Denom:
+  imversed.nft.Denom:
     type: object
     properties:
       id:
@@ -20472,7 +20472,7 @@ definitions:
       updateRestricted:
         type: boolean
     title: Denom defines a type of NFT
-  metachain.nft.IDCollection:
+  imversed.nft.IDCollection:
     type: object
     properties:
       denomId:
@@ -20482,25 +20482,25 @@ definitions:
         items:
           type: string
     title: IDCollection defines a type of collection with specified ID
-  metachain.nft.MsgBurnNFTResponse:
+  imversed.nft.MsgBurnNFTResponse:
     type: object
     description: MsgBurnNFTResponse defines the Msg/BurnNFT response type.
-  metachain.nft.MsgEditNFTResponse:
+  imversed.nft.MsgEditNFTResponse:
     type: object
     description: MsgEditNFTResponse defines the Msg/EditNFT response type.
-  metachain.nft.MsgIssueDenomResponse:
+  imversed.nft.MsgIssueDenomResponse:
     type: object
     description: MsgIssueDenomResponse defines the Msg/IssueDenom response type.
-  metachain.nft.MsgMintNFTResponse:
+  imversed.nft.MsgMintNFTResponse:
     type: object
     description: MsgMintNFTResponse defines the Msg/MintNFT response type.
-  metachain.nft.MsgTransferDenomResponse:
+  imversed.nft.MsgTransferDenomResponse:
     type: object
     description: MsgTransferDenomResponse defines the Msg/TransferDenom response type.
-  metachain.nft.MsgTransferNFTResponse:
+  imversed.nft.MsgTransferNFTResponse:
     type: object
     description: MsgTransferNFTResponse defines the Msg/TransferNFT response type.
-  metachain.nft.Owner:
+  imversed.nft.Owner:
     type: object
     properties:
       address:
@@ -20518,7 +20518,7 @@ definitions:
                 type: string
           title: IDCollection defines a type of collection with specified ID
     title: Owner defines a type of owner
-  metachain.nft.QueryCollectionResponse:
+  imversed.nft.QueryCollectionResponse:
     type: object
     properties:
       collection:
@@ -20587,7 +20587,7 @@ definitions:
     title: >-
       QueryCollectionResponse is the response type for the Query/Collection RPC
       method
-  metachain.nft.QueryDenomResponse:
+  imversed.nft.QueryDenomResponse:
     type: object
     properties:
       denom:
@@ -20609,7 +20609,7 @@ definitions:
             type: boolean
         title: Denom defines a type of NFT
     title: QueryDenomResponse is the response type for the Query/Denom RPC method
-  metachain.nft.QueryDenomsResponse:
+  imversed.nft.QueryDenomsResponse:
     type: object
     properties:
       denoms:
@@ -20658,7 +20658,7 @@ definitions:
                    PageResponse page = 2;
            }
     title: QueryDenomsResponse is the response type for the Query/Denoms RPC method
-  metachain.nft.QueryNFTResponse:
+  imversed.nft.QueryNFTResponse:
     type: object
     properties:
       nft:
@@ -20676,7 +20676,7 @@ definitions:
             type: string
         title: BaseNFT defines a non-fungible token
     title: QueryNFTResponse is the response type for the Query/NFT RPC method
-  metachain.nft.QueryOwnerResponse:
+  imversed.nft.QueryOwnerResponse:
     type: object
     properties:
       owner:
@@ -20723,7 +20723,7 @@ definitions:
                    PageResponse page = 2;
            }
     title: QueryOwnerResponse is the response type for the Query/Owner RPC method
-  metachain.nft.QuerySupplyResponse:
+  imversed.nft.QuerySupplyResponse:
     type: object
     properties:
       amount:

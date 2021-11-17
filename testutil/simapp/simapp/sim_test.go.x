@@ -280,7 +280,7 @@ func TestAppStateDeterminism(t *testing.T) {
 	config.ExportParamsPath = ""
 	config.OnOperation = false
 	config.AllInvariants = false
-	config.ChainID = "metachain"
+	config.ChainID = "imversed"
 
 	numSeeds := 3
 	numTimesToRunPerSeed := 5

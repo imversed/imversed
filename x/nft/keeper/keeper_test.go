@@ -5,7 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"testing"
 
-	metachainapp "github.com/fulldivevr/metachain/app"
+	imversedapp "github.com/fulldivevr/imversed/app"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
@@ -19,8 +19,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	nftkeeper "github.com/fulldivevr/metachain/x/nft/keeper"
-	"github.com/fulldivevr/metachain/x/nft/types"
+	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
+	"github.com/fulldivevr/imversed/x/nft/types"
 )
 
 var (
@@ -57,7 +57,7 @@ var (
 type KeeperSuite struct {
 	suite.Suite
 
-	app			metachainapp.MetachainApp
+	app			imversedapp.ImversedApp
 	legacyAmino *codec.LegacyAmino
 	ctx         sdk.Context
 	keeper      nftkeeper.Keeper
@@ -81,9 +81,9 @@ func (suite *KeeperSuite) SetupTest() {
 
 	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(metachainapp.ModuleBasics)
+	encoding := cosmoscmd.MakeEncodingConfig(imversedapp.ModuleBasics)
 
-	app := *metachainapp.New(logger, db, nil, true,
+	app := *imversedapp.New(logger, db, nil, true,
 		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
 
 	suite.app = app
