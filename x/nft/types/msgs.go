@@ -25,7 +25,7 @@ var (
 )
 
 // NewMsgIssueDenom is a constructor function for MsgSetName
-func NewMsgIssueDenom(denomID, denomName, schema, sender, symbol string, mintRestricted, updateRestricted bool) *MsgIssueDenom {
+func NewMsgIssueDenom(denomID, denomName, schema, sender, symbol string, mintRestricted, updateRestricted bool, oracleUrl string) *MsgIssueDenom {
 	return &MsgIssueDenom{
 		Sender:           sender,
 		Id:               denomID,
@@ -34,6 +34,7 @@ func NewMsgIssueDenom(denomID, denomName, schema, sender, symbol string, mintRes
 		Symbol:           symbol,
 		MintRestricted:   mintRestricted,
 		UpdateRestricted: updateRestricted,
+		OracleUrl: 		  oracleUrl,
 	}
 }
 

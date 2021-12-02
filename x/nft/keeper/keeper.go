@@ -35,8 +35,9 @@ func (k Keeper) IssueDenom(ctx sdk.Context,
 	id, name, schema, symbol string,
 	creator sdk.AccAddress,
 	mintRestricted, updateRestricted bool,
+	oracleUrl string,
 ) error {
-	return k.SetDenom(ctx, types.NewDenom(id, name, schema, symbol, creator, mintRestricted, updateRestricted))
+	return k.SetDenom(ctx, types.NewDenom(id, name, schema, symbol, creator, mintRestricted, updateRestricted, oracleUrl))
 }
 
 // MintNFT mints an NFT and manages the NFT's existence within Collections and Owners

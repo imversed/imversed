@@ -53,7 +53,8 @@ func GetCmdIssueDenom() *cobra.Command {
 				"--update-restricted=<update-restricted> "+
 				"--schema=<schema-content or path to schema.json> "+
 				"--chain-id=<chain-id> "+
-				"--fees=<fee>",
+				"--fees=<fee> "+
+				"--oracle-url=<oracle-url>",
 			version.AppName,
 		),
 		Args: cobra.ExactArgs(1),
@@ -83,6 +84,10 @@ func GetCmdIssueDenom() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			oracleUrl, err := cmd.Flags().GetString(FlagOracleUrl)
+			if err != nil {
+				return err
+			}
 			optionsContent, err := ioutil.ReadFile(schema)
 			if err == nil {
 				schema = string(optionsContent)
@@ -96,6 +101,7 @@ func GetCmdIssueDenom() *cobra.Command {
 				symbol,
 				mintRestricted,
 				updateRestricted,
+				oracleUrl,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

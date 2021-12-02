@@ -12531,6 +12531,8 @@ paths:
                         type: boolean
                       updateRestricted:
                         type: boolean
+                      oracleUrl:
+                        type: string
                     title: Denom defines a type of NFT
                   nfts:
                     type: array
@@ -12731,6 +12733,8 @@ paths:
                       type: boolean
                     updateRestricted:
                       type: boolean
+                    oracleUrl:
+                      type: string
                   title: Denom defines a type of NFT
               pagination:
                 type: object
@@ -12863,6 +12867,8 @@ paths:
                     type: boolean
                   updateRestricted:
                     type: boolean
+                  oracleUrl:
+                    type: string
                 title: Denom defines a type of NFT
             title: >-
               QueryDenomResponse is the response type for the Query/Denom RPC
@@ -20436,6 +20442,8 @@ definitions:
             type: boolean
           updateRestricted:
             type: boolean
+          oracleUrl:
+            type: string
         title: Denom defines a type of NFT
       nfts:
         type: array
@@ -20471,6 +20479,8 @@ definitions:
         type: boolean
       updateRestricted:
         type: boolean
+      oracleUrl:
+        type: string
     title: Denom defines a type of NFT
   imversed.nft.IDCollection:
     type: object
@@ -20541,6 +20551,8 @@ definitions:
                 type: boolean
               updateRestricted:
                 type: boolean
+              oracleUrl:
+                type: string
             title: Denom defines a type of NFT
           nfts:
             type: array
@@ -20607,6 +20619,8 @@ definitions:
             type: boolean
           updateRestricted:
             type: boolean
+          oracleUrl:
+            type: string
         title: Denom defines a type of NFT
     title: QueryDenomResponse is the response type for the Query/Denom RPC method
   imversed.nft.QueryDenomsResponse:
@@ -20631,6 +20645,8 @@ definitions:
               type: boolean
             updateRestricted:
               type: boolean
+            oracleUrl:
+              type: string
           title: Denom defines a type of NFT
       pagination:
         type: object

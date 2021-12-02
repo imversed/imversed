@@ -17,6 +17,7 @@ const (
 	FlagSymbol           = "symbol"
 	FlagMintRestricted   = "mint-restricted"
 	FlagUpdateRestricted = "update-restricted"
+	FlagOracleUrl		 = "oracle-url"
 )
 
 var (
@@ -35,6 +36,7 @@ func init() {
 	FsIssueDenom.String(FlagSymbol, "", "The symbol of the denom")
 	FsIssueDenom.Bool(FlagMintRestricted, false, "mint restricted of nft under denom")
 	FsIssueDenom.Bool(FlagUpdateRestricted, false, "update restricted of nft under denom")
+	FsIssueDenom.String(FlagOracleUrl, "","The URL address of a trusted oracle")
 
 	FsMintNFT.String(FlagTokenURI, "", "URI for supplemental off-chain tokenData (should return a JSON object)")
 	FsMintNFT.String(FlagRecipient, "", "Receiver of the nft, if not filled, the default is the sender of the transaction")

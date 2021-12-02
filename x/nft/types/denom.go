@@ -5,7 +5,7 @@ import (
 )
 
 // NewDenom return a new denom
-func NewDenom(id, name, schema, symbol string, creator sdk.AccAddress, mintRestricted, updateRestricted bool) Denom {
+func NewDenom(id, name, schema, symbol string, creator sdk.AccAddress, mintRestricted, updateRestricted bool, oracleUrl string) Denom {
 	return Denom{
 		Id:               id,
 		Name:             name,
@@ -14,5 +14,6 @@ func NewDenom(id, name, schema, symbol string, creator sdk.AccAddress, mintRestr
 		Symbol:           symbol,
 		MintRestricted:   mintRestricted,
 		UpdateRestricted: updateRestricted,
+		OracleUrl:		  oracleUrl,
 	}
 }

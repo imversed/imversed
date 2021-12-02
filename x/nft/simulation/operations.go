@@ -404,6 +404,7 @@ func SimulateMsgIssueDenom(k keeper.Keeper, ak types.AccountKeeper, bk types.Ban
 		sender, _ := simtypes.RandomAcc(r, accs)
 		mintRestricted := genRandomBool(r)
 		updateRestricted := genRandomBool(r)
+		oracleUrl := "https://www.yArtViq.ru/pnSwlld"
 
 		if err := types.ValidateDenomID(denomId); err != nil {
 			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgTransferDenom, "invalid denom"), nil, nil
@@ -422,6 +423,7 @@ func SimulateMsgIssueDenom(k keeper.Keeper, ak types.AccountKeeper, bk types.Ban
 			symbol,
 			mintRestricted,
 			updateRestricted,
+			oracleUrl,
 		)
 		account := ak.GetAccount(ctx, sender.Address)
 		spendable := bk.SpendableCoins(ctx, account.GetAddress())
