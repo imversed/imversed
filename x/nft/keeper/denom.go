@@ -4,7 +4,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/fulldivevr/imversed/x/nft/types"
-
 	//"github.com/fulldivevr/imversed/x/nft/types"
 )
 
@@ -21,7 +20,7 @@ func (k Keeper) SetDenom(ctx sdk.Context, denom types.Denom) error {
 	}
 
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&denom)
+	bz := k.Cdc.MustMarshal(&denom)
 	store.Set(types.KeyDenomID(denom.Id), bz)
 	store.Set(types.KeyDenomName(denom.Name), []byte(denom.Id))
 	return nil
@@ -36,7 +35,7 @@ func (k Keeper) GetDenom(ctx sdk.Context, id string) (denom types.Denom, found b
 		return denom, false
 	}
 
-	k.cdc.MustUnmarshal(bz, &denom)
+	k.Cdc.MustUnmarshal(bz, &denom)
 	return denom, true
 }
 
@@ -48,7 +47,7 @@ func (k Keeper) GetDenoms(ctx sdk.Context) (denoms []types.Denom) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var denom types.Denom
-		k.cdc.MustUnmarshal(iterator.Value(), &denom)
+		k.Cdc.MustUnmarshal(iterator.Value(), &denom)
 		denoms = append(denoms, denom)
 	}
 	return denoms
@@ -61,7 +60,7 @@ func (k Keeper) UpdateDenom(ctx sdk.Context, denom types.Denom) error {
 	}
 
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&denom)
+	bz := k.Cdc.MustMarshal(&denom)
 	store.Set(types.KeyDenomID(denom.Id), bz)
 	return nil
 }

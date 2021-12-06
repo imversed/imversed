@@ -52,7 +52,7 @@ func (k Keeper) GetPaginateCollection(ctx sdk.Context, request *types.QueryColle
 	nftStore := prefix.NewStore(store, types.KeyNFT(denomID, ""))
 	pageRes, err := query.Paginate(nftStore, request.Pagination, func(key []byte, value []byte) error {
 		var baseNFT types.BaseNFT
-		k.cdc.MustUnmarshal(value, &baseNFT)
+		k.Cdc.MustUnmarshal(value, &baseNFT)
 		nfts = append(nfts, baseNFT)
 		return nil
 	})
@@ -78,7 +78,7 @@ func (k Keeper) GetTotalSupply(ctx sdk.Context, denomID string) uint64 {
 	if len(bz) == 0 {
 		return 0
 	}
-	return types.MustUnMarshalSupply(k.cdc, bz)
+	return types.MustUnMarshalSupply(k.Cdc, bz)
 }
 
 // GetTotalSupplyOfOwner returns the amount of NFTs by the specified conditions
@@ -97,7 +97,7 @@ func (k Keeper) increaseSupply(ctx sdk.Context, denomID string) {
 	supply++
 
 	store := ctx.KVStore(k.storeKey)
-	bz := types.MustMarshalSupply(k.cdc, supply)
+	bz := types.MustMarshalSupply(k.Cdc, supply)
 	store.Set(types.KeyCollection(denomID), bz)
 }
 
@@ -111,6 +111,6 @@ func (k Keeper) decreaseSupply(ctx sdk.Context, denomID string) {
 		return
 	}
 
-	bz := types.MustMarshalSupply(k.cdc, supply)
+	bz := types.MustMarshalSupply(k.Cdc, supply)
 	store.Set(types.KeyCollection(denomID), bz)
 }

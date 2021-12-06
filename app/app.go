@@ -17,7 +17,6 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authrest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
@@ -206,8 +205,7 @@ type ImversedApp struct {
 	TransferKeeper   ibctransferkeeper.Keeper
 	FeeGrantKeeper   feegrantkeeper.Keeper
 
-	NFTKeeper 		 nftkeeper.Keeper
-
+	NFTKeeper nftkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -238,7 +236,7 @@ func New(
 
 	bApp := baseapp.NewBaseApp(Name, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion(version.Version)
+	bApp.SetVersion("2")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -304,6 +302,40 @@ func New(
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
 
+	cfg := module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	//app.mm.RegisterServices(cfg)
+	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
+	app.UpgradeKeeper.SetUpgradeHandler("2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+		// ...
+		// do upgrade logic
+		// ...
+
+		println("PLAN NAME:", plan.Name)
+		// RunMigrations returns the VersionMap
+		//// with the updated
+		cfg.RegisterMigration("nft", 2, func(context sdk.Context) error {
+			return nil
+		})
+
+		store := ctx.KVStore(keys[nfttypes.StoreKey])
+		iterator := sdk.KVStorePrefixIterator(store, nfttypes.KeyDenomID(""))
+		defer iterator.Close()
+
+		for ; iterator.Valid(); iterator.Next() {
+			var denom nfttypes.Denom
+			app.NFTKeeper.Cdc.MustUnmarshal(iterator.Value(), &denom)
+			denom.OracleUrl = "new_url"
+			updates := app.NFTKeeper.Cdc.MustMarshal(&denom)
+
+			store.Set(nfttypes.KeyDenomID(denom.Id), updates)
+		}
+
+		return app.mm.RunMigrations(ctx, cfg, vm)
+	})
+
+	println("HAS HANDLER test:", app.UpgradeKeeper.HasHandler("test"))
+
+	//
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper = *stakingKeeper.SetHooks(
@@ -352,8 +384,6 @@ func New(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
-
-	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
 
 	/****  Module Options ****/
 
@@ -425,7 +455,7 @@ func New(
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
+	app.mm.RegisterServices(cfg)
 
 	// initialize stores
 	app.MountKVStores(keys)

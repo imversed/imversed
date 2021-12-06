@@ -11,7 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
-
 	//"github.com/fulldivevr/imversed/x/nft/types"
 )
 
@@ -101,7 +100,7 @@ func (k Keeper) Denoms(c context.Context, req *types.QueryDenomsRequest) (*types
 	denomStore := prefix.NewStore(store, types.KeyDenomID(""))
 	pageRes, err := query.Paginate(denomStore, req.Pagination, func(key []byte, value []byte) error {
 		var denom types.Denom
-		k.cdc.MustUnmarshal(value, &denom)
+		k.Cdc.MustUnmarshal(value, &denom)
 		denoms = append(denoms, denom)
 		return nil
 	})

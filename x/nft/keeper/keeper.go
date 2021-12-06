@@ -14,14 +14,14 @@ import (
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
-	cdc      codec.BinaryCodec
+	Cdc      codec.BinaryCodec
 }
 
 // NewKeeper creates a new instance of the NFT Keeper
 func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey) Keeper {
 	return Keeper{
 		storeKey: storeKey,
-		cdc:      cdc,
+		Cdc:      cdc,
 	}
 }
 
