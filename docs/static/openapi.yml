@@ -20510,6 +20510,9 @@ definitions:
   imversed.nft.MsgTransferNFTResponse:
     type: object
     description: MsgTransferNFTResponse defines the Msg/TransferNFT response type.
+  imversed.nft.MsgUpdateDenomResponse:
+    type: object
+    description: MsgUpdateDenomResponse defines the Msg/UpdateDenom response type.
   imversed.nft.Owner:
     type: object
     properties:

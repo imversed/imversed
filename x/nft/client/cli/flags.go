@@ -22,6 +22,7 @@ const (
 
 var (
 	FsIssueDenom    = flag.NewFlagSet("", flag.ContinueOnError)
+	FsUpdateDenom   = flag.NewFlagSet("", flag.ContinueOnError)
 	FsMintNFT       = flag.NewFlagSet("", flag.ContinueOnError)
 	FsEditNFT       = flag.NewFlagSet("", flag.ContinueOnError)
 	FsTransferNFT   = flag.NewFlagSet("", flag.ContinueOnError)
@@ -37,6 +38,12 @@ func init() {
 	FsIssueDenom.Bool(FlagMintRestricted, false, "mint restricted of nft under denom")
 	FsIssueDenom.Bool(FlagUpdateRestricted, false, "update restricted of nft under denom")
 	FsIssueDenom.String(FlagOracleUrl, "","The URL address of a trusted oracle")
+
+	FsUpdateDenom.String(FlagDenomName, "", "The name of the denom")
+	FsUpdateDenom.String(FlagSchema, "", "Denom data structure definition")
+	FsUpdateDenom.Bool(FlagMintRestricted, false, "mint restricted of nft under denom")
+	FsUpdateDenom.Bool(FlagUpdateRestricted, false, "update restricted of nft under denom")
+	FsUpdateDenom.String(FlagOracleUrl, "","The URL address of a trusted oracle")
 
 	FsMintNFT.String(FlagTokenURI, "", "URI for supplemental off-chain tokenData (should return a JSON object)")
 	FsMintNFT.String(FlagRecipient, "", "Receiver of the nft, if not filled, the default is the sender of the transaction")
