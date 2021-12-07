@@ -14,14 +14,14 @@ import (
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
-	Cdc      codec.BinaryCodec
+	cdc      codec.BinaryCodec
 }
 
 // NewKeeper creates a new instance of the NFT Keeper
 func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey) Keeper {
 	return Keeper{
 		storeKey: storeKey,
-		Cdc:      cdc,
+		cdc:      cdc,
 	}
 }
 
@@ -187,5 +187,22 @@ func (k Keeper) TransferDenomOwner(
 		return err
 	}
 
+	return nil
+}
+
+func (k Keeper) MigrationAddOracleUrl(ctx sdk.Context) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyDenomID(""))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var denom types.Denom
+		k.cdc.MustUnmarshal(iterator.Value(), &denom)
+		// todo: important: before merge in master change oracleUrl -> "https://api.fdvr.co/instagram-nft/oracle-validate"
+		denom.OracleUrl = "https://api-staging.fdvr.co/instagram-nft/oracle-validate"
+		updates := k.cdc.MustMarshal(&denom)
+
+		store.Set(types.KeyDenomID(denom.Id), updates)
+	}
 	return nil
 }

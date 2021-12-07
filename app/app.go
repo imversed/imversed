@@ -236,7 +236,7 @@ func New(
 
 	bApp := baseapp.NewBaseApp(Name, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion("2")
+	bApp.SetVersion("v2.0")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -305,35 +305,16 @@ func New(
 	cfg := module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	//app.mm.RegisterServices(cfg)
 	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
-	app.UpgradeKeeper.SetUpgradeHandler("2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
-		// ...
-		// do upgrade logic
-		// ...
-
+	app.UpgradeKeeper.SetUpgradeHandler("v2.0", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 		println("PLAN NAME:", plan.Name)
-		// RunMigrations returns the VersionMap
-		//// with the updated
-		cfg.RegisterMigration("nft", 2, func(context sdk.Context) error {
-			return nil
-		})
 
-		store := ctx.KVStore(keys[nfttypes.StoreKey])
-		iterator := sdk.KVStorePrefixIterator(store, nfttypes.KeyDenomID(""))
-		defer iterator.Close()
-
-		for ; iterator.Valid(); iterator.Next() {
-			var denom nfttypes.Denom
-			app.NFTKeeper.Cdc.MustUnmarshal(iterator.Value(), &denom)
-			denom.OracleUrl = "new_url"
-			updates := app.NFTKeeper.Cdc.MustMarshal(&denom)
-
-			store.Set(nfttypes.KeyDenomID(denom.Id), updates)
+		err := cfg.RegisterMigration("nft", 2, app.NFTKeeper.MigrationAddOracleUrl)
+		if err != nil {
+			return nil, err
 		}
 
 		return app.mm.RunMigrations(ctx, cfg, vm)
 	})
-
-	println("HAS HANDLER test:", app.UpgradeKeeper.HasHandler("test"))
 
 	//
 	// register the staking hooks
