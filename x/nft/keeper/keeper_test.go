@@ -20,7 +20,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	nft "github.com/fulldivevr/imversed/x/nft/types"
 )
 
 var (
@@ -64,7 +64,7 @@ type KeeperSuite struct {
 	ctx         sdk.Context
 	keeper      nftkeeper.Keeper
 
-	queryClient types.QueryClient
+	queryClient nft.QueryClient
 }
 
 type EmptyAppOptions struct{}
@@ -95,8 +95,8 @@ func (suite *KeeperSuite) SetupTest() {
 	suite.keeper = app.NFTKeeper
 
 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, app.InterfaceRegistry())
-	types.RegisterQueryServer(queryHelper, app.NFTKeeper)
-	suite.queryClient = types.NewQueryClient(queryHelper)
+	nft.RegisterQueryServer(queryHelper, app.NFTKeeper)
+	suite.queryClient = nft.NewQueryClient(queryHelper)
 
 	err = suite.keeper.IssueDenom(suite.ctx, denomID, denomNm, schema, denomSymbol, address, false, false, oracleUrl)
 	suite.NoError(err)
@@ -108,10 +108,21 @@ func (suite *KeeperSuite) SetupTest() {
 	err = suite.keeper.IssueDenom(suite.ctx, denomID3, denomNm3, schema, denomSymbol3, address3, true, true, oracleUrl)
 	suite.NoError(err)
 
+	
+
 	// collections should equal 3
 	collections := suite.keeper.GetCollections(suite.ctx)
 	suite.NotEmpty(collections)
 	suite.Equal(len(collections), 3)
+}
+
+func (suite *KeeperSuite) TestUpdateDenom() {
+	denomE := nft.NewDenom(denomID, denomNm, schema, denomSymbol, address, false, false, "")
+	err := suite.keeper.UpdateDenom(suite.ctx, denomE)
+	suite.NoError(err)	
+	denom, ok := suite.keeper.GetDenom(suite.ctx, denomID)
+	suite.Equal(ok, true)
+	suite.Equal(denom, denomE)
 }
 
 func TestKeeperSuite(t *testing.T) {
