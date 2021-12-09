@@ -20237,6 +20237,8 @@ definitions:
     description: >-
       MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
       response type.
+  fulldivevr.imversed.currency.MsgMintTokensResponse:
+    type: object
   ibc.applications.transfer.v1.DenomTrace:
     type: object
     properties:

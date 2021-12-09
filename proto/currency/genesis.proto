@@ -1,0 +1,11 @@
+syntax = "proto3";
+package fulldivevr.imversed.currency;
+
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+
+// GenesisState defines the currency module's genesis state.
+message GenesisState {
+    // this line is used by starport scaffolding # genesis/proto/state
+}

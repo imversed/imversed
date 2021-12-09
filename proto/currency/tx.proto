@@ -1,0 +1,26 @@
+syntax = "proto3";
+package fulldivevr.imversed.currency;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc MintTokens(MsgMintTokens) returns (MsgMintTokensResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgMintTokens {
+  string creator = 1;
+  repeated cosmos.base.v1beta1.Coin amount = 2
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message MsgMintTokensResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message
