@@ -52,6 +52,8 @@ var (
 	tokenData = "{a:a,b:b}"
 
 	isCheckTx = false
+
+	oracleUrl = "https://www.yArtViq.ru/pnSwlld"
 )
 
 type KeeperSuite struct {
@@ -96,14 +98,14 @@ func (suite *KeeperSuite) SetupTest() {
 	types.RegisterQueryServer(queryHelper, app.NFTKeeper)
 	suite.queryClient = types.NewQueryClient(queryHelper)
 
-	err = suite.keeper.IssueDenom(suite.ctx, denomID, denomNm, schema, denomSymbol, address, false, false)
+	err = suite.keeper.IssueDenom(suite.ctx, denomID, denomNm, schema, denomSymbol, address, false, false, oracleUrl)
 	suite.NoError(err)
 
 	// MintNFT shouldn't fail when collection does not exist
-	err = suite.keeper.IssueDenom(suite.ctx, denomID2, denomNm2, schema, denomSymbol2, address, false, false)
+	err = suite.keeper.IssueDenom(suite.ctx, denomID2, denomNm2, schema, denomSymbol2, address, false, false, oracleUrl)
 	suite.NoError(err)
 	//
-	err = suite.keeper.IssueDenom(suite.ctx, denomID3, denomNm3, schema, denomSymbol3, address3, true, true)
+	err = suite.keeper.IssueDenom(suite.ctx, denomID3, denomNm3, schema, denomSymbol3, address3, true, true, oracleUrl)
 	suite.NoError(err)
 
 	// collections should equal 3

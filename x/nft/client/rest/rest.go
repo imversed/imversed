@@ -28,6 +28,7 @@ type issueDenomReq struct {
 	Symbol           string       `json:"symbol"`
 	MintRestricted   bool         `json:"mint_restricted"`
 	UpdateRestricted bool         `json:"update_restricted"`
+	OracleUrl 		 string       `json:"oracle_url"`
 }
 
 type mintNFTReq struct {
