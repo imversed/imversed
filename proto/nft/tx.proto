@@ -11,6 +11,9 @@ service Msg {
     // IssueDenom defines a method for issue a denom.
     rpc IssueDenom(MsgIssueDenom) returns (MsgIssueDenomResponse);
 
+    //UpdateDenom defines a method for update a denom
+    rpc UpdateDenom(MsgUpdateDenom) returns (MsgUpdateDenomResponse);
+
     // MintNFT defines a method for mint a new nft
     rpc MintNFT(MsgMintNFT) returns (MsgMintNFTResponse);
 
@@ -41,8 +44,24 @@ message MsgIssueDenom {
     string oracle_url = 8;
 }
 
+//MsgUpdateDenom defines an SDK message for updating denom
+message MsgUpdateDenom {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string name = 2;
+    string schema = 3;
+    string sender = 4;
+    bool mint_restricted = 5;
+    bool update_restricted = 6;
+    string oracle_url = 7;
+}
+
 // MsgIssueDenomResponse defines the Msg/IssueDenom response type.
 message MsgIssueDenomResponse {}
+
+// MsgUpdateDenomResponse defines the Msg/UpdateDenom response type.
+message MsgUpdateDenomResponse {}
 
 // MsgTransferNFT defines an SDK message for transferring an NFT to recipient.
 message MsgTransferNFT {

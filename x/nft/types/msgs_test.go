@@ -7,7 +7,7 @@ import (
 
 	"github.com/fulldivevr/imversed/x/nft/types"
 )
-
+var denomE = types.NewDenom(denomID, denom, schema, denomSymbol, address, false, false, oracleUrl)
 // ---------------------------------------- Msgs --------------------------------------------------
 
 func TestMsgTransferNFTValidateBasicMethod(t *testing.T) {
@@ -28,11 +28,49 @@ func TestMsgTransferNFTValidateBasicMethod(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestUpdateDenomValidationBasicMethod(t *testing.T) {
+	newMsgUpdateDenom := types.NewMsgUpdateDenom(denomID, denom, schema, address.String(), false, false, oracleUrl)
+	err := newMsgUpdateDenom.ValidateBasic()
+	require.NoError(t, err)
+}
+
+func TestIssueDenomValidationBasicMethod(t *testing.T) {
+	newMsgIssueDenom := types.NewMsgIssueDenom(denomID,denom,schema, address.String(), denomSymbol, false, false, oracleUrl)
+	err := newMsgIssueDenom.ValidateBasic()
+	require.NoError(t, err)
+}
+
 func TestMsgTransferNFTGetSignBytesMethod(t *testing.T) {
 	newMsgTransferNFT := types.NewMsgTransferNFT(denomID, denom, id, tokenURI, tokenData, address.String(), address2.String())
 	sortedBytes := newMsgTransferNFT.GetSignBytes()
 	expected := `{"type":"imversed/nft/MsgTransferNFT","value":{"data":"https://google.com/token-1.json","denom_id":"denom","id":"denom","name":"id1","recipient":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp0ctjdj","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","uri":"https://google.com/token-1.json"}}`
 	require.Equal(t, expected, string(sortedBytes))
+}
+
+func TestMsgIssueDenomGetSignBytesMethod(t *testing.T) {
+	newMsgIssueDenom := types.NewMsgIssueDenom(denomID, denom, schema, address.String(), denomSymbol, false, false, oracleUrl)
+	sortedBytes := newMsgIssueDenom.GetSignBytes()
+	expected := `{"type":"imversed/nft/MsgIssueDenom","value":{"id":"denom","name":"denom","oracle_url":"https://oracle-url.com","schema":"https://schema-url.com","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq","symbol":"denomSymbol"}}`
+	require.Equal(t, expected, string(sortedBytes))
+}
+func TestMsgUpdateDenomGetSignBytesMethod(t *testing.T) {
+	newMsgUpdateDenom := types.NewMsgUpdateDenom(denomID, denom, schema, address.String(), false, false, oracleUrl)
+	sortedBytes := newMsgUpdateDenom.GetSignBytes()
+	expected := `{"type":"imversed/nft/MsgUpdateDenom","value":{"id":"denom","name":"denom","oracle_url":"https://oracle-url.com","schema":"https://schema-url.com","sender":"cosmos15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqjwl8sq"}}`
+	require.Equal(t, expected, string(sortedBytes))
+}
+
+func TestMsgIssueDenomGetSignersMethod(t * testing.T) {
+	newMsgIssueDenom := types.NewMsgIssueDenom(denomID, denom, schema, address.String(), denomSymbol, false, false, oracleUrl)
+	signers := newMsgIssueDenom.GetSigners()
+	require.Equal(t, 1, len(signers))
+	require.Equal(t, address.String(), signers[0].String())
+}
+func TestMsgUpdateDenomGetSignersMethod(t * testing.T) {
+	newMsgUpdateDenom := types.NewMsgUpdateDenom(denomID, denom, schema, address.String(), false, false, oracleUrl)
+	signers := newMsgUpdateDenom.GetSigners()
+	require.Equal(t, 1, len(signers))
+	require.Equal(t, address.String(), signers[0].String())
 }
 
 func TestMsgTransferNFTGetSignersMethod(t *testing.T) {

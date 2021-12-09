@@ -27,6 +27,7 @@ func init() {
 // RegisterLegacyAminoCodec concrete types on codec
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgIssueDenom{}, "imversed/nft/MsgIssueDenom", nil)
+	cdc.RegisterConcrete(&MsgUpdateDenom{}, "imversed/nft/MsgUpdateDenom", nil)
 	cdc.RegisterConcrete(&MsgTransferNFT{}, "imversed/nft/MsgTransferNFT", nil)
 	cdc.RegisterConcrete(&MsgEditNFT{}, "imversed/nft/MsgEditNFT", nil)
 	cdc.RegisterConcrete(&MsgMintNFT{}, "imversed/nft/MsgMintNFT", nil)
@@ -40,6 +41,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgIssueDenom{},
+		&MsgUpdateDenom{},
 		&MsgTransferNFT{},
 		&MsgEditNFT{},
 		&MsgMintNFT{},

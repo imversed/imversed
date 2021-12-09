@@ -8,6 +8,7 @@ import (
 // constant used to indicate that some field should not be updated
 const (
 	TypeMsgIssueDenom    = "issue_denom"
+	TypeMsgUpdateDenom   = "update_denom"
 	TypeMsgTransferNFT   = "transfer_nft"
 	TypeMsgEditNFT       = "edit_nft"
 	TypeMsgMintNFT       = "mint_nft"
@@ -17,6 +18,7 @@ const (
 
 var (
 	_ sdk.Msg = &MsgIssueDenom{}
+	_ sdk.Msg = &MsgUpdateDenom{}
 	_ sdk.Msg = &MsgTransferNFT{}
 	_ sdk.Msg = &MsgEditNFT{}
 	_ sdk.Msg = &MsgMintNFT{}
@@ -24,7 +26,7 @@ var (
 	_ sdk.Msg = &MsgTransferDenom{}
 )
 
-// NewMsgIssueDenom is a constructor function for MsgSetName
+// NewMsgIssueDenom is a constructor function for MsgIssueDenom
 func NewMsgIssueDenom(denomID, denomName, schema, sender, symbol string, mintRestricted, updateRestricted bool, oracleUrl string) *MsgIssueDenom {
 	return &MsgIssueDenom{
 		Sender:           sender,
@@ -32,6 +34,18 @@ func NewMsgIssueDenom(denomID, denomName, schema, sender, symbol string, mintRes
 		Name:             denomName,
 		Schema:           schema,
 		Symbol:           symbol,
+		MintRestricted:   mintRestricted,
+		UpdateRestricted: updateRestricted,
+		OracleUrl: 		  oracleUrl,
+	}
+}
+// NewMsgUpdateDenom is a constructor function for MsgUpdateDenom
+func NewMsgUpdateDenom(denomID, denomName, schema, sender string, mintRestricted, updateRestricted bool, oracleUrl string) *MsgUpdateDenom {
+	return &MsgUpdateDenom{
+		Id:               denomID,
+		Name:             denomName,
+		Schema:           schema,
+		Sender:           sender,
 		MintRestricted:   mintRestricted,
 		UpdateRestricted: updateRestricted,
 		OracleUrl: 		  oracleUrl,
@@ -56,6 +70,18 @@ func (msg MsgIssueDenom) ValidateBasic() error {
 	return ValidateKeywords(msg.Id)
 }
 
+// ValidateBasic Implements Msg.
+func (msg MsgUpdateDenom) ValidateBasic() error {
+	if err := ValidateDenomID(msg.Id); err != nil {
+		return err
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Sender); err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
+	}
+	return ValidateKeywords(msg.Id)
+}
+
 // GetSignBytes Implements Msg.
 func (msg MsgIssueDenom) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&msg)
@@ -69,6 +95,21 @@ func (msg MsgIssueDenom) GetSigners() []sdk.AccAddress {
 		panic(err)
 	}
 	return []sdk.AccAddress{from}
+}
+
+// GetSigners Implements Msg.
+func (msg MsgUpdateDenom) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+// GetSignBytes Implements Msg.
+func (msg MsgUpdateDenom) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(&msg)
+	return sdk.MustSortJSON(bz)
 }
 
 // NewMsgTransferNFT is a constructor function for MsgSetName
