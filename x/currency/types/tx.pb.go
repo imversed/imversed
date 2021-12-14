@@ -291,6 +291,94 @@ func (m *MsgDeleteCurrencyResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgDeleteCurrencyResponse proto.InternalMessageInfo
 
+type MsgIssue struct {
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Denom  string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
+}
+
+func (m *MsgIssue) Reset()         { *m = MsgIssue{} }
+func (m *MsgIssue) String() string { return proto.CompactTextString(m) }
+func (*MsgIssue) ProtoMessage()    {}
+func (*MsgIssue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f919deed15e2a0d2, []int{6}
+}
+func (m *MsgIssue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgIssue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgIssue.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgIssue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgIssue.Merge(m, src)
+}
+func (m *MsgIssue) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgIssue) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgIssue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgIssue proto.InternalMessageInfo
+
+func (m *MsgIssue) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgIssue) GetDenom() string {
+	if m != nil {
+		return m.Denom
+	}
+	return ""
+}
+
+type MsgIssueResponse struct {
+}
+
+func (m *MsgIssueResponse) Reset()         { *m = MsgIssueResponse{} }
+func (m *MsgIssueResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgIssueResponse) ProtoMessage()    {}
+func (*MsgIssueResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f919deed15e2a0d2, []int{7}
+}
+func (m *MsgIssueResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgIssueResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgIssueResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgIssueResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgIssueResponse.Merge(m, src)
+}
+func (m *MsgIssueResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgIssueResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgIssueResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgIssueResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgCreateCurrency)(nil), "fulldivevr.imversed.currency.MsgCreateCurrency")
 	proto.RegisterType((*MsgCreateCurrencyResponse)(nil), "fulldivevr.imversed.currency.MsgCreateCurrencyResponse")
@@ -298,30 +386,38 @@ func init() {
 	proto.RegisterType((*MsgUpdateCurrencyResponse)(nil), "fulldivevr.imversed.currency.MsgUpdateCurrencyResponse")
 	proto.RegisterType((*MsgDeleteCurrency)(nil), "fulldivevr.imversed.currency.MsgDeleteCurrency")
 	proto.RegisterType((*MsgDeleteCurrencyResponse)(nil), "fulldivevr.imversed.currency.MsgDeleteCurrencyResponse")
+	proto.RegisterType((*MsgIssue)(nil), "fulldivevr.imversed.currency.MsgIssue")
+	proto.RegisterType((*MsgIssueResponse)(nil), "fulldivevr.imversed.currency.MsgIssueResponse")
 }
 
 func init() { proto.RegisterFile("currency/tx.proto", fileDescriptor_f919deed15e2a0d2) }
 
 var fileDescriptor_f919deed15e2a0d2 = []byte{
-	// 277 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4c, 0x2e, 0x2d, 0x2a,
-	0x4a, 0xcd, 0x4b, 0xae, 0xd4, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x49,
-	0x2b, 0xcd, 0xc9, 0x49, 0xc9, 0x2c, 0x4b, 0x2d, 0x2b, 0xd2, 0xcb, 0xcc, 0x2d, 0x4b, 0x2d, 0x2a,
-	0x4e, 0x4d, 0xd1, 0x83, 0x29, 0x93, 0x12, 0x87, 0x6b, 0x80, 0x31, 0x20, 0xda, 0x94, 0xec, 0xb9,
-	0x04, 0x7d, 0x8b, 0xd3, 0x9d, 0x8b, 0x52, 0x13, 0x4b, 0x52, 0x9d, 0xa1, 0x52, 0x42, 0x22, 0x5c,
-	0xac, 0xf9, 0xe5, 0x79, 0xa9, 0x45, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0x9c, 0x41, 0x10, 0x0e, 0x48,
-	0x34, 0x25, 0x35, 0x2f, 0x3f, 0x57, 0x82, 0x09, 0x22, 0x0a, 0xe6, 0x28, 0x49, 0x73, 0x49, 0x62,
-	0x18, 0x10, 0x94, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x0a, 0x35, 0x3d, 0xb4, 0x20, 0x85, 0x32,
-	0xd3, 0x51, 0x0d, 0x40, 0x33, 0xdd, 0x25, 0x35, 0x27, 0x95, 0x22, 0xd3, 0x51, 0x0d, 0x80, 0x99,
-	0x6e, 0xf4, 0x93, 0x89, 0x8b, 0xd9, 0xb7, 0x38, 0x5d, 0xa8, 0x8a, 0x8b, 0x0f, 0x2d, 0x78, 0xf4,
-	0xf5, 0xf0, 0x85, 0xb5, 0x1e, 0x46, 0x70, 0x48, 0x99, 0x93, 0xa8, 0x01, 0xe6, 0x06, 0x90, 0xdd,
-	0x68, 0x81, 0x47, 0xd8, 0x6e, 0x54, 0x0d, 0x44, 0xd8, 0x8d, 0x3d, 0x74, 0x41, 0x76, 0xa3, 0x05,
-	0x2d, 0x61, 0xbb, 0x51, 0x35, 0x10, 0x61, 0x37, 0xf6, 0xb0, 0x77, 0xf2, 0x3c, 0xf1, 0x48, 0x8e,
-	0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58,
-	0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0xfd, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4,
-	0xfc, 0x5c, 0x7d, 0x84, 0xe1, 0xfa, 0x30, 0xc3, 0xf5, 0x2b, 0xf4, 0x11, 0x59, 0xa3, 0xb2, 0x20,
-	0xb5, 0x38, 0x89, 0x0d, 0x9c, 0xce, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x93, 0x29,
-	0xbd, 0x33, 0x03, 0x00, 0x00,
+	// 373 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0xcd, 0x4a, 0xc3, 0x40,
+	0x14, 0x85, 0x1b, 0x6d, 0xab, 0xce, 0x42, 0x6d, 0x10, 0xad, 0x51, 0x82, 0x14, 0x14, 0x37, 0xce,
+	0x80, 0x2e, 0xea, 0x4e, 0xb0, 0x6e, 0xba, 0xc8, 0xa6, 0xe0, 0x46, 0x04, 0xb1, 0xc9, 0x35, 0x06,
+	0xda, 0x99, 0x30, 0x93, 0xd4, 0xd6, 0xa7, 0xf0, 0x71, 0x7c, 0x04, 0x97, 0x5d, 0xba, 0x94, 0xf6,
+	0x45, 0x24, 0x3f, 0x93, 0x92, 0xb4, 0x36, 0x91, 0xee, 0x72, 0x27, 0xe7, 0x7c, 0x67, 0xe0, 0x5c,
+	0x06, 0xd5, 0x4c, 0x9f, 0x73, 0xa0, 0xe6, 0x88, 0x78, 0x43, 0xec, 0x72, 0xe6, 0x31, 0xf5, 0xf8,
+	0xc5, 0xef, 0xf5, 0x2c, 0x67, 0x00, 0x03, 0x8e, 0x9d, 0xfe, 0x00, 0xb8, 0x00, 0x0b, 0x4b, 0x99,
+	0x76, 0x90, 0x18, 0xe4, 0x47, 0x64, 0x6b, 0xdc, 0xa0, 0x9a, 0x21, 0xec, 0x16, 0x87, 0x67, 0x0f,
+	0x5a, 0xf1, 0x2f, 0x75, 0x0f, 0x55, 0xd8, 0x1b, 0x05, 0x5e, 0x57, 0x4e, 0x94, 0xf3, 0xad, 0x4e,
+	0x34, 0x04, 0xa7, 0x16, 0x50, 0xd6, 0xaf, 0xaf, 0x45, 0xa7, 0xe1, 0xd0, 0x38, 0x42, 0x87, 0x73,
+	0x80, 0x0e, 0x08, 0x97, 0x51, 0x01, 0x31, 0xfd, 0xde, 0xb5, 0x56, 0xa3, 0xa7, 0x01, 0x19, 0xfa,
+	0x1d, 0xf4, 0x60, 0x25, 0x7a, 0x1a, 0x90, 0xd0, 0xaf, 0xd1, 0xa6, 0x21, 0xec, 0xb6, 0x10, 0x3e,
+	0xa8, 0xfb, 0xa8, 0x2a, 0x80, 0x5a, 0x09, 0x35, 0x9e, 0xfe, 0xc0, 0xaa, 0x68, 0x57, 0x3a, 0x13,
+	0x5a, 0x13, 0x6d, 0x18, 0xc2, 0x36, 0x1c, 0xea, 0x2d, 0x83, 0x99, 0xcc, 0xa1, 0x42, 0xc2, 0xc2,
+	0xa1, 0x51, 0x43, 0x3b, 0xb1, 0x51, 0xb2, 0x2e, 0x3f, 0xcb, 0x68, 0xdd, 0x10, 0xb6, 0xfa, 0x8e,
+	0xb6, 0x33, 0xc5, 0x11, 0xbc, 0x6c, 0x0b, 0xf0, 0x5c, 0x51, 0x5a, 0xf3, 0x9f, 0x06, 0x79, 0x87,
+	0x20, 0x3b, 0x53, 0x6b, 0x7e, 0x76, 0xda, 0x50, 0x20, 0x7b, 0x71, 0xef, 0x41, 0x76, 0xa6, 0xf4,
+	0xfc, 0xec, 0xb4, 0xa1, 0x40, 0xf6, 0xe2, 0xad, 0x50, 0x9f, 0x50, 0x25, 0x5a, 0x89, 0xb3, 0x5c,
+	0x42, 0xa8, 0xd3, 0x70, 0x31, 0x5d, 0x12, 0xf0, 0x88, 0xca, 0xe1, 0x96, 0x9c, 0xe6, 0xfa, 0x02,
+	0x99, 0x76, 0x51, 0x48, 0x26, 0xe9, 0xb7, 0xed, 0xaf, 0x89, 0xae, 0x8c, 0x27, 0xba, 0xf2, 0x33,
+	0xd1, 0x95, 0x8f, 0xa9, 0x5e, 0x1a, 0x4f, 0xf5, 0xd2, 0xf7, 0x54, 0x2f, 0x3d, 0x10, 0xdb, 0xf1,
+	0x5e, 0xfd, 0x2e, 0x36, 0x59, 0x9f, 0xcc, 0x90, 0x44, 0x22, 0xc9, 0x90, 0xcc, 0xde, 0x9c, 0x91,
+	0x0b, 0xa2, 0x5b, 0x0d, 0x1f, 0x90, 0xab, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x5e, 0x82, 0xa4,
+	0x2e, 0x8c, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -339,6 +435,7 @@ type MsgClient interface {
 	CreateCurrency(ctx context.Context, in *MsgCreateCurrency, opts ...grpc.CallOption) (*MsgCreateCurrencyResponse, error)
 	UpdateCurrency(ctx context.Context, in *MsgUpdateCurrency, opts ...grpc.CallOption) (*MsgUpdateCurrencyResponse, error)
 	DeleteCurrency(ctx context.Context, in *MsgDeleteCurrency, opts ...grpc.CallOption) (*MsgDeleteCurrencyResponse, error)
+	Issue(ctx context.Context, in *MsgIssue, opts ...grpc.CallOption) (*MsgIssueResponse, error)
 }
 
 type msgClient struct {
@@ -376,11 +473,21 @@ func (c *msgClient) DeleteCurrency(ctx context.Context, in *MsgDeleteCurrency, o
 	return out, nil
 }
 
+func (c *msgClient) Issue(ctx context.Context, in *MsgIssue, opts ...grpc.CallOption) (*MsgIssueResponse, error) {
+	out := new(MsgIssueResponse)
+	err := c.cc.Invoke(ctx, "/fulldivevr.imversed.currency.Msg/Issue", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreateCurrency(context.Context, *MsgCreateCurrency) (*MsgCreateCurrencyResponse, error)
 	UpdateCurrency(context.Context, *MsgUpdateCurrency) (*MsgUpdateCurrencyResponse, error)
 	DeleteCurrency(context.Context, *MsgDeleteCurrency) (*MsgDeleteCurrencyResponse, error)
+	Issue(context.Context, *MsgIssue) (*MsgIssueResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -395,6 +502,9 @@ func (*UnimplementedMsgServer) UpdateCurrency(ctx context.Context, req *MsgUpdat
 }
 func (*UnimplementedMsgServer) DeleteCurrency(ctx context.Context, req *MsgDeleteCurrency) (*MsgDeleteCurrencyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCurrency not implemented")
+}
+func (*UnimplementedMsgServer) Issue(ctx context.Context, req *MsgIssue) (*MsgIssueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Issue not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -455,6 +565,24 @@ func _Msg_DeleteCurrency_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Issue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgIssue)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Issue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fulldivevr.imversed.currency.Msg/Issue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Issue(ctx, req.(*MsgIssue))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "fulldivevr.imversed.currency.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -470,6 +598,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCurrency",
 			Handler:    _Msg_DeleteCurrency_Handler,
+		},
+		{
+			MethodName: "Issue",
+			Handler:    _Msg_Issue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -656,6 +788,66 @@ func (m *MsgDeleteCurrencyResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgIssue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgIssue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgIssue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Denom) > 0 {
+		i -= len(m.Denom)
+		copy(dAtA[i:], m.Denom)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Denom)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgIssueResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgIssueResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgIssueResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -737,6 +929,32 @@ func (m *MsgDeleteCurrency) Size() (n int) {
 }
 
 func (m *MsgDeleteCurrencyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgIssue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Denom)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgIssueResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1220,6 +1438,170 @@ func (m *MsgDeleteCurrencyResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgDeleteCurrencyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgIssue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgIssue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgIssue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Denom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgIssueResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgIssueResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgIssueResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

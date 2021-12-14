@@ -20410,6 +20410,8 @@ definitions:
     type: object
   fulldivevr.imversed.currency.MsgDeleteCurrencyResponse:
     type: object
+  fulldivevr.imversed.currency.MsgIssueResponse:
+    type: object
   fulldivevr.imversed.currency.MsgUpdateCurrencyResponse:
     type: object
   fulldivevr.imversed.currency.QueryAllCurrencyResponse:

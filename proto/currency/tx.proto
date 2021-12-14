@@ -11,6 +11,7 @@ service Msg {
       rpc CreateCurrency(MsgCreateCurrency) returns (MsgCreateCurrencyResponse);
   rpc UpdateCurrency(MsgUpdateCurrency) returns (MsgUpdateCurrencyResponse);
   rpc DeleteCurrency(MsgDeleteCurrency) returns (MsgDeleteCurrencyResponse);
+  rpc Issue(MsgIssue) returns (MsgIssueResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -33,5 +34,13 @@ message MsgDeleteCurrency {
   string denom = 2;
 }
 message MsgDeleteCurrencyResponse {}
+
+message MsgIssue {
+  string sender = 1;
+  string denom = 2;
+}
+
+message MsgIssueResponse {
+}
 
 // this line is used by starport scaffolding # proto/tx/message

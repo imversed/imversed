@@ -12,7 +12,7 @@ import (
 
 func CmdListCurrency() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-currency",
+		Use:   "list",
 		Short: "list all currency",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
@@ -45,7 +45,7 @@ func CmdListCurrency() *cobra.Command {
 
 func CmdShowCurrency() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-currency [denom]",
+		Use:   "show [denom]",
 		Short: "shows a currency",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
