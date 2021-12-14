@@ -88,6 +88,9 @@ import (
 
 	"github.com/fulldivevr/imversed/docs"
 
+	currencymodule "github.com/fulldivevr/imversed/x/currency"
+	currencymodulekeeper "github.com/fulldivevr/imversed/x/currency/keeper"
+	currencymoduletypes "github.com/fulldivevr/imversed/x/currency/types"
 	"github.com/fulldivevr/imversed/x/nft"
 	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
 	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
@@ -142,6 +145,7 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		nft.AppModuleBasic{},
+		currencymodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -154,6 +158,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		currencymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -206,13 +211,13 @@ type ImversedApp struct {
 	TransferKeeper   ibctransferkeeper.Keeper
 	FeeGrantKeeper   feegrantkeeper.Keeper
 
-	NFTKeeper 		 nftkeeper.Keeper
-
+	NFTKeeper nftkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
+	CurrencyKeeper currencymodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -247,6 +252,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		nfttypes.StoreKey,
+		currencymoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -345,6 +351,15 @@ func New(
 		&stakingKeeper, govRouter,
 	)
 
+	app.CurrencyKeeper = *currencymodulekeeper.NewKeeper(
+		appCodec,
+		keys[currencymoduletypes.StoreKey],
+		keys[currencymoduletypes.MemStoreKey],
+
+		app.BankKeeper,
+	)
+	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
@@ -386,6 +401,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		nft.NewAppModule(appCodec, app.NFTKeeper),
+		currencyModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -420,6 +436,7 @@ func New(
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
+		currencymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -607,6 +624,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
+	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
