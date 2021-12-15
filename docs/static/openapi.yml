@@ -20412,6 +20412,8 @@ definitions:
     type: object
   fulldivevr.imversed.currency.MsgIssueResponse:
     type: object
+  fulldivevr.imversed.currency.MsgMintResponse:
+    type: object
   fulldivevr.imversed.currency.MsgUpdateCurrencyResponse:
     type: object
   fulldivevr.imversed.currency.QueryAllCurrencyResponse:

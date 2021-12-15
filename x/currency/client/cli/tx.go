@@ -33,6 +33,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdUpdateCurrency())
 	cmd.AddCommand(CmdDeleteCurrency())
 	cmd.AddCommand(CmdIssue())
+	cmd.AddCommand(CmdMint())
 	// this line is used by starport scaffolding # 1
 
 	return cmd

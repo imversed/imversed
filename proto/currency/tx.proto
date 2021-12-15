@@ -1,6 +1,8 @@
 syntax = "proto3";
 package fulldivevr.imversed.currency;
 
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "currency/currency.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
@@ -12,6 +14,7 @@ service Msg {
   rpc UpdateCurrency(MsgUpdateCurrency) returns (MsgUpdateCurrencyResponse);
   rpc DeleteCurrency(MsgDeleteCurrency) returns (MsgDeleteCurrencyResponse);
   rpc Issue(MsgIssue) returns (MsgIssueResponse);
+  rpc Mint(MsgMint) returns (MsgMintResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -41,6 +44,14 @@ message MsgIssue {
 }
 
 message MsgIssueResponse {
+}
+
+message MsgMint {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false, (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+}
+
+message MsgMintResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
