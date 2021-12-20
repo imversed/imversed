@@ -1,0 +1,126 @@
+#  // befor run docker-compose
+#    // build two image. one used for setup before docker-compose run. another to start process.
+#  // todo: publish images, because build process takes a lot of time
+#
+#    docker build -t imversedlocal . --progress plain   --platform linux/x86_64         ( --platform linux/x86_64 // use fix param if you use mac on M1)
+#
+#    // setup data in volumes
+#    // first node
+#    docker run -v ~/.imversed1:/root/.imversed  -it -p 26657:26657 -p 26656:26656  imversedlocal imversed init test --chain-id test &&
+#    docker run -it -p 26657:26657 -p 26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed keys add validator &&
+#    docker run -it -p 26657:26657 -p 26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed add-genesis-account validator 1000000000stake --keyring-backend os &&
+#    docker run -it -p 26657:26657 -p 26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed gentx validator 10000000stake --chain-id test --keyring-backend os &&
+#    docker run -it -p 26657:26657 -p 26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed collect-gentxs
+#
+#    // start it if you want to see it works
+#    docker run -it -p 127.0.0.1:26657:26657 -p 127.0.0.1:26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed start
+#    // get tendermint node id to setup peers in next volumes
+#    docker run -it -p 127.0.0.1:26657:26657 -p 127.0.0.1:26656:26656 -v ~/.imversed1:/root/.imversed imversedlocal imversed  tendermint show-node-id // returns [tendermint-node-id]
+#
+#    // setup two more volumes. it is necessary to init. in case copy paste will be consensus error on start.
+#    docker run -v ~/.imversed2:/root/.imversed  -it -p 26657:26657 -p 26656:26656  imversedlocal imversed init test --chain-id test &&
+#    docker run -v ~/.imversed3:/root/.imversed  -it -p 26657:26657 -p 26656:26656  imversedlocal imversed init test --chain-id test
+#
+#    // change genesis in volume 2 and 3
+#    rm -fr ~/.imversed2/config/genesis.json &&
+#    rm -fr ~/.imversed3/config/genesis.json &&
+#    cp ~/.imversed1/config/genesis.json ~/.imversed2/config/genesis.json &&
+#    cp ~/.imversed1/config/genesis.json ~/.imversed3/config/genesis.json
+#
+#    //setup config for 1 node. check RPC configuration
+#    nano ~/.imversed1/config/config.toml
+#
+#    **********************
+#    laddr = "tcp://0.0.0.0:26657"
+#    // in same setting block
+#    cors_allowed_origins = ["*"]
+#    **********************
+#
+#    //setup config for 2 and 3 nodes
+#    // in both files add peers and check RPC configuration
+#    nano ~/.imversed2/config/config.toml
+#    nano ~/.imversed3/config/config.toml
+#    **********************
+#    persistent_peers = "[tendermint-node-id]@192.168.10.2:26656"
+#    laddr = "tcp://0.0.0.0:26657"
+#    // in same setting block
+#    cors_allowed_origins = ["*"]
+#    **********************
+#
+#  // todo: make setup by bash
+version: "3"
+
+services:
+  node1:
+    container_name: node1
+    image: "imversedlocal"
+    environment:
+      - DEBUG=1
+      - ID=0
+      - LOG=${LOG:-simd.log}
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "26656-26657:26656-26657"
+      - "1317:1317"
+      - "9090:9090"
+      - "2345:2345"
+    volumes:
+      - ~/.imversed1:/root/.imversed
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.2
+
+  node2:
+    container_name: node2
+    image: "imversedlocal"
+    environment:
+      - DEBUG=0
+      - ID=1
+      - LOG=${LOG:-simd.log}
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "26666-26667:26656-26657"
+      - "1318:1317"
+      - "9091:9090"
+      - "2346:2345"
+    volumes:
+      - ~/.imversed2:/root/.imversed
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.3
+
+  node3:
+    container_name: node3
+    image: "imversedlocal"
+    environment:
+      - DEBUG=0
+      - ID=1
+      - LOG=${LOG:-simd.log}
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "26676-26677:26656-26657"
+      - "1319:1317"
+      - "9092:9090"
+      - "2347:2345"
+    volumes:
+      - ~/.imversed3:/root/.imversed
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.4
+
+networks:
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/25
