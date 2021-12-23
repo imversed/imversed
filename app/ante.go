@@ -5,12 +5,13 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	ante "github.com/cosmos/cosmos-sdk/x/auth/ante"
+	currencykeeper "github.com/fulldivevr/imversed/x/currency/keeper"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
 // numbers, checks signatures & account numbers, and deducts fees from the first
 // signer.
-func NewAnteHandler(options ante.HandlerOptions) (sdk.AnteHandler, error) {
+func NewAnteHandler(options ante.HandlerOptions, ck currencykeeper.Keeper) (sdk.AnteHandler, error) {
 	if options.AccountKeeper == nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "account keeper is required for ante builder")
 	}
@@ -36,6 +37,7 @@ func NewAnteHandler(options ante.HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(options.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
+		currencykeeper.NewConsumeTxMintCurrencyGasDecorator(ck),
 		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper),
 		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),

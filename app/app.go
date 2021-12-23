@@ -462,6 +462,7 @@ func New(
 			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
+		app.CurrencyKeeper,
 	)
 	if err != nil {
 		panic(err)
