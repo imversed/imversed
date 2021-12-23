@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	// this line is used by starport scaffolding # genesis/types/import
 )
 
 // DefaultIndex is the default capability global index
@@ -12,6 +13,8 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		CurrencyList: []Currency{},
 		// this line is used by starport scaffolding # genesis/types/default
+		// this line is used by starport scaffolding # genesis/types/default
+		Params: DefaultParams(),
 	}
 }
 
@@ -30,5 +33,5 @@ func (gs GenesisState) Validate() error {
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 
-	return nil
+	return gs.Params.Validate()
 }
