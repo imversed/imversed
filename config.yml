@@ -28,8 +28,6 @@ genesis:
             - denom: imversed
               exponent: 6
               aliases: [ "imv", "imversed" ]
-  genutil:
-    gen_txs:
-      auth_info:
-        fee:
-          gas_limit: 200000
+    currency:
+      params:
+        txMintCurrencyCost: "10000000"
