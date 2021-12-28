@@ -32,7 +32,7 @@ func (m msgServer) Issue(goCtx context.Context, msg *types.MsgIssue) (*types.Msg
 	}
 
 	mintingCost := m.GetParams(ctx).TxMintCurrencyCost
-	ctx.BlockGasMeter().ConsumeGas(mintingCost, "txMintCurrency")
+	ctx.GasMeter().ConsumeGas(mintingCost, "txMintCurrency")
 
 	return &types.MsgIssueResponse{}, nil
 }
