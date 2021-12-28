@@ -242,7 +242,7 @@ func New(
 
 	bApp := baseapp.NewBaseApp(Name, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion("v2.0")
+	bApp.SetVersion("v2.2")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -312,16 +312,6 @@ func New(
 	cfg := module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	//app.mm.RegisterServices(cfg)
 	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
-	app.UpgradeKeeper.SetUpgradeHandler("v2.0", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
-		println("PLAN NAME:", plan.Name)
-
-		err := cfg.RegisterMigration("nft", 2, app.NFTKeeper.MigrationAddOracleUrl)
-		if err != nil {
-			return nil, err
-		}
-
-		return app.mm.RunMigrations(ctx, cfg, vm)
-	})
 
 	//
 	// register the staking hooks
@@ -374,7 +364,15 @@ func New(
 		app.BankKeeper,
 	)
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
+	app.UpgradeKeeper.SetUpgradeHandler("v2.2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+		println("PLAN NAME:", plan.Name)
 
+		app.CurrencyKeeper.SetParams(ctx, currencymoduletypes.Params{
+			TxMintCurrencyCost: 10000000000000,
+		})
+
+		return vm, nil
+	})
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
