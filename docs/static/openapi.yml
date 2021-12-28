@@ -20446,15 +20446,9 @@ definitions:
         type: string
       owner:
         type: string
-  fulldivevr.imversed.currency.MsgCreateCurrencyResponse:
-    type: object
-  fulldivevr.imversed.currency.MsgDeleteCurrencyResponse:
-    type: object
   fulldivevr.imversed.currency.MsgIssueResponse:
     type: object
   fulldivevr.imversed.currency.MsgMintResponse:
-    type: object
-  fulldivevr.imversed.currency.MsgUpdateCurrencyResponse:
     type: object
   fulldivevr.imversed.currency.Params:
     type: object

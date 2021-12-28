@@ -10,8 +10,7 @@ import (
 var _ paramtypes.ParamSet = (*Params)(nil)
 
 var (
-	KeyTxMintCurrencyCost = []byte("TxMintCurrencyCost")
-	// TODO: Determine the default value
+	KeyTxMintCurrencyCost            = []byte("TxMintCurrencyCost")
 	DefaultTxMintCurrencyCost uint64 = 1000000
 )
 

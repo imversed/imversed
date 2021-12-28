@@ -2,7 +2,6 @@ syntax = "proto3";
 package fulldivevr.imversed.currency;
 
 import "gogoproto/gogo.proto";
-import "currency/params.proto";
 import "currency/currency.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
