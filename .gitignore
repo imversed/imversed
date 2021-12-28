@@ -4,3 +4,4 @@ release/
 .idea
 .DS_Store
 tmp/
+.vscode/
