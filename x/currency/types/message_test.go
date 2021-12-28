@@ -8,22 +8,53 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestMsgCreateCurrency_ValidateBasic(t *testing.T) {
+func TestMsgMint_ValidateBasic(t *testing.T) {
 	tests := []struct {
 		name string
-		msg  MsgCreateCurrency
+		msg  MsgMint
 		err  error
 	}{
 		{
 			name: "invalid address",
-			msg: MsgCreateCurrency{
-				Owner: "invalid_address",
+			msg: MsgMint{
+				Sender: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
-			msg: MsgCreateCurrency{
-				Owner: sample.AccAddress(),
+			msg: MsgMint{
+				Sender: sample.AccAddress(),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.msg.ValidateBasic()
+			if tt.err != nil {
+				require.ErrorIs(t, err, tt.err)
+				return
+			}
+			require.NoError(t, err)
+		})
+	}
+}
+
+func TestMsgIssue_ValidateBasic(t *testing.T) {
+	tests := []struct {
+		name string
+		msg  MsgIssue
+		err  error
+	}{
+		{
+			name: "invalid address",
+			msg: MsgIssue{
+				Sender: "invalid_address",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		}, {
+			name: "valid address",
+			msg: MsgIssue{
+				Sender: sample.AccAddress(),
 			},
 		},
 	}
@@ -54,37 +85,6 @@ func TestMsgUpdateCurrency_ValidateBasic(t *testing.T) {
 		}, {
 			name: "valid address",
 			msg: MsgUpdateCurrency{
-				Owner: sample.AccAddress(),
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := tt.msg.ValidateBasic()
-			if tt.err != nil {
-				require.ErrorIs(t, err, tt.err)
-				return
-			}
-			require.NoError(t, err)
-		})
-	}
-}
-
-func TestMsgDeleteCurrency_ValidateBasic(t *testing.T) {
-	tests := []struct {
-		name string
-		msg  MsgDeleteCurrency
-		err  error
-	}{
-		{
-			name: "invalid address",
-			msg: MsgDeleteCurrency{
-				Owner: "invalid_address",
-			},
-			err: sdkerrors.ErrInvalidAddress,
-		}, {
-			name: "valid address",
-			msg: MsgDeleteCurrency{
 				Owner: sample.AccAddress(),
 			},
 		},

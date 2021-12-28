@@ -36,6 +36,7 @@ func CurrencyKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		memStoreKey,
 		"CurrencyParams",
 	)
+
 	k := keeper.NewKeeper(
 		cdc,
 		storeKey,

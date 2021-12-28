@@ -35,19 +35,6 @@ func TestCurrencyGet(t *testing.T) {
 		require.Equal(t, item, rst)
 	}
 }
-func TestCurrencyRemove(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
-	items := createNCurrency(keeper, ctx, 10)
-	for _, item := range items {
-		keeper.RemoveCurrency(ctx,
-			item.Denom,
-		)
-		_, found := keeper.GetCurrency(ctx,
-			item.Denom,
-		)
-		require.False(t, found)
-	}
-}
 
 func TestCurrencyGetAll(t *testing.T) {
 	keeper, ctx := keepertest.CurrencyKeeper(t)

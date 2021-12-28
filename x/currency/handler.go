@@ -17,14 +17,8 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		switch msg := msg.(type) {
-		case *types.MsgCreateCurrency:
-			res, err := msgServer.CreateCurrency(sdk.WrapSDKContext(ctx), msg)
-			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgUpdateCurrency:
 			res, err := msgServer.UpdateCurrency(sdk.WrapSDKContext(ctx), msg)
-			return sdk.WrapServiceResult(ctx, res, err)
-		case *types.MsgDeleteCurrency:
-			res, err := msgServer.DeleteCurrency(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgIssue:
 			res, err := msgServer.Issue(sdk.WrapSDKContext(ctx), msg)
