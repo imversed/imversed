@@ -35,8 +35,9 @@ func (k Keeper) IssueDenom(ctx sdk.Context,
 	id, name, schema, symbol string,
 	creator sdk.AccAddress,
 	mintRestricted, updateRestricted bool,
+	oracleUrl string,
 ) error {
-	return k.SetDenom(ctx, types.NewDenom(id, name, schema, symbol, creator, mintRestricted, updateRestricted))
+	return k.SetDenom(ctx, types.NewDenom(id, name, schema, symbol, creator, mintRestricted, updateRestricted, oracleUrl))
 }
 
 // MintNFT mints an NFT and manages the NFT's existence within Collections and Owners
@@ -186,5 +187,21 @@ func (k Keeper) TransferDenomOwner(
 		return err
 	}
 
+	return nil
+}
+
+func (k Keeper) MigrationAddOracleUrl(ctx sdk.Context) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyDenomID(""))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var denom types.Denom
+		k.cdc.MustUnmarshal(iterator.Value(), &denom)
+		denom.OracleUrl = ""
+		updates := k.cdc.MustMarshal(&denom)
+
+		store.Set(types.KeyDenomID(denom.Id), updates)
+	}
 	return nil
 }

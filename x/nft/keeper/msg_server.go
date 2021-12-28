@@ -30,7 +30,7 @@ func (m msgServer) IssueDenom(goCtx context.Context, msg *types.MsgIssueDenom) (
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Schema, msg.Symbol, sender, msg.MintRestricted, msg.UpdateRestricted); err != nil {
+	if err := m.Keeper.IssueDenom(ctx, msg.Id, msg.Name, msg.Schema, msg.Symbol, sender, msg.MintRestricted, msg.UpdateRestricted, msg.OracleUrl); err != nil {
 		return nil, err
 	}
 
@@ -49,6 +49,63 @@ func (m msgServer) IssueDenom(goCtx context.Context, msg *types.MsgIssueDenom) (
 	})
 
 	return &types.MsgIssueDenomResponse{}, nil
+}
+
+// UpdateDenom updates a existing denom.
+func (m msgServer) UpdateDenom(goCtx context.Context, msg *types.MsgUpdateDenom) (*types.MsgUpdateDenomResponse, error) {
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	denom, found := m.Keeper.GetDenom(ctx, msg.Id)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidDenom, "denom ID %s not exists", msg.Id)
+	}
+
+	// Check permission for update denom
+	creator, err := sdk.AccAddressFromBech32(denom.Creator)
+	if err != nil {
+		return nil, err
+	}
+		
+	if !sender.Equals(creator) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to update denom %s", creator.String(), denom.Id)
+	}
+
+	if (msg.Name != "") {
+		denom.Name = msg.Name
+	}
+	if (msg.Schema != "") {
+		denom.Schema = msg.Schema
+	}
+	if (msg.OracleUrl != "") {
+		denom.OracleUrl = msg.OracleUrl
+	}
+	denom.MintRestricted = msg.MintRestricted
+	denom.UpdateRestricted = msg.UpdateRestricted
+	
+	if err := m.Keeper.UpdateDenom(ctx, denom); err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUpdateDenom,
+			sdk.NewAttribute(types.AttributeKeyDenomID, msg.Id),
+			sdk.NewAttribute(types.AttributeKeyDenomName, msg.Name),
+			sdk.NewAttribute(types.AttributeKeyCreator, msg.Sender),
+		),
+		sdk.NewEvent(
+			sdk.EventTypeMessage,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+		),
+	})
+
+	return &types.MsgUpdateDenomResponse{}, nil
 }
 
 func (m msgServer) MintNFT(goCtx context.Context, msg *types.MsgMintNFT) (*types.MsgMintNFTResponse, error) {

@@ -3,6 +3,7 @@ package types
 // NFT module event types
 var (
 	EventTypeIssueDenom    = "issue_denom"
+	EventTypeUpdateDenom   = "update_denom"
 	EventTypeTransfer      = "transfer_nft"
 	EventTypeEditNFT       = "edit_nft"
 	EventTypeMintNFT       = "mint_nft"

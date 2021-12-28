@@ -17,6 +17,9 @@ var (
 	address2  = CreateTestAddrs(2)[1]
 	tokenURI  = "https://google.com/token-1.json"
 	tokenData = "https://google.com/token-1.json"
+	schema    = "https://schema-url.com"
+	oracleUrl = "https://oracle-url.com"
+	denomSymbol = "denomSymbol"
 )
 
 // CreateTestAddrs creates test addresses

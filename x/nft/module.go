@@ -30,8 +30,8 @@ import (
 )
 
 var (
-	_ module.AppModule           = AppModule{}
-	_ module.AppModuleBasic      = AppModuleBasic{}
+	_ module.AppModule      = AppModule{}
+	_ module.AppModuleBasic = AppModuleBasic{}
 	//_ module.AppModuleSimulation = AppModule{}
 )
 
@@ -100,7 +100,7 @@ type AppModule struct {
 }
 
 func (am AppModule) ConsensusVersion() uint64 {
-	return 2
+	return 3
 }
 
 // NewAppModule creates a new AppModule object

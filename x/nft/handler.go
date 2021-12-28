@@ -19,6 +19,9 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgIssueDenom:
 			res, err := msgServer.IssueDenom(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgUpdateDenom:
+			res, err := msgServer.UpdateDenom(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgMintNFT:
 			res, err := msgServer.MintNFT(sdk.WrapSDKContext(ctx), msg)
