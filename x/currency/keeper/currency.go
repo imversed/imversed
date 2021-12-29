@@ -46,18 +46,6 @@ func (k Keeper) GetCurrency(
 	return val, true
 }
 
-// RemoveCurrency removes a currency from the store
-func (k Keeper) RemoveCurrency(
-	ctx sdk.Context,
-	denom string,
-
-) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrencyKeyPrefix))
-	store.Delete(types.CurrencyKey(
-		denom,
-	))
-}
-
 // GetAllCurrency returns all currency
 func (k Keeper) GetAllCurrency(ctx sdk.Context) (list []types.Currency) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrencyKeyPrefix))

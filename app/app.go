@@ -360,8 +360,6 @@ func New(
 		keys[currencymoduletypes.StoreKey],
 		keys[currencymoduletypes.MemStoreKey],
 		app.GetSubspace(currencymoduletypes.ModuleName),
-
-		app.BankKeeper,
 	)
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
 	app.UpgradeKeeper.SetUpgradeHandler("v2.2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
@@ -464,7 +462,7 @@ func New(
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 
-	anteHandler, err := NewAnteHandler(
+	anteHandler, err := ante.NewAnteHandler(
 		ante.HandlerOptions{
 			AccountKeeper:   app.AccountKeeper,
 			BankKeeper:      app.BankKeeper,
@@ -472,8 +470,8 @@ func New(
 			FeegrantKeeper:  app.FeeGrantKeeper,
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
-		app.CurrencyKeeper,
 	)
+
 	if err != nil {
 		panic(err)
 	}

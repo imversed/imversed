@@ -109,3 +109,14 @@ func TestCurrencyQueryPaginated(t *testing.T) {
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }
+
+func TestParamsQuery(t *testing.T) {
+	keeper, ctx := keepertest.CurrencyKeeper(t)
+	wctx := sdk.WrapSDKContext(ctx)
+	params := types.DefaultParams()
+	keeper.SetParams(ctx, params)
+
+	response, err := keeper.Params(wctx, &types.QueryParamsRequest{})
+	require.NoError(t, err)
+	require.Equal(t, &types.QueryParamsResponse{Params: params}, response)
+}
