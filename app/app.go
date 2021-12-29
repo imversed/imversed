@@ -360,6 +360,7 @@ func New(
 		keys[currencymoduletypes.StoreKey],
 		keys[currencymoduletypes.MemStoreKey],
 		app.GetSubspace(currencymoduletypes.ModuleName),
+		app.BankKeeper,
 	)
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
 	app.UpgradeKeeper.SetUpgradeHandler("v2.2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
