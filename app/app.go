@@ -363,15 +363,6 @@ func New(
 		app.BankKeeper,
 	)
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
-	app.UpgradeKeeper.SetUpgradeHandler("v2.2", func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
-		println("PLAN NAME:", plan.Name)
-
-		app.CurrencyKeeper.SetParams(ctx, currencymoduletypes.Params{
-			TxMintCurrencyCost: 10000000000000,
-		})
-
-		return vm, nil
-	})
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
@@ -479,6 +470,8 @@ func New(
 
 	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
+
+	app.setUpgradeHandler(cfg)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
