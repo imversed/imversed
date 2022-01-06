@@ -2,12 +2,11 @@ package cli
 
 import (
 	"fmt"
-	"strconv"
-	"time"
-
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/version"
+	"strconv"
 
 	"github.com/spf13/cobra"
 
@@ -15,15 +14,6 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/fulldivevr/imversed/x/currency/types"
 )
-
-var (
-	DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
-)
-
-//const (
-//	flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
-//	listSeparator              = ","
-//)
 
 // GetTxCmd returns the transaction commands for this module
 func GetTxCmd() *cobra.Command {
@@ -46,9 +36,10 @@ var _ = strconv.Itoa(0)
 
 func CmdIssue() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "issue [denom]",
-		Short: "Broadcast message issue",
-		Args:  cobra.ExactArgs(1),
+		Use:     "issue [denom]",
+		Long:    "Issue a new token denomination",
+		Example: fmt.Sprintf("$ %s tx %s issue <denom> --from=<key-name>", version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argDenom := args[0]
 
@@ -75,9 +66,10 @@ func CmdIssue() *cobra.Command {
 
 func CmdMint() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "mint [coin]",
-		Short: "Broadcast message mint",
-		Args:  cobra.ExactArgs(1),
+		Use:     "mint [token]",
+		Short:   "Mint tokens for particular denomination",
+		Example: fmt.Sprintf("$ %s tx %s mint 100500tokenname --from=<key-name>", version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			coin, err := sdk.ParseCoinNormalized(args[0])
 			if err != nil {
