@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/version"
 
 	// "strings"
 
@@ -37,8 +38,9 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 
 func CmdListCurrency() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "list all currency",
+		Use:     "list",
+		Long:    "Get list of all token denominations",
+		Example: fmt.Sprintf("$ %s query %s list", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
@@ -70,9 +72,10 @@ func CmdListCurrency() *cobra.Command {
 
 func CmdShowCurrency() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show [denom]",
-		Short: "shows a currency",
-		Args:  cobra.ExactArgs(1),
+		Use:     "show [denom]",
+		Long:    "Show token denomination details",
+		Example: fmt.Sprintf("$ %s query %s show <denom>", version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
@@ -100,9 +103,10 @@ func CmdShowCurrency() *cobra.Command {
 
 func CmdQueryParams() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "params",
-		Short: "shows the parameters of the module",
-		Args:  cobra.NoArgs,
+		Use:     "params",
+		Short:   "shows the parameters of the module",
+		Example: fmt.Sprintf("$ %s query %s params", version.AppName, types.ModuleName),
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
