@@ -31,7 +31,6 @@ func (k Keeper) SetCurrency(ctx sdk.Context, currency types.Currency) error {
 func (k Keeper) GetCurrency(
 	ctx sdk.Context,
 	denom string,
-
 ) (val types.Currency, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrencyKeyPrefix))
 

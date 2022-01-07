@@ -17,7 +17,7 @@ func (k Keeper) CurrencyAll(c context.Context, req *types.QueryAllCurrencyReques
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var currencys []types.Currency
+	var currencies []types.Currency
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
@@ -29,7 +29,7 @@ func (k Keeper) CurrencyAll(c context.Context, req *types.QueryAllCurrencyReques
 			return err
 		}
 
-		currencys = append(currencys, currency)
+		currencies = append(currencies, currency)
 		return nil
 	})
 
@@ -37,7 +37,7 @@ func (k Keeper) CurrencyAll(c context.Context, req *types.QueryAllCurrencyReques
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllCurrencyResponse{Currency: currencys, Pagination: pageRes}, nil
+	return &types.QueryAllCurrencyResponse{Currency: currencies, Pagination: pageRes}, nil
 }
 
 func (k Keeper) Currency(c context.Context, req *types.QueryGetCurrencyRequest) (*types.QueryGetCurrencyResponse, error) {

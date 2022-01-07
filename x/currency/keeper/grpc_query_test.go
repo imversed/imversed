@@ -18,7 +18,7 @@ import (
 var _ = strconv.IntSize
 
 func TestCurrencyQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
+	keeper, ctx := keepertest.CurrencyKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNCurrency(keeper, ctx, 2)
 	for _, tc := range []struct {
@@ -65,7 +65,7 @@ func TestCurrencyQuerySingle(t *testing.T) {
 }
 
 func TestCurrencyQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
+	keeper, ctx := keepertest.CurrencyKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNCurrency(keeper, ctx, 5)
 
@@ -111,7 +111,7 @@ func TestCurrencyQueryPaginated(t *testing.T) {
 }
 
 func TestParamsQuery(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
+	keeper, ctx := keepertest.CurrencyKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	params := types.DefaultParams()
 	keeper.SetParams(ctx, params)

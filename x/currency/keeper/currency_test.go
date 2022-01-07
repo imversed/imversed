@@ -17,7 +17,7 @@ var _ = strconv.IntSize
 func createNCurrency(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Currency {
 	items := make([]types.Currency, n)
 	for i := range items {
-		items[i].Denom = strconv.Itoa(i)
+		items[i].Denom = strconv.Itoa(i * 100)
 
 		keeper.SetCurrency(ctx, items[i])
 	}
@@ -25,10 +25,10 @@ func createNCurrency(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Curr
 }
 
 func TestCurrencyGet(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
-	items := createNCurrency(keeper, ctx, 10)
+	k, ctx := keepertest.CurrencyKeeper(t, nil)
+	items := createNCurrency(k, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetCurrency(ctx,
+		rst, found := k.GetCurrency(ctx,
 			item.Denom,
 		)
 		require.True(t, found)
@@ -37,7 +37,8 @@ func TestCurrencyGet(t *testing.T) {
 }
 
 func TestCurrencyGetAll(t *testing.T) {
-	keeper, ctx := keepertest.CurrencyKeeper(t)
-	items := createNCurrency(keeper, ctx, 10)
-	require.ElementsMatch(t, items, keeper.GetAllCurrency(ctx))
+	k, ctx := keepertest.CurrencyKeeper(t, nil)
+	items := createNCurrency(k, ctx, 10)
+	saved := k.GetAllCurrency(ctx)
+	require.ElementsMatch(t, items, saved)
 }

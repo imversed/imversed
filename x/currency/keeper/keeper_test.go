@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetParams(t *testing.T) {
-	k, ctx := testkeeper.CurrencyKeeper(t)
+	k, ctx := testkeeper.CurrencyKeeper(t, nil)
 	params := types.DefaultParams()
 
 	k.SetParams(ctx, params)
