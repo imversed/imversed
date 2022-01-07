@@ -19,13 +19,5 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 // ExportGenesis returns the capability module's exported genesis.
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
-	genesis := types.DefaultGenesis()
-
-	genesis.CurrencyList = k.GetAllCurrency(ctx)
-
-	genesis.Params = k.GetParams(ctx)
-
-	// this line is used by starport scaffolding # genesis/module/export
-
-	return genesis
+	return types.NewGenesisState(k.GetAllCurrency(ctx), k.GetParams(ctx))
 }

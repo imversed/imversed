@@ -10,11 +10,17 @@ const DefaultIndex uint64 = 1
 
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
+	return NewGenesisState(
+		[]Currency{},
+		DefaultParams(),
+	)
+}
+
+// NewGenesisState creates a new genesis state.
+func NewGenesisState(currencyList []Currency, params Params) *GenesisState {
 	return &GenesisState{
-		CurrencyList: []Currency{},
-		// this line is used by starport scaffolding # genesis/types/default
-		// this line is used by starport scaffolding # genesis/types/default
-		Params: DefaultParams(),
+		CurrencyList: currencyList,
+		Params:       params,
 	}
 }
 
