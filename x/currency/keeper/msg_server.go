@@ -32,18 +32,22 @@ func (m msgServer) Issue(goCtx context.Context, msg *types.MsgIssue) (*types.Msg
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			types.EventTypeIssue,
-			sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
-			sdk.NewAttribute(types.AttributeKeyOwner, msg.Sender),
-		),
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
-		),
-	})
+	// https://github.com/cosmos/cosmos-sdk/blob/a47bd592e951d34ebbffca03f85ca98d65b61be8/docs/architecture/adr-032-typed-events.md
+	//ctx.EventManager().EmitEvents(sdk.Events{
+	//	sdk.NewEvent(
+	//		types.EventTypeIssue,
+	//		sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
+	//		sdk.NewAttribute(types.AttributeKeyOwner, msg.Sender),
+	//	),
+	//	sdk.NewEvent(
+	//		sdk.EventTypeMessage,
+	//		sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+	//		sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+	//	),
+	//})
+	if err := ctx.EventManager().EmitTypedEvents(msg); err != nil {
+		return nil, err
+	}
 
 	return &types.MsgIssueResponse{}, nil
 }
@@ -54,7 +58,7 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 	denom := msg.Coin.Denom
 	currency, found := m.Keeper.GetCurrency(ctx, denom)
 	if !found {
-		return nil, sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom %s does not exists", currency.Denom)
+		return nil, sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom [%s] does not exists", currency.Denom)
 	}
 
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -82,17 +86,20 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			types.EventTypeMint,
-			sdk.NewAttribute(types.AttributeKeyOwner, msg.Sender),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Coin.String()),
-		),
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
-		),
-	})
+	//ctx.EventManager().EmitEvents(sdk.Events{
+	//	sdk.NewEvent(
+	//		types.EventTypeMint,
+	//		sdk.NewAttribute(types.AttributeKeyOwner, msg.Sender),
+	//		sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Coin.String()),
+	//	),
+	//	sdk.NewEvent(
+	//		sdk.EventTypeMessage,
+	//		sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+	//	),
+	//})
+	if err := ctx.EventManager().EmitTypedEvents(msg); err != nil {
+		return nil, err
+	}
 
 	return &types.MsgMintResponse{}, nil
 }
