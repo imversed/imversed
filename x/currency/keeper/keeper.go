@@ -9,6 +9,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/fulldivevr/imversed/x/currency/types"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type (
@@ -47,20 +49,37 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-// GetParams get all parameters as types.Params
-func (k Keeper) GetParams(ctx sdk.Context) types.Params {
-	return types.NewParams(
-		k.TxMintCurrencyCost(ctx),
-	)
+func (k Keeper) Issue(ctx sdk.Context, denom string, owner sdk.AccAddress) error {
+	return k.SetCurrency(ctx, types.NewCurrency(denom, owner))
 }
 
-// SetParams set the params
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramstore.SetParamSet(ctx, &params)
-}
+func (k Keeper) Mint(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error {
+	denom := coin.Denom
+	currency, found := k.GetCurrency(ctx, denom)
+	if !found {
+		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom [%s] does not exists", currency.Denom)
+	}
 
-// TxMintCurrencyCost returns the TxMintCurrencyCost param
-func (k Keeper) TxMintCurrencyCost(ctx sdk.Context) (res uint64) {
-	k.paramstore.Get(ctx, types.KeyTxMintCurrencyCost, &res)
-	return
+	expected, err := sdk.AccAddressFromBech32(currency.Owner)
+	if err != nil {
+		return err
+	}
+
+	if !owner.Equals(expected) {
+		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "sender is not owner")
+	}
+
+	mintingCost := k.GetParams(ctx).TxMintCurrencyCost
+	ctx.GasMeter().ConsumeGas(mintingCost, "txMintCurrency")
+
+	coins := sdk.NewCoins(coin)
+	if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, coins); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, owner, coins); err != nil {
+		return err
+	}
+
+	return nil
 }
