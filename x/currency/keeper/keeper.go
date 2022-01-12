@@ -57,7 +57,7 @@ func (k Keeper) Mint(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error
 	denom := coin.Denom
 	currency, found := k.GetCurrency(ctx, denom)
 	if !found {
-		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom [%s] does not exists", currency.Denom)
+		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom %s does not exists", denom)
 	}
 
 	expected, err := sdk.AccAddressFromBech32(currency.Owner)
