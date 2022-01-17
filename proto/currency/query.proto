@@ -1,0 +1,58 @@
+syntax = "proto3";
+package fulldivevr.imversed.currency;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "currency/currency.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Queries a currency by index.
+	rpc Currency(QueryGetCurrencyRequest) returns (QueryGetCurrencyResponse) {
+		option (google.api.http).get = "/fulldivevr/imversed/currency/currency/{denom}";
+	}
+
+	// Queries a list of currency items.
+	rpc CurrencyAll(QueryAllCurrencyRequest) returns (QueryAllCurrencyResponse) {
+		option (google.api.http).get = "/fulldivevr/imversed/currency/currency";
+	}
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/fulldivevr/imversed/currency/params";
+  }
+
+// this line is used by starport scaffolding # 2
+}
+
+message QueryGetCurrencyRequest {
+	  string denom = 1;
+
+}
+
+message QueryGetCurrencyResponse {
+	Currency currency = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllCurrencyRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllCurrencyResponse {
+	repeated Currency currency = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// this line is used by starport scaffolding # 3
