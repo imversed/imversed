@@ -1,20 +1,21 @@
 package keeper_test
 
 import (
-	"bytes"
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/baseapp"
+
 	imversedapp "github.com/fulldivevr/imversed/app"
+	"github.com/fulldivevr/imversed/testutil"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
+
+	"os"
+	"path/filepath"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/spm/cosmoscmd"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"os"
-	"path/filepath"
-	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,10 +25,10 @@ import (
 )
 
 var (
-	denomID     = "denomid"
-	denomNm     = "denomnm"
-	denomSymbol = "denomSymbol"
-	schema      = "{a:a,b:b}"
+	denomID      = "denomid"
+	denomNm      = "denomnm"
+	denomSymbol  = "denomSymbol"
+	schema       = "{a:a,b:b}"
 	denomID2     = "denomid2"
 	denomNm2     = "denom2nm"
 	denomSymbol2 = "denomSymbol2"
@@ -44,14 +45,12 @@ var (
 	denomNm3     = "denom3nm"
 	denomSymbol3 = "denomSymbol3"
 
-	address   = CreateTestAddrs(1)[0]
-	address2  = CreateTestAddrs(2)[1]
-	address3  = CreateTestAddrs(3)[2]
+	address   = testutil.CreateTestAddrs(1)[0]
+	address2  = testutil.CreateTestAddrs(2)[1]
+	address3  = testutil.CreateTestAddrs(3)[2]
 	tokenURI  = "https://google.com/token-1.json"
 	tokenURI2 = "https://google.com/token-2.json"
 	tokenData = "{a:a,b:b}"
-
-	isCheckTx = false
 
 	oracleUrl = "https://www.yArtViq.ru/pnSwlld"
 )
@@ -59,7 +58,7 @@ var (
 type KeeperSuite struct {
 	suite.Suite
 
-	app			imversedapp.ImversedApp
+	app         imversedapp.ImversedApp
 	legacyAmino *codec.LegacyAmino
 	ctx         sdk.Context
 	keeper      nftkeeper.Keeper
@@ -108,8 +107,6 @@ func (suite *KeeperSuite) SetupTest() {
 	err = suite.keeper.IssueDenom(suite.ctx, denomID3, denomNm3, schema, denomSymbol3, address3, true, true, oracleUrl)
 	suite.NoError(err)
 
-	
-
 	// collections should equal 3
 	collections := suite.keeper.GetCollections(suite.ctx)
 	suite.NotEmpty(collections)
@@ -119,7 +116,7 @@ func (suite *KeeperSuite) SetupTest() {
 func (suite *KeeperSuite) TestUpdateDenom() {
 	denomE := nft.NewDenom(denomID, denomNm, schema, denomSymbol, address, false, false, "")
 	err := suite.keeper.UpdateDenom(suite.ctx, denomE)
-	suite.NoError(err)	
+	suite.NoError(err)
 	denom, ok := suite.keeper.GetDenom(suite.ctx, denomID)
 	suite.Equal(ok, true)
 	suite.Equal(denom, denomE)
@@ -236,46 +233,4 @@ func (suite *KeeperSuite) TestBurnNFT() {
 
 	//msg, fail := keeper.SupplyInvariant(suite.keeper)(suite.ctx)
 	//suite.False(fail, msg)
-}
-
-// CreateTestAddrs creates test addresses
-func CreateTestAddrs(numAddrs int) []sdk.AccAddress {
-	var addresses []sdk.AccAddress
-	var buffer bytes.Buffer
-
-	// start at 100 so we can make up to 999 test addresses with valid test addresses
-	for i := 100; i < (numAddrs + 100); i++ {
-		numString := strconv.Itoa(i)
-		buffer.WriteString("A58856F0FD53BF058B4909A21AEC019107BA6") //base address string
-
-		buffer.WriteString(numString) //adding on final two digits to make addresses unique
-		res, _ := sdk.AccAddressFromHex(buffer.String())
-		bech := res.String()
-		addresses = append(addresses, testAddr(buffer.String(), bech))
-		buffer.Reset()
-	}
-
-	return addresses
-}
-
-// for incode address generation
-func testAddr(addr string, bech string) sdk.AccAddress {
-	res, err := sdk.AccAddressFromHex(addr)
-	if err != nil {
-		panic(err)
-	}
-	bechexpected := res.String()
-	if bech != bechexpected {
-		panic("Bech encoding doesn't match reference")
-	}
-
-	bechres, err := sdk.AccAddressFromBech32(bech)
-	if err != nil {
-		panic(err)
-	}
-	if !bytes.Equal(bechres, res) {
-		panic("Bech decode and hex decode don't match")
-	}
-
-	return res
 }

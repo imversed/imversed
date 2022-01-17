@@ -198,8 +198,7 @@ func (k Keeper) MigrationAddOracleUrl(ctx sdk.Context) error {
 	for ; iterator.Valid(); iterator.Next() {
 		var denom types.Denom
 		k.cdc.MustUnmarshal(iterator.Value(), &denom)
-		// todo: important: before merge in master change oracleUrl -> "https://api.fdvr.co/instagram-nft/oracle-validate"
-		denom.OracleUrl = "https://api-staging.fdvr.co/instagram-nft/oracle-validate"
+		denom.OracleUrl = ""
 		updates := k.cdc.MustMarshal(&denom)
 
 		store.Set(types.KeyDenomID(denom.Id), updates)
