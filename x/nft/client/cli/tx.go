@@ -29,6 +29,7 @@ func NewTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetCmdIssueDenom(),
+		GetCmdUpdateDenom(),
 		GetCmdMintNFT(),
 		GetCmdEditNFT(),
 		GetCmdTransferNFT(),
@@ -53,7 +54,8 @@ func GetCmdIssueDenom() *cobra.Command {
 				"--update-restricted=<update-restricted> "+
 				"--schema=<schema-content or path to schema.json> "+
 				"--chain-id=<chain-id> "+
-				"--fees=<fee>",
+				"--fees=<fee> "+
+				"--oracle-url=<oracle-url>",
 			version.AppName,
 		),
 		Args: cobra.ExactArgs(1),
@@ -83,6 +85,10 @@ func GetCmdIssueDenom() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			oracleUrl, err := cmd.Flags().GetString(FlagOracleUrl)
+			if err != nil {
+				return err
+			}
 			optionsContent, err := ioutil.ReadFile(schema)
 			if err == nil {
 				schema = string(optionsContent)
@@ -96,6 +102,7 @@ func GetCmdIssueDenom() *cobra.Command {
 				symbol,
 				mintRestricted,
 				updateRestricted,
+				oracleUrl,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -104,6 +111,78 @@ func GetCmdIssueDenom() *cobra.Command {
 		},
 	}
 	cmd.Flags().AddFlagSet(FsIssueDenom)
+	_ = cmd.MarkFlagRequired(FlagMintRestricted)
+	_ = cmd.MarkFlagRequired(FlagUpdateRestricted)
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetCmdUpdateDenom is the CLI command for an UpdateDenom transaction 
+func GetCmdUpdateDenom() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "update [denom-id]",
+		Long: "Update denom.",
+		Example: fmt.Sprintf(
+			"$ %s tx nft update <denom-id> "+
+			"--from=<key-name> "+
+			"--name=<denom-name> "+
+			"--mint-restricted=<mint-restricted> "+
+			"--update-restricted=<update-restricted> "+
+			"--schema=<schema-content or path to schema.json> "+
+			"--chain-id=<chain-id> "+
+			"--fees=<fee> "+
+			"--oracle-url=<oracle-url>",
+			version.AppName,
+		),
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			denomName, err := cmd.Flags().GetString(FlagDenomName)
+			if err != nil {
+				return err
+			}
+			schema, err := cmd.Flags().GetString(FlagSchema)
+			if err != nil {
+				return err
+			}
+			mintRestricted, err := cmd.Flags().GetBool(FlagMintRestricted)
+			if err != nil {
+				return err
+			}
+			updateRestricted, err := cmd.Flags().GetBool(FlagUpdateRestricted)
+			if err != nil {
+				return err
+			}
+			oracleUrl, err := cmd.Flags().GetString(FlagOracleUrl)
+			if err != nil {
+				return err
+			}
+			optionsContent, err := ioutil.ReadFile(schema)
+			if err == nil {
+				schema = string(optionsContent)
+			}
+
+			msg := types.NewMsgUpdateDenom(
+				args[0],
+				denomName,
+				schema,
+				clientCtx.GetFromAddress().String(),
+				mintRestricted,
+				updateRestricted,
+				oracleUrl,
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+	cmd.Flags().AddFlagSet(FsUpdateDenom)
 	_ = cmd.MarkFlagRequired(FlagMintRestricted)
 	_ = cmd.MarkFlagRequired(FlagUpdateRestricted)
 	flags.AddTxFlagsToCmd(cmd)

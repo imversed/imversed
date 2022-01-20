@@ -11769,6 +11769,208 @@ paths:
           type: boolean
       tags:
         - Query
+  /fulldivevr/imversed/currency/currency:
+    get:
+      summary: Queries a list of currency items.
+      operationId: FulldivevrImversedCurrencyCurrencyAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              currency:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    owner:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/fulldivevr/imversed/currency/currency/{denom}':
+    get:
+      summary: Queries a currency by index.
+      operationId: FulldivevrImversedCurrencyCurrency
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              currency:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  owner:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: denom
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /fulldivevr/imversed/currency/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: FulldivevrImversedCurrencyParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  txMintCurrencyCost:
+                    type: string
+                    format: uint64
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /ibc/apps/transfer/v1/denom_traces:
     get:
       summary: DenomTraces queries all denomination traces.
@@ -12531,6 +12733,8 @@ paths:
                         type: boolean
                       updateRestricted:
                         type: boolean
+                      oracleUrl:
+                        type: string
                     title: Denom defines a type of NFT
                   nfts:
                     type: array
@@ -12731,6 +12935,8 @@ paths:
                       type: boolean
                     updateRestricted:
                       type: boolean
+                    oracleUrl:
+                      type: string
                   title: Denom defines a type of NFT
               pagination:
                 type: object
@@ -12863,6 +13069,8 @@ paths:
                     type: boolean
                   updateRestricted:
                     type: boolean
+                  oracleUrl:
+                    type: string
                 title: Denom defines a type of NFT
             title: >-
               QueryDenomResponse is the response type for the Query/Denom RPC
@@ -20237,6 +20445,82 @@ definitions:
     description: >-
       MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
       response type.
+  fulldivevr.imversed.currency.Currency:
+    type: object
+    properties:
+      denom:
+        type: string
+      owner:
+        type: string
+  fulldivevr.imversed.currency.MsgIssueResponse:
+    type: object
+  fulldivevr.imversed.currency.MsgMintResponse:
+    type: object
+  fulldivevr.imversed.currency.Params:
+    type: object
+    properties:
+      txMintCurrencyCost:
+        type: string
+        format: uint64
+    description: Params defines the parameters for the module.
+  fulldivevr.imversed.currency.QueryAllCurrencyResponse:
+    type: object
+    properties:
+      currency:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            owner:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  fulldivevr.imversed.currency.QueryGetCurrencyResponse:
+    type: object
+    properties:
+      currency:
+        type: object
+        properties:
+          denom:
+            type: string
+          owner:
+            type: string
+  fulldivevr.imversed.currency.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          txMintCurrencyCost:
+            type: string
+            format: uint64
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.transfer.v1.DenomTrace:
     type: object
     properties:
@@ -20436,6 +20720,8 @@ definitions:
             type: boolean
           updateRestricted:
             type: boolean
+          oracleUrl:
+            type: string
         title: Denom defines a type of NFT
       nfts:
         type: array
@@ -20471,6 +20757,8 @@ definitions:
         type: boolean
       updateRestricted:
         type: boolean
+      oracleUrl:
+        type: string
     title: Denom defines a type of NFT
   imversed.nft.IDCollection:
     type: object
@@ -20500,6 +20788,9 @@ definitions:
   imversed.nft.MsgTransferNFTResponse:
     type: object
     description: MsgTransferNFTResponse defines the Msg/TransferNFT response type.
+  imversed.nft.MsgUpdateDenomResponse:
+    type: object
+    description: MsgUpdateDenomResponse defines the Msg/UpdateDenom response type.
   imversed.nft.Owner:
     type: object
     properties:
@@ -20541,6 +20832,8 @@ definitions:
                 type: boolean
               updateRestricted:
                 type: boolean
+              oracleUrl:
+                type: string
             title: Denom defines a type of NFT
           nfts:
             type: array
@@ -20607,6 +20900,8 @@ definitions:
             type: boolean
           updateRestricted:
             type: boolean
+          oracleUrl:
+            type: string
         title: Denom defines a type of NFT
     title: QueryDenomResponse is the response type for the Query/Denom RPC method
   imversed.nft.QueryDenomsResponse:
@@ -20631,6 +20926,8 @@ definitions:
               type: boolean
             updateRestricted:
               type: boolean
+            oracleUrl:
+              type: string
           title: Denom defines a type of NFT
       pagination:
         type: object

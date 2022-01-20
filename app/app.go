@@ -17,7 +17,6 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authrest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
@@ -88,6 +87,9 @@ import (
 
 	"github.com/fulldivevr/imversed/docs"
 
+	currencymodule "github.com/fulldivevr/imversed/x/currency"
+	currencymodulekeeper "github.com/fulldivevr/imversed/x/currency/keeper"
+	currencymoduletypes "github.com/fulldivevr/imversed/x/currency/types"
 	"github.com/fulldivevr/imversed/x/nft"
 	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
 	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
@@ -142,6 +144,7 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		nft.AppModuleBasic{},
+		currencymodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -154,6 +157,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		currencymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -206,13 +210,13 @@ type ImversedApp struct {
 	TransferKeeper   ibctransferkeeper.Keeper
 	FeeGrantKeeper   feegrantkeeper.Keeper
 
-	NFTKeeper 		 nftkeeper.Keeper
-
+	NFTKeeper nftkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
+	CurrencyKeeper currencymodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -238,7 +242,7 @@ func New(
 
 	bApp := baseapp.NewBaseApp(Name, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion(version.Version)
+	bApp.SetVersion("v2.2")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -247,6 +251,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		nfttypes.StoreKey,
+		currencymoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -304,6 +309,11 @@ func New(
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
 
+	cfg := module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	//app.mm.RegisterServices(cfg)
+	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
+
+	//
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper = *stakingKeeper.SetHooks(
@@ -345,6 +355,14 @@ func New(
 		&stakingKeeper, govRouter,
 	)
 
+	app.CurrencyKeeper = *currencymodulekeeper.NewKeeper(
+		appCodec,
+		keys[currencymoduletypes.StoreKey],
+		keys[currencymoduletypes.MemStoreKey],
+		app.GetSubspace(currencymoduletypes.ModuleName),
+		app.BankKeeper,
+	)
+	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Create static IBC router, add transfer route, then set and seal it
@@ -352,8 +370,6 @@ func New(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
-
-	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
 
 	/****  Module Options ****/
 
@@ -386,6 +402,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		nft.NewAppModule(appCodec, app.NFTKeeper),
+		currencyModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -417,6 +434,7 @@ func New(
 		minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
+		currencymoduletypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
@@ -425,7 +443,7 @@ func New(
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
+	app.mm.RegisterServices(cfg)
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -445,12 +463,15 @@ func New(
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
 	)
+
 	if err != nil {
 		panic(err)
 	}
 
 	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
+
+	app.setUpgradeHandler(cfg)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -607,6 +628,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
+	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
