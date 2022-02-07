@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-
 	// "github.com/fulldivevr/imversed/x/nft/types"
 )
 
@@ -219,24 +218,24 @@ func GetCmdQueryDenom() *cobra.Command {
 // GetCmdQueryNFT queries a single NFTs from a collection
 func GetCmdQueryNFT() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "token [denom-id] [nft-id]",
+		Use:     "token [denom-id] ",
 		Long:    "Query a single NFT from a collection.",
-		Example: fmt.Sprintf("$ %s query nft token <denom-id> <nft-id>", version.AppName),
-		Args:    cobra.ExactArgs(2),
+		Example: fmt.Sprintf("$ %s query nft token <denom-id> --nft-id=<nft-id>", version.AppName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			if err := types.ValidateTokenID(args[1]); err != nil {
+			queryClient := types.NewQueryClient(clientCtx)
+			nftId, err := cmd.Flags().GetString(NftId)
+			if err != nil {
 				return err
 			}
-
-			queryClient := types.NewQueryClient(clientCtx)
 			resp, err := queryClient.Nft(context.Background(), &types.QueryNFTRequest{
 				DenomId: args[0],
-				TokenId: args[1],
+				TokenId: nftId,
 			})
 			if err != nil {
 				return err
@@ -244,6 +243,8 @@ func GetCmdQueryNFT() *cobra.Command {
 			return clientCtx.PrintProto(resp.NFT)
 		},
 	}
+	cmd.Flags().AddFlagSet(FsQueryNFT)
+
 	flags.AddQueryFlagsToCmd(cmd)
 
 	return cmd

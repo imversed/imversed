@@ -13,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-
 	// "github.com/fulldivevr/imversed/x/nft/types"
 )
 
@@ -118,21 +117,21 @@ func GetCmdIssueDenom() *cobra.Command {
 	return cmd
 }
 
-// GetCmdUpdateDenom is the CLI command for an UpdateDenom transaction 
+// GetCmdUpdateDenom is the CLI command for an UpdateDenom transaction
 func GetCmdUpdateDenom() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "update [denom-id]",
 		Long: "Update denom.",
 		Example: fmt.Sprintf(
 			"$ %s tx nft update <denom-id> "+
-			"--from=<key-name> "+
-			"--name=<denom-name> "+
-			"--mint-restricted=<mint-restricted> "+
-			"--update-restricted=<update-restricted> "+
-			"--schema=<schema-content or path to schema.json> "+
-			"--chain-id=<chain-id> "+
-			"--fees=<fee> "+
-			"--oracle-url=<oracle-url>",
+				"--from=<key-name> "+
+				"--name=<denom-name> "+
+				"--mint-restricted=<mint-restricted> "+
+				"--update-restricted=<update-restricted> "+
+				"--schema=<schema-content or path to schema.json> "+
+				"--chain-id=<chain-id> "+
+				"--fees=<fee> "+
+				"--oracle-url=<oracle-url>",
 			version.AppName,
 		),
 		Args: cobra.ExactArgs(1),
@@ -193,10 +192,11 @@ func GetCmdUpdateDenom() *cobra.Command {
 // GetCmdMintNFT is the CLI command for a MintNFT transaction
 func GetCmdMintNFT() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "mint [denom-id] [nft-id]",
+		Use:  "mint [denom-id]",
 		Long: "Mint an NFT and set the owner to the recipient.",
 		Example: fmt.Sprintf(
-			"$ %s tx nft mint <denom-id> <nft-id> "+
+			"$ %s tx nft mint <denom-id> "+
+				"--nft-id=<nft-id>"+
 				"--uri=<uri> "+
 				"--recipient=<recipient> "+
 				"--from=<key-name> "+
@@ -204,7 +204,7 @@ func GetCmdMintNFT() *cobra.Command {
 				"--fees=<fee>",
 			version.AppName,
 		),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -226,7 +226,10 @@ func GetCmdMintNFT() *cobra.Command {
 			} else {
 				recipient = sender
 			}
-
+			nftId, err := cmd.Flags().GetString(NftId)
+			if err != nil {
+				return err
+			}
 			tokenName, err := cmd.Flags().GetString(FlagTokenName)
 			if err != nil {
 				return err
@@ -241,7 +244,7 @@ func GetCmdMintNFT() *cobra.Command {
 			}
 
 			msg := types.NewMsgMintNFT(
-				args[1],
+				nftId,
 				args[0],
 				tokenName,
 				tokenURI,
@@ -264,23 +267,28 @@ func GetCmdMintNFT() *cobra.Command {
 // GetCmdEditNFT is the CLI command for sending an MsgEditNFT transaction
 func GetCmdEditNFT() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "edit [denom-id] [nft-id]",
+		Use:  "edit [denom-id]",
 		Long: "Edit the token data of an NFT.",
 		Example: fmt.Sprintf(
-			"$ %s tx nft edit <denom-id> <nft-id> "+
+			"$ %s tx nft edit <denom-id> "+
+				"--nft-id=<nft-id>"+
 				"--uri=<uri> "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",
 			version.AppName,
 		),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
+			nftId, err := cmd.Flags().GetString(NftId)
+			if err != nil {
+				return err
+			}
 			tokenName, err := cmd.Flags().GetString(FlagTokenName)
 			if err != nil {
 				return err
@@ -294,7 +302,7 @@ func GetCmdEditNFT() *cobra.Command {
 				return err
 			}
 			msg := types.NewMsgEditNFT(
-				args[1],
+				nftId,
 				args[0],
 				tokenName,
 				tokenURI,
@@ -316,17 +324,18 @@ func GetCmdEditNFT() *cobra.Command {
 // GetCmdTransferNFT is the CLI command for sending a TransferNFT transaction
 func GetCmdTransferNFT() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "transfer [recipient] [denom-id] [nft-id]",
+		Use:  "transfer [recipient] [denom-id]",
 		Long: "Transfer an NFT to a recipient.",
 		Example: fmt.Sprintf(
-			"$ %s tx nft transfer <recipient> <denom-id> <nft-id> "+
+			"$ %s tx nft transfer <recipient> <denom-id> "+
+				"--nft-id=<nft-id> "+
 				"--uri=<uri> "+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",
 			version.AppName,
 		),
-		Args: cobra.ExactArgs(3),
+		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -337,6 +346,10 @@ func GetCmdTransferNFT() *cobra.Command {
 				return err
 			}
 
+			nftId, err := cmd.Flags().GetString(NftId)
+			if err != nil {
+				return err
+			}
 			tokenName, err := cmd.Flags().GetString(FlagTokenName)
 			if err != nil {
 				return err
@@ -350,7 +363,7 @@ func GetCmdTransferNFT() *cobra.Command {
 				return err
 			}
 			msg := types.NewMsgTransferNFT(
-				args[2],
+				nftId,
 				args[1],
 				tokenName,
 				tokenURI,
@@ -373,25 +386,30 @@ func GetCmdTransferNFT() *cobra.Command {
 // GetCmdBurnNFT is the CLI command for sending a BurnNFT transaction
 func GetCmdBurnNFT() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "burn [denom-id] [nft-id]",
+		Use:  "burn [denom-id]",
 		Long: "Burn an NFT.",
 		Example: fmt.Sprintf(
-			"$ %s tx nft burn <denom-id> <nft-id> "+
+			"$ %s tx nft burn <denom-id> "+
+				"--nft-id=<nft-id>"+
 				"--from=<key-name> "+
 				"--chain-id=<chain-id> "+
 				"--fees=<fee>",
 			version.AppName,
 		),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
+			nftId, err := cmd.Flags().GetString(NftId)
+			if err != nil {
+				return err
+			}
 			msg := types.NewMsgBurnNFT(
 				clientCtx.GetFromAddress().String(),
-				args[1],
+				nftId,
 				args[0],
 			)
 			if err := msg.ValidateBasic(); err != nil {
@@ -400,6 +418,7 @@ func GetCmdBurnNFT() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
+	cmd.Flags().AddFlagSet(FsTransferNFT)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
