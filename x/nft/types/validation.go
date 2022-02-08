@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 )
 
 const (
@@ -27,6 +26,7 @@ var (
 	IsAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 	// IsBeginWithAlpha only begin with [a-z]
 	IsBeginWithAlpha = regexp.MustCompile(`^[a-z].*`).MatchString
+	IsValidNftId     = regexp.MustCompile(`^[\w.-]+$`).MatchString
 
 	keywords          = strings.Join([]string{ReservedPeg, ReservedIBC, ReservedHTLT, ReservedTIBC}, "|")
 	regexpKeywordsFmt = fmt.Sprintf("^(%s).*", keywords)
@@ -38,9 +38,9 @@ func ValidateDenomID(denomID string) error {
 	if len(denomID) < MinDenomLen || len(denomID) > MaxDenomLen {
 		return sdkerrors.Wrapf(ErrInvalidDenom, "the length of denom(%s) only accepts value [%d, %d]", denomID, MinDenomLen, MaxDenomLen)
 	}
-	boolPrifix := strings.HasPrefix(denomID,"tibc-")
+	boolPrifix := strings.HasPrefix(denomID, "tibc-")
 	if !IsBeginWithAlpha(denomID) || !IsAlphaNumeric(denomID) && !boolPrifix {
-			return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts alphanumeric characters, and begin with an english letter", denomID)
+		return sdkerrors.Wrapf(ErrInvalidDenom, "the denom(%s) only accepts alphanumeric characters, and begin with an english letter", denomID)
 	}
 	return nil
 }
@@ -50,7 +50,8 @@ func ValidateTokenID(tokenID string) error {
 	if len(tokenID) < MinDenomLen || len(tokenID) > MaxDenomLen {
 		return sdkerrors.Wrapf(ErrInvalidTokenID, "the length of nft id(%s) only accepts value [%d, %d]", tokenID, MinDenomLen, MaxDenomLen)
 	}
-	if !IsBeginWithAlpha(tokenID) || !IsAlphaNumeric(tokenID) {
+
+	if !IsValidNftId(tokenID) {
 		return sdkerrors.Wrapf(ErrInvalidTokenID, "nft id(%s) only accepts alphanumeric characters, and begin with an english letter", tokenID)
 	}
 	return nil
