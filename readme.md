@@ -1,12 +1,11 @@
 # Imversed
 
 Imversed is a blockchain surrounded by a ecosystem of projects which are enables the simple creation, trading, and
-transfer of tokens and non-fungible tokens (NFTs [https://ethereum.org/en/nft](https://ethereum.org/en/nft)) without the need for coding or
+transfer of tokens and non-fungible tokens (NFT) without the need for coding or
 engineering. Imversed is a community-driven SaaS solution that empowers businesses, influencers, and communities to use
 blockchain technology. Among the most important characteristics are the following:
 
-* Stable and secured implementation of Proof Of Stake (
-  POS [https://www.investopedia.com/terms/p/proof-stake-pos.asp](https://www.investopedia.com/terms/p/proof-stake-pos.asp)) consensus
+* Stable and secured implementation of Proof Of Stake consensus
 * A graphical user interface and an API for creating user tokens
 * All tokens on Imversed are interchangeable
 * Non-monetary tokens are supported
@@ -17,7 +16,7 @@ blockchain technology. Among the most important characteristics are the followin
 * Infrastructure is propelled forward by a dependable engine (Imversed chain)
 
 These extensive features are built on a dependable and secure foundation. Imversed is a blockchain application built on
-top of the COSMOS library that, when combined with Tendermint Core [https://github.com/tendermint/tendermint/wiki](https://github.com/tendermint/tendermint/wiki),
+top of the COSMOS library that, when combined with Tendermint Core,
 provides a high-performance, consistent-in-use, and secure PBFT-like consensus engine with strict fork-accountability
 guarantees over malicious actors' behavior. More information on PBFT-like consensus engines can be found
 in [http://pmg.csail.mit.edu/papers/osdi99.pdf](http://pmg.csail.mit.edu/papers/osdi99.pdf). The BFT consensus algorithm from Tendermint Core is well-suited
