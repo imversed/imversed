@@ -377,7 +377,7 @@ func New(
 	app.PoolsKeeper = *poolsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[poolsmoduletypes.StoreKey],
-		app.GetSubspace(currencymoduletypes.ModuleName),
+		app.GetSubspace(poolsmoduletypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.DistrKeeper,

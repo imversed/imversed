@@ -26,7 +26,7 @@ func NewParams(poolCreationFee sdk.Coins) Params {
 // default pools module parameters
 func DefaultParams() Params {
 	return Params{
-		PoolCreationFee: sdk.Coins{sdk.NewInt64Coin("nimv", 1000_000_000)}, // 1000 OSMO
+		PoolCreationFee: sdk.Coins{sdk.NewInt64Coin("nimv", 1000_000_000)},
 	}
 }
 
