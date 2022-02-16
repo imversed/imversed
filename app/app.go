@@ -374,7 +374,7 @@ func New(
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
-	app.PoolsKeeper = *poolsmodulekeeper.NewKeeper(
+	poolsKeeper := poolsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[poolsmoduletypes.StoreKey],
 		app.GetSubspace(poolsmoduletypes.ModuleName),
@@ -382,7 +382,7 @@ func New(
 		app.BankKeeper,
 		app.DistrKeeper,
 	)
-	poolsModule := poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper)
+	app.PoolsKeeper = *poolsKeeper.SetHooks(poolsmoduletypes.NewMultiPoolsHooks())
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
@@ -422,7 +422,7 @@ func New(
 		transferModule,
 		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
-		poolsModule,
+		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 

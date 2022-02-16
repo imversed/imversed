@@ -34,7 +34,7 @@ type Keeper struct {
 	distrKeeper   types.DistrKeeper
 }
 
-func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, paramSpace paramtypes.Subspace, accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, distrKeeper types.DistrKeeper) *Keeper {
+func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, paramSpace paramtypes.Subspace, accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, distrKeeper types.DistrKeeper) Keeper {
 	// Ensure that the module account are set.
 	moduleAddr, perms := accountKeeper.GetModuleAddressAndPermissions(types.ModuleName)
 	if moduleAddr == nil {
@@ -49,7 +49,7 @@ func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, paramSpace paramtyp
 	if !paramSpace.HasKeyTable() {
 		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
 	}
-	return &Keeper{
+	return Keeper{
 		storeKey:   storeKey,
 		cdc:        cdc,
 		paramSpace: paramSpace,
