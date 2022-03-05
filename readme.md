@@ -24,4 +24,4 @@ for scaling public proof-of-stake blockchains.
 
 ### Whitepapaer
 
-[https://github.com/imversed/documents/blob/main/whitepaper.md](https://github.com/imversed/documents/blob/main/whitepaper.md)
+[https://github.com/imversed/documents/blob/main/Whitepaper.md](https://github.com/imversed/documents/blob/main/Whitepaper.md)
