@@ -10,9 +10,10 @@ type BankKeeper interface {
 	MintCoins(ctx sdk.Context, moduleName string, amounts sdk.Coins) error
 }
 
-func NewCurrency(denom string, owner sdk.AccAddress) Currency {
+func NewCurrency(denom string, owner sdk.AccAddress, icon string) Currency {
 	return Currency{
 		Denom: denom,
 		Owner: owner.String(),
+		Icon:  icon,
 	}
 }

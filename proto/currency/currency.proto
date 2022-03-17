@@ -8,6 +8,7 @@ option go_package = "github.com/fulldivevr/imversed/x/currency/types";
 message Currency {
   string denom = 1; 
   string owner = 2;
+  string icon = 3;
 }
 
 // Params defines the parameters for the module.

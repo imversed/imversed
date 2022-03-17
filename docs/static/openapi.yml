@@ -11788,6 +11788,8 @@ paths:
                       type: string
                     owner:
                       type: string
+                    icon:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -11905,6 +11907,8 @@ paths:
                   denom:
                     type: string
                   owner:
+                    type: string
+                  icon:
                     type: string
         default:
           description: An unexpected error response.
@@ -20452,6 +20456,8 @@ definitions:
         type: string
       owner:
         type: string
+      icon:
+        type: string
   fulldivevr.imversed.currency.MsgIssueResponse:
     type: object
   fulldivevr.imversed.currency.MsgMintResponse:
@@ -20474,6 +20480,8 @@ definitions:
             denom:
               type: string
             owner:
+              type: string
+            icon:
               type: string
       pagination:
         type: object
@@ -20509,6 +20517,8 @@ definitions:
           denom:
             type: string
           owner:
+            type: string
+          icon:
             type: string
   fulldivevr.imversed.currency.QueryParamsResponse:
     type: object
