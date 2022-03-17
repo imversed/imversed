@@ -49,8 +49,8 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) Issue(ctx sdk.Context, denom string, owner sdk.AccAddress) error {
-	return k.SetCurrency(ctx, types.NewCurrency(denom, owner))
+func (k Keeper) Issue(ctx sdk.Context, denom string, owner sdk.AccAddress, icon string) error {
+	return k.SetCurrency(ctx, types.NewCurrency(denom, owner, icon))
 }
 
 func (k Keeper) Mint(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error {

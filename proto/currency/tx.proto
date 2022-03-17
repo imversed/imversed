@@ -18,6 +18,7 @@ service Msg {
 message MsgIssue {
   string sender = 1;
   string denom = 2;
+  string icon = 3;
 }
 
 message MsgIssueResponse {
