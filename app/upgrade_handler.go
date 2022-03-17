@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -14,6 +15,18 @@ func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
 		"v2.1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 			err := cfg.RegisterMigration("nft", 2, app.NFTKeeper.MigrationAddOracleUrl)
+			if err != nil {
+				return nil, err
+			}
+
+			return app.mm.RunMigrations(ctx, cfg, vm)
+		},
+	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"",
+		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+			err := cfg.RegisterMigration("currency", 2, app.CurrencyKeeper.MigrationAddIcon)
 			if err != nil {
 				return nil, err
 			}
