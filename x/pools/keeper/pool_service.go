@@ -16,7 +16,6 @@ func (k Keeper) CreatePool(
 	sender sdk.AccAddress,
 	poolParams types.PoolParams,
 	poolAssets []types.PoolAsset,
-	futurePoolGovernor string,
 ) (uint64, error) {
 	if len(poolAssets) < types.MinPoolAssets {
 		return 0, types.ErrTooFewPoolAssets
@@ -25,7 +24,7 @@ func (k Keeper) CreatePool(
 	if len(poolAssets) > types.MaxPoolAssets {
 		return 0, sdkerrors.Wrapf(
 			types.ErrTooManyPoolAssets,
-			"pool has too many PoolAssets (%d)", len(poolAssets),
+			"pool has (%d) PoolAssets but maximum is (%d)", len(poolAssets), types.MaxPoolAssets,
 		)
 	}
 
@@ -36,7 +35,7 @@ func (k Keeper) CreatePool(
 		return 0, err
 	}
 
-	pool, err := k.newPool(ctx, poolParams, poolAssets, futurePoolGovernor)
+	pool, err := k.newPool(ctx, poolParams, poolAssets)
 	if err != nil {
 		return 0, err
 	}

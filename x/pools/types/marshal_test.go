@@ -30,7 +30,7 @@ func TestPoolMarshalYAML(t *testing.T) {
 	pacc, err := NewPool(defaultPoolId, PoolParams{
 		SwapFee: defaultSwapFee,
 		ExitFee: defaultExitFee,
-	}, ymlAssetTest, defaultFutureGovernor, defaultCurBlockTime)
+	}, ymlAssetTest, defaultCurBlockTime)
 	require.NoError(t, err)
 
 	bs, err := yaml.Marshal(pacc)
@@ -82,7 +82,7 @@ func TestLBPPoolMarshalYAML(t *testing.T) {
 		SwapFee:                  defaultSwapFee,
 		ExitFee:                  defaultExitFee,
 		SmoothWeightChangeParams: &lbpParams,
-	}, ymlAssetTest, defaultFutureGovernor, defaultCurBlockTime)
+	}, ymlAssetTest, defaultCurBlockTime)
 	require.NoError(t, err)
 
 	bs, err := yaml.Marshal(pacc)
@@ -159,7 +159,7 @@ func TestPoolJson(t *testing.T) {
 	pacc, err := NewPool(poolId, PoolParams{
 		SwapFee: defaultSwapFee,
 		ExitFee: defaultExitFee,
-	}, jsonAssetTest, defaultFutureGovernor, defaultCurBlockTime)
+	}, jsonAssetTest, defaultCurBlockTime)
 	require.NoError(t, err)
 
 	paccInternal := pacc.(*Pool)

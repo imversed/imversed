@@ -51,7 +51,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	val := s.network.Validators[0]
 
 	// create a new pool
-	_, err = poolstestutil.MsgCreatePool(s.T(), val.ClientCtx, val.Address, "5stake,5node0token", "100stake,100node0token", "0.01", "0.01", "")
+	_, err = poolstestutil.MsgCreatePool(s.T(), val.ClientCtx, val.Address, "5stake,5node0token", "100stake,100node0token", "0.01", "0.01")
 	s.Require().NoError(err)
 
 	_, err = s.network.WaitForHeight(1)
@@ -144,10 +144,9 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 			  "%s": "1node0token,3stake",
 			  "%s": "100node0token,100stake",
 			  "%s": "0.001",
-			  "%s": "0.001",
-			  "%s": "osmo1fqlr98d45v5ysqgp6h56kpujcj4cvsjnjq9nck"
+			  "%s": "0.001"
 			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee, cli.PoolFileFutureGovernor),
+			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
 			false, &sdk.TxResponse{}, 0,
 		},
 		{
@@ -157,10 +156,9 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 			  "%s": "1node0token,3stake",
 			  "%s": "100node0token,100stake",
 			  "%s": "0.001",
-			  "%s": "0.001",
-			  "%s": "2h"
+			  "%s": "0.001"
 			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee, cli.PoolFileFutureGovernor),
+			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
 			false, &sdk.TxResponse{}, 0,
 		},
 		{
@@ -170,10 +168,9 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 			  "%s": "1node0token,3stake",
 			  "%s": "100node0token,100stake",
 			  "%s": "0.001",
-			  "%s": "0.001",
-			  "%s": "token,1000h"
+			  "%s": "0.001"
 			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee, cli.PoolFileFutureGovernor),
+			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
 			false, &sdk.TxResponse{}, 0,
 		},
 		{
@@ -183,10 +180,9 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 			  "%s": "1node0token,3stake",
 			  "%s": "100node0token,100stake",
 			  "%s": "0.001",
-			  "%s": "0.001",
-			  "%s": "validdenom,invalidtime"
+			  "%s": "0.001"
 			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee, cli.PoolFileFutureGovernor),
+			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
 			true, &sdk.TxResponse{}, 7,
 		},
 		{

@@ -381,8 +381,7 @@ func NewBuildCreatePoolMsg(clientCtx client.Context, txf tx.Factory, fs *flag.Fl
 			SwapFee: swapFee,
 			ExitFee: exitFee,
 		},
-		PoolAssets:         poolAssets,
-		FuturePoolGovernor: pool.FutureGovernor,
+		PoolAssets: poolAssets,
 	}
 
 	if (pool.SmoothWeightChangeParams != smoothWeightChangeParamsInputs{}) {

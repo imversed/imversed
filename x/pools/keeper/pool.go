@@ -81,10 +81,10 @@ func (k Keeper) SetPool(ctx sdk.Context, pool types.PoolI) error {
 
 // newPool is an internal function that creates a new Pool object with the provided
 // parameters, initial assets, and future governor.
-func (k Keeper) newPool(ctx sdk.Context, poolParams types.PoolParams, assets []types.PoolAsset, futureGovernor string) (types.PoolI, error) {
+func (k Keeper) newPool(ctx sdk.Context, poolParams types.PoolParams, assets []types.PoolAsset) (types.PoolI, error) {
 	poolId := k.GetNextPoolNumberAndIncrement(ctx)
 
-	pool, err := types.NewPool(poolId, poolParams, assets, futureGovernor, ctx.BlockTime())
+	pool, err := types.NewPool(poolId, poolParams, assets, ctx.BlockTime())
 	if err != nil {
 		return nil, err
 	}

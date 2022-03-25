@@ -125,7 +125,7 @@ func (suite *KeeperTestSuite) TestRepeatedJoinPoolDistinctDenom() {
 			},
 		}
 
-		_, err = suite.app.PoolsKeeper.CreatePool(suite.ctx, defaultAddr, defaultBalancerPoolParams, poolAssets, "")
+		_, err = suite.app.PoolsKeeper.CreatePool(suite.ctx, defaultAddr, defaultBalancerPoolParams, poolAssets)
 		suite.Require().NoError(err)
 	}
 

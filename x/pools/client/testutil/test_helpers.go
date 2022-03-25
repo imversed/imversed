@@ -28,7 +28,6 @@ func MsgCreatePool(
 	initialDeposit string,
 	swapFee string,
 	exitFee string,
-	futureGovernor string,
 	extraArgs ...string,
 ) (testutil.BufferWriter, error) {
 	args := []string{}

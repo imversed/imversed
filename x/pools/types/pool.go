@@ -56,21 +56,19 @@ func NewPoolAddress(poolId uint64) sdk.AccAddress {
 // Invariants that are assumed to be satisfied and not checked:
 // (This is handled in ValidateBasic)
 // * 2 <= len(assets) <= 8
-// * FutureGovernor is valid
 // * poolID doesn't already exist
-func NewPool(poolId uint64, poolParams PoolParams, assets []PoolAsset, futureGovernor string, blockTime time.Time) (PoolI, error) {
+func NewPool(poolId uint64, poolParams PoolParams, assets []PoolAsset, blockTime time.Time) (PoolI, error) {
 	poolAddr := NewPoolAddress(poolId)
 
 	// pool thats created up to ensuring the assets and params are valid.
 	// We assume that FuturePoolGovernor is valid.
 	pool := &Pool{
-		Address:            poolAddr.String(),
-		Id:                 poolId,
-		PoolParams:         PoolParams{},
-		TotalWeight:        sdk.ZeroInt(),
-		TotalShares:        sdk.NewCoin(GetPoolShareDenom(poolId), sdk.ZeroInt()),
-		PoolAssets:         nil,
-		FuturePoolGovernor: futureGovernor,
+		Address:     poolAddr.String(),
+		Id:          poolId,
+		PoolParams:  PoolParams{},
+		TotalWeight: sdk.ZeroInt(),
+		TotalShares: sdk.NewCoin(GetPoolShareDenom(poolId), sdk.ZeroInt()),
+		PoolAssets:  nil,
 	}
 
 	err := pool.setInitialPoolAssets(assets)

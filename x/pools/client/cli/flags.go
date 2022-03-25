@@ -13,7 +13,6 @@ const (
 	PoolFileInitialDeposit = "initial-deposit"
 	PoolFileSwapFee        = "swap-fee"
 	PoolFileExitFee        = "exit-fee"
-	PoolFileFutureGovernor = "future-governor"
 
 	PoolFileSmoothWeightChangeParams = "lbp-params"
 	PoolFileStartTime                = "start-time"
@@ -44,7 +43,6 @@ type createPoolInputs struct {
 	InitialDeposit           string                         `json:"initial-deposit"`
 	SwapFee                  string                         `json:"swap-fee"`
 	ExitFee                  string                         `json:"exit-fee"`
-	FutureGovernor           string                         `json:"future-governor"`
 	SmoothWeightChangeParams smoothWeightChangeParamsInputs `json:"lbp-params"`
 }
 
