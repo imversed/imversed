@@ -37,7 +37,7 @@ imversed query pools estimate-swap-exact-amount-out <poolID> <sender> <tokenOut>
 ### Example
 Query the amount of OSMO the sender would require to swap 1 ATOM out of pool 1.
 ```sh
-imversed query pools estimate-swap-exact-amount-out 1 osmo123nfq6m8f88m4g3sky570unsnk4zng4uqv7cm8 1000000ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 --swap-route-pool-ids 1 --swap-route-denoms uosmo
+imversed query pools estimate-swap-exact-amount-out 1 osmo123nfq6m8f88m4g3sky570unsnk4zng4uqv7cm8 1000000ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 --swap-route-pool-ids 1 --swap-route-denoms nimv
 ```
 
 
@@ -105,7 +105,7 @@ imversed query pools spot-price <poolID> <tokenInDenom> <tokenOutDenom> [flags]
 ### Example
 Query the price of OSMO based on the price of ATOM in pool 1.
 ```sh
-imversed query pools spot-price 1 uosmo ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2
+imversed query pools spot-price 1 nimv ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2
 ```
 
 
@@ -238,7 +238,7 @@ imversed tx pools join-swap-share-amount-out [token-in-denom] [token-in-max-amou
 ```
 #### Example
 ```sh
-imversed tx pools join-swap-share-amount-out uosmo 1000000 1000000 --pool-id 1 --from myKeyringWallet
+imversed tx pools join-swap-share-amount-out nimv 1000000 1000000 --pool-id 1 --from myKeyringWallet
 ```
 
 
@@ -250,7 +250,7 @@ imversed tx pools exit-swap-share-amount-in [token-out-denom] [share-in-amount] 
 ```
 #### Example
 ```sh
-imversed tx pools exit-swap-share-amount-in uosmo 1000000 1000000 --pool-id 1 --from myKeyringWallet
+imversed tx pools exit-swap-share-amount-in nimv 1000000 1000000 --pool-id 1 --from myKeyringWallet
 ```
 
 ## Swap Exact Amount In
@@ -275,7 +275,7 @@ imversed tx pools swap-exact-amount-out [token-out] [token-out-max-amount] [flag
 #### Example
 Swap 1 ATOM through pool 1 into at most 2.5 OSMO using MyKeyringWallet.
 ```sh
-imversed tx pools swap-exact-amount-out 1000000ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 250000 --swap-route-pool-ids 1 --swap-route-denoms uosmo --from MyKeyringWallet
+imversed tx pools swap-exact-amount-out 1000000ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 250000 --swap-route-pool-ids 1 --swap-route-denoms nimv --from MyKeyringWallet
 ```
 
 # Other resources

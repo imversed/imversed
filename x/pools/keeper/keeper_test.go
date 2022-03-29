@@ -9,8 +9,8 @@ import (
 
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/crypto/ed25519"
+	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tmlibs/log"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -21,6 +21,12 @@ import (
 
 	"github.com/fulldivevr/imversed/x/pools/types"
 )
+
+type EmptyAppOptions struct{}
+
+func (ao EmptyAppOptions) Get(o string) interface{} {
+	return nil
+}
 
 type KeeperTestSuite struct {
 	suite.Suite

@@ -71,7 +71,7 @@ func Pow(base sdk.Dec, exp sdk.Dec) sdk.Dec {
 // 0 < exp < 1
 func PowApprox(base sdk.Dec, exp sdk.Dec, precision sdk.Dec) sdk.Dec {
 	if exp.IsZero() {
-		return sdk.ZeroDec()
+		return sdk.OneDec()
 	}
 
 	// Common case optimization
@@ -129,7 +129,7 @@ func PowApprox(base sdk.Dec, exp sdk.Dec, precision sdk.Dec) sdk.Dec {
 		c, cneg := AbsDifferenceWithSign(exp, bigK)
 		// On this line, bigK == i.
 		bigK = sdk.NewDec(i) // TODO: O(n) bigint allocation happens
-		term.Mul(c).Mul(x).Quo(bigK)
+		term = term.Mul(c).Mul(x).Quo(bigK)
 
 		// a is mutated on absDifferenceWithSign, reset
 		// a.Set(exp)
