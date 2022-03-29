@@ -21,7 +21,6 @@ import (
 	"github.com/fulldivevr/imversed/app"
 
 	"github.com/fulldivevr/imversed/x/pools/types"
-
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -69,9 +68,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 	)
 
 	suite.app = testapp
-	suite.ctx = testapp.BaseApp.NewUncachedContext(false, tmproto.Header{})
+	suite.ctx = testapp.BaseApp.NewContext(false, tmproto.Header{})
 
-	suite.app.PoolsKeeper.SetParams(suite.ctx, types.DefaultParams())
+	// suite.app.PoolsKeeper.SetParams(suite.ctx, types.DefaultParams())
+
+	// suite.app.DistrKeeper.SetFeePool(suite.ctx, distrtypes.InitialFeePool())
 
 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
 	types.RegisterQueryServer(queryHelper, suite.app.PoolsKeeper)
