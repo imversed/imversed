@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -20,6 +21,8 @@ import (
 	"github.com/fulldivevr/imversed/app"
 
 	"github.com/fulldivevr/imversed/x/pools/types"
+
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 type EmptyAppOptions struct{}
@@ -48,11 +51,27 @@ func (suite *KeeperTestSuite) SetupTest() {
 	db := dbm.NewMemDB()
 	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
 
-	app := *app.New(logger, db, nil, true,
+	testapp := *app.New(logger, db, nil, true,
 		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
 
-	suite.app = app
-	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{})
+	genesisState := app.NewDefaultGenesisState(testapp.AppCodec())
+	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
+	if err != nil {
+		panic(err)
+	}
+
+	testapp.InitChain(
+		abci.RequestInitChain{
+			Validators:      []abci.ValidatorUpdate{},
+			ConsensusParams: simapp.DefaultConsensusParams,
+			AppStateBytes:   stateBytes,
+		},
+	)
+
+	suite.app = testapp
+	suite.ctx = testapp.BaseApp.NewUncachedContext(false, tmproto.Header{})
+
+	suite.app.PoolsKeeper.SetParams(suite.ctx, types.DefaultParams())
 
 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
 	types.RegisterQueryServer(queryHelper, suite.app.PoolsKeeper)
@@ -73,7 +92,7 @@ func (suite *KeeperTestSuite) preparePoolWithPoolParams(poolParams types.PoolPar
 	// Mint some assets to the accounts.
 	for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
 		err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
-			sdk.NewCoin("uosmo", sdk.NewInt(10000000000)),
+			sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
 			sdk.NewCoin("foo", sdk.NewInt(10000000)),
 			sdk.NewCoin("bar", sdk.NewInt(10000000)),
 			sdk.NewCoin("baz", sdk.NewInt(10000000)),
