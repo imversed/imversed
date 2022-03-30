@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"encoding/json"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -46,7 +47,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 	homePath := filepath.Join(userHomeDir, ".simapp")
 
-	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
+	logger := log.NewTMLogger(log.NewSyncWriter(io.Discard))
 	db := dbm.NewMemDB()
 	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
 

@@ -62,7 +62,7 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 
 	// mint some assets to the accounts
 	err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, defaultAddr, sdk.NewCoins(
-		sdk.NewCoin("uosmo", sdk.NewInt(10000000000000)),
+		sdk.NewCoin("nimv", sdk.NewInt(10000000000000)),
 		sdk.NewCoin("foo", sdk.NewInt(10000000000000000)),
 		sdk.NewCoin("bar", sdk.NewInt(10000000000000000)),
 		sdk.NewCoin("baz", sdk.NewInt(10000000000000000)),
@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 	suite.Require().NoError(err)
 
 	firstJoinGas := suite.measureJoinPoolGas(defaultAddr, poolId, minShareOutAmount, defaultCoins)
-	suite.Assert().Equal(65316, int(firstJoinGas))
+	suite.Assert().Equal(63335, int(firstJoinGas))
 
 	for i := 1; i < startAveragingAt; i++ {
 		err := suite.app.PoolsKeeper.JoinPool(suite.ctx, defaultAddr, poolId, minShareOutAmount, sdk.Coins{})
@@ -79,8 +79,8 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 
 	avgGas, maxGas := suite.measureAvgAndMaxJoinPoolGas(totalNumJoins, defaultAddr, poolIDFn, minShareOutAmountFn, maxCoinsFn)
 	fmt.Printf("test deets: total %d of pools joined, begin average at %d\n", totalNumJoins, startAveragingAt)
-	suite.Assert().Equal(66831, int(avgGas), "average gas / join pool")
-	suite.Assert().Equal(66930, int(maxGas), "max gas / join pool")
+	suite.Assert().Equal(64853, int(avgGas), "average gas / join pool")
+	suite.Assert().Equal(64952, int(maxGas), "max gas / join pool")
 }
 
 func (suite *KeeperTestSuite) TestRepeatedJoinPoolDistinctDenom() {
@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestRepeatedJoinPoolDistinctDenom() {
 
 	// mint some usomo to account
 	err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, defaultAddr, sdk.NewCoins(
-		sdk.NewCoin("uosmo", sdk.NewInt(1000000000000000000)),
+		sdk.NewCoin("nimv", sdk.NewInt(1000000000000000000)),
 	))
 	suite.Require().NoError(err)
 
