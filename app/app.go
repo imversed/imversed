@@ -85,6 +85,8 @@ import (
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/spm/openapiconsole"
 
+	appParams "github.com/fulldivevr/imversed/app/params"
+
 	"github.com/fulldivevr/imversed/docs"
 
 	currencymodule "github.com/fulldivevr/imversed/x/currency"
@@ -93,6 +95,10 @@ import (
 	"github.com/fulldivevr/imversed/x/nft"
 	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
 	nfttypes "github.com/fulldivevr/imversed/x/nft/types"
+
+	poolsmodule "github.com/fulldivevr/imversed/x/pools"
+	poolsmodulekeeper "github.com/fulldivevr/imversed/x/pools/keeper"
+	poolsmoduletypes "github.com/fulldivevr/imversed/x/pools/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -145,6 +151,7 @@ var (
 		vesting.AppModuleBasic{},
 		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
+		poolsmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -158,6 +165,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		currencymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		poolsmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -174,6 +182,8 @@ func init() {
 	}
 
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+Name)
+
+	appParams.InitConfig()
 }
 
 // ImversedApp extends an ABCI application, but with most of its parameters exported.
@@ -217,6 +227,8 @@ type ImversedApp struct {
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
 	CurrencyKeeper currencymodulekeeper.Keeper
+
+	PoolsKeeper poolsmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -252,6 +264,7 @@ func New(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
+		poolsmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -365,6 +378,16 @@ func New(
 	currencyModule := currencymodule.NewAppModule(appCodec, app.CurrencyKeeper)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
+	poolsKeeper := poolsmodulekeeper.NewKeeper(
+		appCodec,
+		keys[poolsmoduletypes.StoreKey],
+		app.GetSubspace(poolsmoduletypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.DistrKeeper,
+	)
+	app.PoolsKeeper = *poolsKeeper.SetHooks(poolsmoduletypes.NewMultiPoolsHooks())
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
@@ -403,6 +426,7 @@ func New(
 		transferModule,
 		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
+		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -435,6 +459,7 @@ func New(
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		currencymoduletypes.ModuleName,
+		poolsmoduletypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
@@ -629,6 +654,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
+	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
