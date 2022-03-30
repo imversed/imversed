@@ -19,8 +19,9 @@ import (
 	"github.com/fulldivevr/imversed/x/pools/client/cli"
 	poolstestutil "github.com/fulldivevr/imversed/x/pools/client/testutil"
 	"github.com/fulldivevr/imversed/x/pools/types"
-	poolstypes "github.com/fulldivevr/imversed/x/pools/types"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
+
+	testnet "github.com/fulldivevr/imversed/testutil/network"
 )
 
 type IntegrationTestSuite struct {
@@ -33,14 +34,14 @@ type IntegrationTestSuite struct {
 func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
-	s.cfg = app.DefaultConfig()
+	s.cfg = testnet.DefaultConfig()
 
 	// modification to pay fee with test bond denom "stake"
 	genesisState := app.ModuleBasics.DefaultGenesis(s.cfg.Codec)
-	poolsGen := poolstypes.DefaultGenesis()
+	poolsGen := types.DefaultGenesis()
 	poolsGen.Params.PoolCreationFee = sdk.Coins{sdk.NewInt64Coin(s.cfg.BondDenom, 1000000)}
 	poolsGenJson := s.cfg.Codec.MustMarshalJSON(poolsGen)
-	genesisState[poolstypes.ModuleName] = poolsGenJson
+	genesisState[types.ModuleName] = poolsGenJson
 	s.cfg.GenesisState = genesisState
 
 	s.network = network.New(s.T(), s.cfg)
@@ -136,54 +137,6 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 			}
 			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
 			false, &sdk.TxResponse{}, 5,
-		},
-		{
-			"future governor address",
-			fmt.Sprintf(`
-			{
-			  "%s": "1node0token,3stake",
-			  "%s": "100node0token,100stake",
-			  "%s": "0.001",
-			  "%s": "0.001"
-			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
-			false, &sdk.TxResponse{}, 0,
-		},
-		{
-			"future governor time",
-			fmt.Sprintf(`
-			{
-			  "%s": "1node0token,3stake",
-			  "%s": "100node0token,100stake",
-			  "%s": "0.001",
-			  "%s": "0.001"
-			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
-			false, &sdk.TxResponse{}, 0,
-		},
-		{
-			"future governor token + time",
-			fmt.Sprintf(`
-			{
-			  "%s": "1node0token,3stake",
-			  "%s": "100node0token,100stake",
-			  "%s": "0.001",
-			  "%s": "0.001"
-			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
-			false, &sdk.TxResponse{}, 0,
-		},
-		{
-			"invalid future governor",
-			fmt.Sprintf(`
-			{
-			  "%s": "1node0token,3stake",
-			  "%s": "100node0token,100stake",
-			  "%s": "0.001",
-			  "%s": "0.001"
-			}
-			`, cli.PoolFileWeights, cli.PoolFileInitialDeposit, cli.PoolFileSwapFee, cli.PoolFileExitFee),
-			true, &sdk.TxResponse{}, 7,
 		},
 		{
 			"not valid json",
