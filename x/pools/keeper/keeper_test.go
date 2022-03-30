@@ -1,35 +1,22 @@
 package keeper_test
 
 import (
-	"encoding/json"
-	"io"
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/fulldivevr/imversed/app"
+	imvapp "github.com/fulldivevr/imversed/app"
 
 	"github.com/fulldivevr/imversed/x/pools/types"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
-
-type EmptyAppOptions struct{}
-
-func (ao EmptyAppOptions) Get(o string) interface{} {
-	return nil
-}
 
 type KeeperTestSuite struct {
 	suite.Suite
@@ -40,40 +27,8 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	userHomeDir, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-
-	homePath := filepath.Join(userHomeDir, ".simapp")
-
-	logger := log.NewTMLogger(log.NewSyncWriter(io.Discard))
-	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
-
-	testapp := *app.New(logger, db, nil, true,
-		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
-
-	genesisState := app.NewDefaultGenesisState(testapp.AppCodec())
-	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
-	if err != nil {
-		panic(err)
-	}
-
-	testapp.InitChain(
-		abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simapp.DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-		},
-	)
-
-	suite.app = testapp
-	suite.ctx = testapp.BaseApp.NewContext(false, tmproto.Header{})
-
-	// suite.app.PoolsKeeper.SetParams(suite.ctx, types.DefaultParams())
-
-	// suite.app.DistrKeeper.SetFeePool(suite.ctx, distrtypes.InitialFeePool())
+	suite.app = *imvapp.CreateTestApp()
+	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{})
 
 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
 	types.RegisterQueryServer(queryHelper, suite.app.PoolsKeeper)

@@ -6,7 +6,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	osmoapp "github.com/fulldivevr/imversed/app"
+	imvapp "github.com/fulldivevr/imversed/app"
 	"github.com/fulldivevr/imversed/x/pools"
 	"github.com/fulldivevr/imversed/x/pools/types"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestPoolsInitGenesis(t *testing.T) {
-	app := osmoapp.Setup(false)
+	app := imvapp.CreateTestApp()
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	poolI, err := types.NewPool(1, types.PoolParams{
@@ -31,7 +31,7 @@ func TestPoolsInitGenesis(t *testing.T) {
 			Weight: sdk.NewInt(1),
 			Token:  sdk.NewInt64Coin("nodetoken", 10),
 		},
-	}, "", ctx.BlockTime())
+	}, ctx.BlockTime())
 	require.NoError(t, err)
 
 	pool, ok := poolI.(*types.Pool)
@@ -67,7 +67,7 @@ func TestPoolsInitGenesis(t *testing.T) {
 }
 
 func TestPoolsExportGenesis(t *testing.T) {
-	app := osmoapp.Setup(false)
+	app := imvapp.CreateTestApp()
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
@@ -87,7 +87,7 @@ func TestPoolsExportGenesis(t *testing.T) {
 	}, {
 		Weight: sdk.NewInt(100),
 		Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
-	}}, "")
+	}})
 	require.NoError(t, err)
 
 	_, err = app.PoolsKeeper.CreatePool(ctx, acc1, types.PoolParams{
@@ -99,7 +99,7 @@ func TestPoolsExportGenesis(t *testing.T) {
 	}, {
 		Weight: sdk.NewInt(100),
 		Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
-	}}, "")
+	}})
 	require.NoError(t, err)
 
 	genesis := pools.ExportGenesis(ctx, app.PoolsKeeper)
@@ -108,11 +108,10 @@ func TestPoolsExportGenesis(t *testing.T) {
 }
 
 func TestMarshalUnmarshalGenesis(t *testing.T) {
-	app := osmoapp.Setup(false)
+	app := imvapp.CreateTestApp()
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
-	encodingConfig := osmoapp.MakeEncodingConfig()
-	appCodec := encodingConfig.Marshaler
+	appCodec := app.AppCodec()
 	am := pools.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper)
 	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
 	err := simapp.FundAccount(app.BankKeeper, ctx, acc1, sdk.NewCoins(
@@ -131,7 +130,7 @@ func TestMarshalUnmarshalGenesis(t *testing.T) {
 	}, {
 		Weight: sdk.NewInt(100),
 		Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
-	}}, "")
+	}})
 	require.NoError(t, err)
 
 	genesis := am.ExportGenesis(ctx, appCodec)
