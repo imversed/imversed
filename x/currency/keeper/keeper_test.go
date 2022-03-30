@@ -78,14 +78,14 @@ func (suite *KeeperSuite) SetupTest() {
 
 func (suite *KeeperSuite) TestIssue() {
 	// should bind coin denom to address
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
 
 	// error if denom exists
-	suite.Error(suite.keeper.Issue(suite.ctx, denom, address2))
+	suite.Error(suite.keeper.Issue(suite.ctx, denom, address2, ""))
 }
 
 func (suite *KeeperSuite) TestMint() {
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
 
 	// should mint user owned coin
 	suite.NoError(suite.keeper.Mint(suite.ctx, sdk.NewCoin(denom, sdk.NewInt(1000000000)), address))
