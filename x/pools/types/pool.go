@@ -1,6 +1,7 @@
 package types
 
 import (
+	"crypto/sha256"
 	"errors"
 	"fmt"
 	"sort"
@@ -46,9 +47,16 @@ var (
 	GuaranteedWeightPrecision int64   = 1 << 30
 )
 
-func NewPoolAddress(poolId uint64) sdk.AccAddress {
+func NewPoolAddress(poolId uint64) (sdk.AccAddress, error) {
 	key := append([]byte("pool"), sdk.Uint64ToBigEndian(poolId)...)
-	return key
+	hasher := sha256.New()
+
+	_, err := hasher.Write(key)
+	if err != nil {
+		return nil, err
+	}
+
+	return hasher.Sum(nil), nil
 	// return address.Module(ModuleName, key)
 }
 
@@ -58,7 +66,10 @@ func NewPoolAddress(poolId uint64) sdk.AccAddress {
 // * 2 <= len(assets) <= 8
 // * poolID doesn't already exist
 func NewPool(poolId uint64, poolParams PoolParams, assets []PoolAsset, blockTime time.Time) (PoolI, error) {
-	poolAddr := NewPoolAddress(poolId)
+	poolAddr, err := NewPoolAddress(poolId)
+	if err != nil {
+		return &Pool{}, err
+	}
 
 	// pool thats created up to ensuring the assets and params are valid.
 	// We assume that FuturePoolGovernor is valid.
@@ -71,7 +82,7 @@ func NewPool(poolId uint64, poolParams PoolParams, assets []PoolAsset, blockTime
 		PoolAssets:  nil,
 	}
 
-	err := pool.setInitialPoolAssets(assets)
+	err = pool.setInitialPoolAssets(assets)
 	if err != nil {
 		return &Pool{}, err
 	}

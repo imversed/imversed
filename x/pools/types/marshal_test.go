@@ -11,7 +11,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	// appParams "github.com/fulldivevr/imversed/app/params"
+	appParams "github.com/fulldivevr/imversed/app/params"
 )
 
 var ymlAssetTest = []PoolAsset{
@@ -26,7 +26,7 @@ var ymlAssetTest = []PoolAsset{
 }
 
 func TestPoolMarshalYAML(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pacc, err := NewPool(defaultPoolId, PoolParams{
 		SwapFee: defaultSwapFee,
 		ExitFee: defaultExitFee,
@@ -37,7 +37,7 @@ func TestPoolMarshalYAML(t *testing.T) {
 	require.NoError(t, err)
 
 	want := `|
-  address: osmo1krp38zzc3zz5as9ndqkyskhkzv6x9e30ckcq5g4lcsu5wpwcqy0sa3dea2
+  address: imv1rclzld07rfuzt053vdem5wfwg49lhs5qkuvpnnr79kmylvgd6stq52qlfu
   id: 10
   pool_params:
     swap_fee: "0.025000000000000000"
@@ -64,7 +64,7 @@ func TestPoolMarshalYAML(t *testing.T) {
 }
 
 func TestLBPPoolMarshalYAML(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	lbpParams := SmoothWeightChangeParams{
 		Duration: time.Hour,
 		TargetPoolWeights: []PoolAsset{
@@ -93,7 +93,7 @@ func TestLBPPoolMarshalYAML(t *testing.T) {
 	require.NoError(t, err)
 
 	want := fmt.Sprintf(`|
-  address: osmo1krp38zzc3zz5as9ndqkyskhkzv6x9e30ckcq5g4lcsu5wpwcqy0sa3dea2
+  address: imv1rclzld07rfuzt053vdem5wfwg49lhs5qkuvpnnr79kmylvgd6stq52qlfu
   id: 10
   pool_params:
     swap_fee: "0.025000000000000000"

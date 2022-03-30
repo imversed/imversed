@@ -85,6 +85,8 @@ import (
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/spm/openapiconsole"
 
+	appParams "github.com/fulldivevr/imversed/app/params"
+
 	"github.com/fulldivevr/imversed/docs"
 
 	currencymodule "github.com/fulldivevr/imversed/x/currency"
@@ -180,6 +182,8 @@ func init() {
 	}
 
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+Name)
+
+	appParams.InitConfig()
 }
 
 // ImversedApp extends an ABCI application, but with most of its parameters exported.

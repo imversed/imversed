@@ -8,11 +8,12 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	// appParams "github.com/fulldivevr/imversed/app/params"
+
+	appParams "github.com/fulldivevr/imversed/app/params"
 )
 
 func TestMsgCreatePool(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -189,38 +190,6 @@ func TestMsgCreatePool(t *testing.T) {
 			expectPass: false,
 		},
 		{
-			name: "invalid governor",
-			msg: createMsg(func(msg MsgCreatePool) MsgCreatePool {
-				msg.FuturePoolGovernor = "invalid_cosmos_address"
-				return msg
-			}),
-			expectPass: false,
-		},
-		{
-			name: "valid governor: lptoken and lock",
-			msg: createMsg(func(msg MsgCreatePool) MsgCreatePool {
-				msg.FuturePoolGovernor = "lptoken,1000h"
-				return msg
-			}),
-			expectPass: true,
-		},
-		{
-			name: "valid governor: just lock duration for pool token",
-			msg: createMsg(func(msg MsgCreatePool) MsgCreatePool {
-				msg.FuturePoolGovernor = "1000h"
-				return msg
-			}),
-			expectPass: true,
-		},
-		{
-			name: "valid governor: address",
-			msg: createMsg(func(msg MsgCreatePool) MsgCreatePool {
-				msg.FuturePoolGovernor = "osmo1fqlr98d45v5ysqgp6h56kpujcj4cvsjnjq9nck"
-				return msg
-			}),
-			expectPass: true,
-		},
-		{
 			name: "zero swap fee",
 			msg: createMsg(func(msg MsgCreatePool) MsgCreatePool {
 				msg.PoolParams.SwapFee = sdk.NewDec(0)
@@ -277,7 +246,7 @@ func TestMsgCreatePool(t *testing.T) {
 }
 
 func TestMsgSwapExactAmountIn(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -407,7 +376,7 @@ func TestMsgSwapExactAmountIn(t *testing.T) {
 }
 
 func TestMsgSwapExactAmountOut(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -537,7 +506,7 @@ func TestMsgSwapExactAmountOut(t *testing.T) {
 }
 
 func TestMsgJoinPool(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -637,7 +606,7 @@ func TestMsgJoinPool(t *testing.T) {
 }
 
 func TestMsgExitPool(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -736,7 +705,7 @@ func TestMsgExitPool(t *testing.T) {
 }
 
 func TestMsgJoinSwapExternAmountIn(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -835,7 +804,7 @@ func TestMsgJoinSwapExternAmountIn(t *testing.T) {
 }
 
 func TestMsgJoinSwapShareAmountOut(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -935,7 +904,7 @@ func TestMsgJoinSwapShareAmountOut(t *testing.T) {
 }
 
 func TestMsgExitSwapExternAmountOut(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
@@ -1034,7 +1003,7 @@ func TestMsgExitSwapExternAmountOut(t *testing.T) {
 }
 
 func TestMsgExitSwapShareAmountIn(t *testing.T) {
-	// appParams.SetAddressPrefixes()
+	appParams.InitConfig()
 	pk1 := ed25519.GenPrivKey().PubKey()
 	addr1 := sdk.AccAddress(pk1.Address()).String()
 	invalidAddr := sdk.AccAddress("invalid")
