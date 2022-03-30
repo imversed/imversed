@@ -46,10 +46,11 @@ func (msg *MsgMint) ValidateBasic() error {
 	return nil
 }
 
-func NewMsgIssue(sender string, denom string) *MsgIssue {
+func NewMsgIssue(sender string, denom string, icon string) *MsgIssue {
 	return &MsgIssue{
 		Sender: sender,
 		Denom:  denom,
+		Icon:   icon,
 	}
 }
 
