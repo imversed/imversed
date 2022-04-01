@@ -2,6 +2,8 @@ package app
 
 import (
 	"fmt"
+	poolsmoduletypes "github.com/fulldivevr/imversed/x/pools/types"
+
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -47,4 +49,30 @@ func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
 			return app.mm.RunMigrations(ctx, cfg, vm)
 		},
 	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v2.4",
+		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+			errCurrency := cfg.RegisterMigration("currency", 1, app.CurrencyKeeper.MigrationAddIcon)
+			errNft := cfg.RegisterMigration("nft", 3, func(ctx sdk.Context) error { return nil })
+
+			if errNft != nil {
+				return nil, errNft
+			}
+			if errCurrency != nil {
+				return nil, errCurrency
+			}
+
+			return app.mm.RunMigrations(ctx, cfg, vm)
+		},
+	)
+
+	if upgradeInfo.Name == "v2.4" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		storeUpgrades := storetypes.StoreUpgrades{
+			Added: []string{poolsmoduletypes.ModuleName},
+		}
+
+		// configure store loader that checks if version == upgradeHeight and applies store upgrades
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	}
 }
