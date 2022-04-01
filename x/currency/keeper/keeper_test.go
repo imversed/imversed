@@ -8,10 +8,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/fulldivevr/imversed/app"
-	"github.com/fulldivevr/imversed/testutil"
-	"github.com/fulldivevr/imversed/x/currency/keeper"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/app"
+	"github.com/imversed/imversed/testutil"
+	"github.com/imversed/imversed/x/currency/keeper"
+	"github.com/imversed/imversed/x/currency/types"
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
@@ -78,14 +78,14 @@ func (suite *KeeperSuite) SetupTest() {
 
 func (suite *KeeperSuite) TestIssue() {
 	// should bind coin denom to address
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
 
 	// error if denom exists
-	suite.Error(suite.keeper.Issue(suite.ctx, denom, address2))
+	suite.Error(suite.keeper.Issue(suite.ctx, denom, address2, ""))
 }
 
 func (suite *KeeperSuite) TestMint() {
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
 
 	// should mint user owned coin
 	suite.NoError(suite.keeper.Mint(suite.ctx, sdk.NewCoin(denom, sdk.NewInt(1000000000)), address))

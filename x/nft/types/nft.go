@@ -3,7 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/x/nft/exported"
+	"github.com/imversed/imversed/x/nft/exported"
 )
 
 var _ exported.NFT = BaseNFT{}

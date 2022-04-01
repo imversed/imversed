@@ -5,9 +5,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/types"
 )
+
 var denomE = types.NewDenom(denomID, denom, schema, denomSymbol, address, false, false, oracleUrl)
+
 // ---------------------------------------- Msgs --------------------------------------------------
 
 func TestMsgTransferNFTValidateBasicMethod(t *testing.T) {
@@ -35,7 +37,7 @@ func TestUpdateDenomValidationBasicMethod(t *testing.T) {
 }
 
 func TestIssueDenomValidationBasicMethod(t *testing.T) {
-	newMsgIssueDenom := types.NewMsgIssueDenom(denomID,denom,schema, address.String(), denomSymbol, false, false, oracleUrl)
+	newMsgIssueDenom := types.NewMsgIssueDenom(denomID, denom, schema, address.String(), denomSymbol, false, false, oracleUrl)
 	err := newMsgIssueDenom.ValidateBasic()
 	require.NoError(t, err)
 }
@@ -60,13 +62,13 @@ func TestMsgUpdateDenomGetSignBytesMethod(t *testing.T) {
 	require.Equal(t, expected, string(sortedBytes))
 }
 
-func TestMsgIssueDenomGetSignersMethod(t * testing.T) {
+func TestMsgIssueDenomGetSignersMethod(t *testing.T) {
 	newMsgIssueDenom := types.NewMsgIssueDenom(denomID, denom, schema, address.String(), denomSymbol, false, false, oracleUrl)
 	signers := newMsgIssueDenom.GetSigners()
 	require.Equal(t, 1, len(signers))
 	require.Equal(t, address.String(), signers[0].String())
 }
-func TestMsgUpdateDenomGetSignersMethod(t * testing.T) {
+func TestMsgUpdateDenomGetSignersMethod(t *testing.T) {
 	newMsgUpdateDenom := types.NewMsgUpdateDenom(denomID, denom, schema, address.String(), false, false, oracleUrl)
 	signers := newMsgUpdateDenom.GetSigners()
 	require.Equal(t, 1, len(signers))

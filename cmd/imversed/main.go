@@ -8,7 +8,7 @@ import (
 	"os"
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
-	"github.com/fulldivevr/imversed/app"
+	"github.com/imversed/imversed/app"
 	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
 )

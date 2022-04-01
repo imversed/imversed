@@ -2,17 +2,18 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-	"strconv"
 
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // GetTxCmd returns the transaction commands for this module
@@ -36,12 +37,13 @@ var _ = strconv.Itoa(0)
 
 func CmdIssue() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "issue [denom]",
+		Use:     "issue [denom] [icon]",
 		Long:    "Issue a new token denomination",
-		Example: fmt.Sprintf("$ %s tx %s issue <denom> --from=<key-name>", version.AppName, types.ModuleName),
-		Args:    cobra.ExactArgs(1),
+		Example: fmt.Sprintf("$ %s tx %s issue <denom> <icon> --from=<key-name>", version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argDenom := args[0]
+			argIcon := args[1]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -51,6 +53,7 @@ func CmdIssue() *cobra.Command {
 			msg := types.NewMsgIssue(
 				clientCtx.GetFromAddress().String(),
 				argDenom,
+				argIcon,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

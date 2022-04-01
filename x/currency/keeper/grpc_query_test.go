@@ -5,12 +5,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 func (suite *KeeperSuite) TestCurrencyAllQuery() {
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom2, address2))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom2, address2, ""))
 
 	response, err := suite.queryClient.CurrencyAll(gocontext.Background(), &types.QueryAllCurrencyRequest{})
 	suite.NoError(err)
@@ -18,8 +18,8 @@ func (suite *KeeperSuite) TestCurrencyAllQuery() {
 }
 
 func (suite *KeeperSuite) TestCurrencyQuery() {
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address))
-	suite.NoError(suite.keeper.Issue(suite.ctx, denom2, address2))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom, address, ""))
+	suite.NoError(suite.keeper.Issue(suite.ctx, denom2, address2, ""))
 
 	response, err := suite.queryClient.Currency(gocontext.Background(), &types.QueryGetCurrencyRequest{
 		Denom: denom,

@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/fulldivevr/imversed/x/currency/keeper"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/keeper"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // NewHandler ...

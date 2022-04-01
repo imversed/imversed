@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 type msgServer struct {
@@ -27,7 +27,7 @@ func (m msgServer) Issue(goCtx context.Context, msg *types.MsgIssue) (*types.Msg
 		return nil, err
 	}
 
-	if err := m.Keeper.Issue(ctx, msg.Denom, sender); err != nil {
+	if err := m.Keeper.Issue(ctx, msg.Denom, sender, msg.Icon); err != nil {
 		return nil, err
 	}
 

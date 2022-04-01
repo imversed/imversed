@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/types"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -11,7 +11,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	//"github.com/fulldivevr/imversed/x/nft/types"
+	//"github.com/imversed/imversed/x/nft/types"
 )
 
 var _ types.QueryServer = Keeper{}

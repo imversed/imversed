@@ -3,8 +3,8 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/fulldivevr/imversed/x/nft/types"
-	//"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/types"
+	//"github.com/imversed/imversed/x/nft/types"
 )
 
 // HasDenomID returns whether the specified denom ID exists

@@ -5,8 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 
-	imversedapp "github.com/fulldivevr/imversed/app"
-	"github.com/fulldivevr/imversed/testutil"
+	imversedapp "github.com/imversed/imversed/app"
+	"github.com/imversed/imversed/testutil"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
@@ -20,8 +20,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	nftkeeper "github.com/fulldivevr/imversed/x/nft/keeper"
-	nft "github.com/fulldivevr/imversed/x/nft/types"
+	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
+	nft "github.com/imversed/imversed/x/nft/types"
 )
 
 var (

@@ -5,10 +5,12 @@ import (
 
 	"github.com/tendermint/tendermint/libs/log"
 
+	"github.com/cosmos/cosmos-sdk/store/prefix"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -49,8 +51,8 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) Issue(ctx sdk.Context, denom string, owner sdk.AccAddress) error {
-	return k.SetCurrency(ctx, types.NewCurrency(denom, owner))
+func (k Keeper) Issue(ctx sdk.Context, denom string, owner sdk.AccAddress, icon string) error {
+	return k.SetCurrency(ctx, types.NewCurrency(denom, owner, icon))
 }
 
 func (k Keeper) Mint(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error {
@@ -81,5 +83,23 @@ func (k Keeper) Mint(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error
 		return err
 	}
 
+	return nil
+}
+
+func (k Keeper) MigrationAddIcon(ctx sdk.Context) error {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CurrencyKeyPrefix))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(""))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var currency types.Currency
+		k.cdc.MustUnmarshal(iterator.Value(), &currency)
+		currency.Icon = ""
+		updates := k.cdc.MustMarshal(&currency)
+
+		store.Set(types.CurrencyKey(
+			currency.Denom,
+		), updates)
+	}
 	return nil
 }

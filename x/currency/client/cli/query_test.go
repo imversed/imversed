@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/fulldivevr/imversed/testutil/network"
-	"github.com/fulldivevr/imversed/x/currency/client/cli"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/testutil/network"
+	"github.com/imversed/imversed/x/currency/client/cli"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // Prevent strconv unused error

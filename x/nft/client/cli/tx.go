@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/types"
 	"io/ioutil"
 	"strings"
 
@@ -13,8 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-
-	// "github.com/fulldivevr/imversed/x/nft/types"
+	// "github.com/imversed/imversed/x/nft/types"
 )
 
 // NewTxCmd returns the transaction commands for this module
@@ -118,21 +117,21 @@ func GetCmdIssueDenom() *cobra.Command {
 	return cmd
 }
 
-// GetCmdUpdateDenom is the CLI command for an UpdateDenom transaction 
+// GetCmdUpdateDenom is the CLI command for an UpdateDenom transaction
 func GetCmdUpdateDenom() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "update [denom-id]",
 		Long: "Update denom.",
 		Example: fmt.Sprintf(
 			"$ %s tx nft update <denom-id> "+
-			"--from=<key-name> "+
-			"--name=<denom-name> "+
-			"--mint-restricted=<mint-restricted> "+
-			"--update-restricted=<update-restricted> "+
-			"--schema=<schema-content or path to schema.json> "+
-			"--chain-id=<chain-id> "+
-			"--fees=<fee> "+
-			"--oracle-url=<oracle-url>",
+				"--from=<key-name> "+
+				"--name=<denom-name> "+
+				"--mint-restricted=<mint-restricted> "+
+				"--update-restricted=<update-restricted> "+
+				"--schema=<schema-content or path to schema.json> "+
+				"--chain-id=<chain-id> "+
+				"--fees=<fee> "+
+				"--oracle-url=<oracle-url>",
 			version.AppName,
 		),
 		Args: cobra.ExactArgs(1),

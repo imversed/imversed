@@ -3,8 +3,8 @@ package types
 // DONTCOVER
 
 import (
-	"github.com/fulldivevr/imversed/x/nft/exported"
 	gogotypes "github.com/gogo/protobuf/types"
+	"github.com/imversed/imversed/x/nft/exported"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/codec/types"
