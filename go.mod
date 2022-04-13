@@ -40,7 +40,9 @@ require (
 )
 
 require (
+	github.com/cosmos/go-bip39 v1.0.0
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/rakyll/statik v0.1.7
 	github.com/tendermint/spm v0.1.9
 	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
 )

@@ -2,11 +2,11 @@ package app
 
 import (
 	"encoding/json"
+	"github.com/imversed/imversed/encoding"
 	"io"
 	"os"
 	"path/filepath"
 
-	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -31,10 +31,10 @@ func CreateTestApp() *ImversedApp {
 
 	logger := log.NewTMLogger(log.NewSyncWriter(io.Discard))
 	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(ModuleBasics)
+	//encoding := cosmoscmd.MakeEncodingConfig(ModuleBasics)
 
 	testapp := New(logger, db, nil, true,
-		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
+		map[int64]bool{}, homePath, 0, encoding.MakeConfig(ModuleBasics), EmptyAppOptions{})
 
 	genesisState := NewDefaultGenesisState(testapp.AppCodec())
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")

@@ -37,13 +37,13 @@ import (
 	mintypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/tharsis/ethermint/crypto/hd"
-	"github.com/tharsis/ethermint/server/config"
-	srvflags "github.com/tharsis/ethermint/server/flags"
-	ethermint "github.com/tharsis/ethermint/types"
-	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	"github.com/imversed/imversed/crypto/hd"
+	"github.com/imversed/imversed/server/config"
+	srvflags "github.com/imversed/imversed/server/flags"
+	ethermint "github.com/imversed/imversed/types"
+	evmtypes "github.com/imversed/imversed/x/evm/types"
 
-	"github.com/tharsis/ethermint/testutil/network"
+	"github.com/imversed/imversed/testutil/network"
 )
 
 var (
