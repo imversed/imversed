@@ -1,8 +1,8 @@
 accounts:
   - name: alice
-    coins: ["2000000000nimv", "200000000stake"]
+    coins: [ "2000000000nimv", "200000000stake" ]
   - name: bob
-    coins: ["3000000000nimv", "100000000stake"]
+    coins: [ "3000000000nimv", "100000000stake" ]
 validator:
   name: alice
   staked: "100000000stake"
@@ -12,6 +12,11 @@ client:
 init:
   app:
     minimum-gas-prices: 0.1nimv
+  api:
+    enable: true
+  json-rpc:
+    address: "0.0.0.0:8545"     # change the JSON-RPC address and port
+    ws-address: "0.0.0.0:8546"
 genesis:
   app_state:
     bank:

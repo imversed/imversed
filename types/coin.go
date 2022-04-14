@@ -14,11 +14,11 @@ const (
 	// - Governance parameters: denomination used for spam prevention in proposal deposits
 	// - Crisis parameters: constant fee denomination used for spam prevention to check broken invariant
 	// - EVM parameters: denomination used for running EVM state transitions in Ethermint.
-	AttoPhoton string = "aphoton"
+	AttoPhoton string = "nimv"
 
 	// BaseDenomUnit defines the base denomination unit for Photons.
-	// 1 photon = 1x10^{BaseDenomUnit} aphoton
-	BaseDenomUnit = 18
+	// 1 imv = 1x10^{BaseDenomUnit} nimv
+	BaseDenomUnit = 6
 
 	// DefaultGasPrice is default gas price for evm transactions
 	DefaultGasPrice = 20

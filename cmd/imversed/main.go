@@ -1,10 +1,12 @@
 package main
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/server"
 	"os"
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/imversed/imversed/app"
 	cmdcfg "github.com/imversed/imversed/cmd/config"
 )
@@ -15,6 +17,15 @@ func main() {
 
 	rootCmd, _ := NewRootCmd()
 
+	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
+		switch e := err.(type) {
+		case server.ErrorCode:
+			os.Exit(e.Code)
+
+		default:
+			os.Exit(1)
+		}
+	}
 	//rootCmd, _ := cosmoscmd.NewRootCmd(
 	//	app.Name,
 	//	app.AccountAddressPrefix,
@@ -24,9 +35,9 @@ func main() {
 	//	AppCtorAdapter,
 	//	// this line is used by starport scaffolding # root/arguments
 	//)
-	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
-		os.Exit(1)
-	}
+	//if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
+	//	os.Exit(1)
+	//}
 }
 
 //func AppCtorAdapter(
