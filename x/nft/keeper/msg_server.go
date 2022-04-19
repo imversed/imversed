@@ -2,12 +2,12 @@ package keeper
 
 import (
 	"context"
-	"github.com/fulldivevr/imversed/x/nft/types"
+
+	"github.com/imversed/imversed/x/nft/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	//"github.com/fulldivevr/imversed/x/nft/types"
+	//"github.com/imversed/imversed/x/nft/types"
 )
 
 type msgServer struct {
@@ -70,23 +70,23 @@ func (m msgServer) UpdateDenom(goCtx context.Context, msg *types.MsgUpdateDenom)
 	if err != nil {
 		return nil, err
 	}
-		
+
 	if !sender.Equals(creator) {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to update denom %s", creator.String(), denom.Id)
 	}
 
-	if (msg.Name != "") {
+	if msg.Name != "" {
 		denom.Name = msg.Name
 	}
-	if (msg.Schema != "") {
+	if msg.Schema != "" {
 		denom.Schema = msg.Schema
 	}
-	if (msg.OracleUrl != "") {
+	if msg.OracleUrl != "" {
 		denom.OracleUrl = msg.OracleUrl
 	}
 	denom.MintRestricted = msg.MintRestricted
 	denom.UpdateRestricted = msg.UpdateRestricted
-	
+
 	if err := m.Keeper.UpdateDenom(ctx, denom); err != nil {
 		return nil, err
 	}

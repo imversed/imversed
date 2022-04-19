@@ -15,13 +15,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
-	"github.com/fulldivevr/imversed/app"
-	"github.com/fulldivevr/imversed/x/pools/client/cli"
-	poolstestutil "github.com/fulldivevr/imversed/x/pools/client/testutil"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/app"
+	"github.com/imversed/imversed/x/pools/client/cli"
+	poolstestutil "github.com/imversed/imversed/x/pools/client/testutil"
+	"github.com/imversed/imversed/x/pools/types"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 
-	testnet "github.com/fulldivevr/imversed/testutil/network"
+	testnet "github.com/imversed/imversed/testutil/network"
 )
 
 type IntegrationTestSuite struct {

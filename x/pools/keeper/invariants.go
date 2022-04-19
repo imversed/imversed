@@ -7,8 +7,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/osmomath"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/osmomath"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 const poolBalanceInvariantName = "pool-account-balance-equals-expected"

@@ -16,9 +16,9 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/fulldivevr/imversed/x/currency/client/cli"
-	"github.com/fulldivevr/imversed/x/currency/keeper"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/client/cli"
+	"github.com/imversed/imversed/x/currency/keeper"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 var (

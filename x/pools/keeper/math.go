@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/fulldivevr/imversed/osmomath"
+	"github.com/imversed/imversed/osmomath"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

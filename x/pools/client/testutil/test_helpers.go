@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	poolscli "github.com/fulldivevr/imversed/x/pools/client/cli"
+	poolscli "github.com/imversed/imversed/x/pools/client/cli"
 )
 
 // commonArgs is args for CLI test commands

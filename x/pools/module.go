@@ -16,10 +16,10 @@ import (
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/fulldivevr/imversed/x/pools/client/cli"
-	"github.com/fulldivevr/imversed/x/pools/client/rest"
-	"github.com/fulldivevr/imversed/x/pools/keeper"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/client/cli"
+	"github.com/imversed/imversed/x/pools/client/rest"
+	"github.com/imversed/imversed/x/pools/keeper"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 var (

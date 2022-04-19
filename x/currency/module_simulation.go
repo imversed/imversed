@@ -9,9 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/fulldivevr/imversed/testutil/sample"
-	currencysimulation "github.com/fulldivevr/imversed/x/currency/simulation"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/testutil/sample"
+	currencysimulation "github.com/imversed/imversed/x/currency/simulation"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // avoid unused import issue

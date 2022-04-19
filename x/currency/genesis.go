@@ -2,8 +2,8 @@ package currency
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/fulldivevr/imversed/x/currency/keeper"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/keeper"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

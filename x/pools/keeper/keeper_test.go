@@ -12,10 +12,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/app"
-	imvapp "github.com/fulldivevr/imversed/app"
+	"github.com/imversed/imversed/app"
+	imvapp "github.com/imversed/imversed/app"
 
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 type KeeperTestSuite struct {

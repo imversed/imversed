@@ -3,9 +3,10 @@ package simulation
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fulldivevr/imversed/x/nft/types"
 	"math/rand"
 	"strings"
+
+	"github.com/imversed/imversed/x/nft/types"
 
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"

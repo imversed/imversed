@@ -13,7 +13,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 // GetTxCmd returns the transaction commands for this module

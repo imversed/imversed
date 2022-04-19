@@ -2,7 +2,8 @@ package keeper
 
 import (
 	"fmt"
-	"github.com/fulldivevr/imversed/x/nft/types"
+
+	"github.com/imversed/imversed/x/nft/types"
 
 	"github.com/tendermint/tendermint/libs/log"
 

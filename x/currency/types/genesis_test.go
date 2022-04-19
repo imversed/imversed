@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 	"github.com/stretchr/testify/require"
 )
 

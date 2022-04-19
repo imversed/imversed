@@ -2,10 +2,11 @@ package simulation
 
 import (
 	"fmt"
-	"github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/types"
 	"math/rand"
 	"strings"
+
+	"github.com/imversed/imversed/x/nft/keeper"
+	"github.com/imversed/imversed/x/nft/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
