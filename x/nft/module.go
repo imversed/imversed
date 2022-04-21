@@ -102,7 +102,7 @@ type AppModule struct {
 }
 
 func (am AppModule) ConsensusVersion() uint64 {
-	return 4
+	return 1
 }
 
 // NewAppModule creates a new AppModule object

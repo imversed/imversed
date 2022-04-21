@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEY="mykey"
+KEY="validator"
 CHAINID="imversed_1234-1"
 MONIKER="localtestnet"
 KEYRING="test"
@@ -94,6 +94,12 @@ if [[ $1 == "pending" ]]; then
   echo "pending mode is on, please wait for the first block committed."
 fi
 
-# Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-#~/go/bin/imversed start --pruning=nothing --evm.tracer=json $TRACE --log_level $LOGLEVEL --minimum-gas-prices=0.0001nimv --json-rpc.api eth,txpool,personal,net,debug,web3,miner --api.enable
-~/go/bin/imversed start
+mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin &&
+# copy current binary
+cp ~/go/bin/imversed $DAEMON_HOME/cosmovisor/genesis/bin &&
+
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v1.1/bin &&
+# copy binary with upgrade
+ cp ~/projects/imversed/release/imversed $DAEMON_HOME/cosmovisor/upgrades/v1.1/bin &&
+
+~/go/bin/cosmovisor start

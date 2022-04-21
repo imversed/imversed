@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
@@ -280,7 +281,9 @@ func NewImversedApp(
 		baseAppOptions...,
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion(version.Version)
+	fmt.Println("!!VERSION", version.Version)
+
+	bApp.SetVersion("v1.0")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -657,6 +660,8 @@ func NewImversedApp(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
+
+	app.setUpgradeHandler(app.configurator)
 
 	return app
 }
