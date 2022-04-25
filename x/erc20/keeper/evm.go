@@ -10,11 +10,11 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/tharsis/ethermint/server/config"
-	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	"github.com/imversed/imversed/server/config"
+	evmtypes "github.com/imversed/imversed/x/evm/types"
 
-	"github.com/tharsis/evmos/v3/contracts"
-	"github.com/tharsis/evmos/v3/x/erc20/types"
+	"github.com/imversed/imversed/contracts"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 // QueryERC20 returns the data of a deployed ERC20 contract

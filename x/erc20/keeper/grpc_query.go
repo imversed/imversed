@@ -9,9 +9,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	ethermint "github.com/tharsis/ethermint/types"
+	ethermint "github.com/imversed/imversed/types"
 
-	"github.com/tharsis/evmos/v3/x/erc20/types"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 var _ types.QueryServer = Keeper{}

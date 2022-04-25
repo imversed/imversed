@@ -5,12 +5,9 @@ import (
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/tharsis/evmos/v3/x/erc20/types"
-	inflationtypes "github.com/tharsis/evmos/v3/x/inflation/types"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 func (suite *KeeperTestSuite) TestConvertCoinNativeCoin() {
@@ -432,6 +429,7 @@ func (suite *KeeperTestSuite) TestConvertCoinNativeERC20() {
 	suite.mintFeeCollector = false
 }
 
+/*
 func (suite *KeeperTestSuite) TestConvertNativeIBC() {
 	suite.SetupTest()
 	base := "ibc/7F1D3FCF4AE79E1554D670D1AD949A9BA4E4A3C76C63093E17E446A46061A7A2"
@@ -458,7 +456,7 @@ func (suite *KeeperTestSuite) TestConvertNativeIBC() {
 	suite.Require().NoError(err)
 	suite.Commit()
 }
-
+*/
 func (suite *KeeperTestSuite) TestWrongPairOwnerERC20NativeCoin() {
 	testCases := []struct {
 		name      string

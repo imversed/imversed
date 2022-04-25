@@ -3,8 +3,8 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
+	imversed "github.com/imversed/imversed/types"
 	"github.com/tendermint/tendermint/crypto/tmhash"
-	ethermint "github.com/tharsis/ethermint/types"
 )
 
 // NewTokenPair returns an instance of TokenPair
@@ -34,7 +34,7 @@ func (tp TokenPair) Validate() error {
 		return err
 	}
 
-	if err := ethermint.ValidateAddress(tp.Erc20Address); err != nil {
+	if err := imversed.ValidateAddress(tp.Erc20Address); err != nil {
 		return err
 	}
 

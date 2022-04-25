@@ -24,6 +24,11 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/imversed/imversed/x/erc20"
+	erc20client "github.com/imversed/imversed/x/erc20/client"
+	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
+	erc20types "github.com/imversed/imversed/x/erc20/types"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -152,6 +157,9 @@ var (
 		gov.NewAppModuleBasic(
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
+			// erc20 proposals handlers
+			erc20client.RegisterCoinProposalHandler, erc20client.RegisterERC20ProposalHandler,
+			erc20client.ToggleTokenRelayProposalHandler, erc20client.UpdateTokenPairERC20ProposalHandler,
 		),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
@@ -166,6 +174,8 @@ var (
 		// Ethermint modules
 		evm.AppModuleBasic{},
 		feemarket.AppModuleBasic{},
+		// Evmos modules
+		erc20.AppModuleBasic{},
 		// custom modules
 		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
@@ -184,6 +194,8 @@ var (
 		evmtypes.ModuleName:            {authtypes.Minter, authtypes.Burner}, // used for secure addition and subtraction of balance using module account
 		currencymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		poolsmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		// erc20 module
+		erc20types.ModuleName: {authtypes.Minter, authtypes.Burner},
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -231,6 +243,9 @@ type ImversedApp struct {
 	IBCKeeper        *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
 	EvidenceKeeper   evidencekeeper.Keeper
 	TransferKeeper   ibctransferkeeper.Keeper
+
+	// erc20 keeper
+	Erc20Keeper erc20keeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -297,6 +312,8 @@ func NewImversedApp(
 		ibchost.StoreKey, ibctransfertypes.StoreKey,
 		// ethermint keys
 		evmtypes.StoreKey, feemarkettypes.StoreKey,
+		// erc20 keys
+		erc20types.StoreKey,
 		// custom modules keys
 		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
@@ -381,6 +398,17 @@ func NewImversedApp(
 		tracer,
 	)
 
+	app.Erc20Keeper = erc20keeper.NewKeeper(
+		keys[erc20types.StoreKey], appCodec, app.GetSubspace(erc20types.ModuleName),
+		app.AccountKeeper, app.BankKeeper, app.EvmKeeper,
+	)
+
+	app.EvmKeeper = app.EvmKeeper.SetHooks(
+		evmkeeper.NewMultiEvmHooks(
+			app.Erc20Keeper.Hooks(),
+		),
+	)
+
 	// Create custom keepers
 	app.CurrencyKeeper = *currencymodulekeeper.NewKeeper(
 		appCodec,
@@ -415,7 +443,9 @@ func NewImversedApp(
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
-		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
+		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
+		// er20 router
+		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper))
 
 	govKeeper := govkeeper.NewKeeper(
 		appCodec, keys[govtypes.StoreKey], app.GetSubspace(govtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
@@ -485,6 +515,8 @@ func NewImversedApp(
 		// Ethermint app modules
 		evm.NewAppModule(app.EvmKeeper, app.AccountKeeper),
 		feemarket.NewAppModule(app.FeeMarketKeeper),
+		// erc20 app modules
+		erc20.NewAppModule(app.Erc20Keeper, app.AccountKeeper),
 		// Custom modules
 		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
@@ -517,6 +549,8 @@ func NewImversedApp(
 		banktypes.ModuleName,
 		govtypes.ModuleName,
 		crisistypes.ModuleName,
+		// erc20
+		erc20types.ModuleName,
 		genutiltypes.ModuleName,
 		authz.ModuleName,
 		feegrant.ModuleName,
@@ -547,6 +581,8 @@ func NewImversedApp(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
+		// erc20
+		erc20types.ModuleName,
 		vestingtypes.ModuleName,
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
@@ -583,6 +619,8 @@ func NewImversedApp(
 		// Ethermint modules
 		evmtypes.ModuleName,
 		feemarkettypes.ModuleName,
+		// erc20
+		erc20types.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -842,6 +880,8 @@ func initParamsKeeper(
 	// ethermint subspaces
 	paramsKeeper.Subspace(evmtypes.ModuleName)
 	paramsKeeper.Subspace(feemarkettypes.ModuleName)
+	// erc20 subspaces
+	paramsKeeper.Subspace(erc20types.ModuleName)
 	// custom subspaces
 	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)

@@ -13,10 +13,10 @@ import (
 
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/tharsis/ethermint/server/config"
+	"github.com/imversed/imversed/server/config"
 
-	"github.com/tharsis/evmos/v3/testutil/network"
-	"github.com/tharsis/evmos/v3/x/erc20/types"
+	"github.com/imversed/imversed/testutil/network"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 // var _ = Describe("E2e", func() {

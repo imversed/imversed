@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -31,26 +30,26 @@ import (
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/imversed/imversed/crypto/ethsecp256k1"
+	"github.com/imversed/imversed/encoding"
+	"github.com/imversed/imversed/server/config"
+	"github.com/imversed/imversed/tests"
+	imversed "github.com/imversed/imversed/types"
+	"github.com/imversed/imversed/x/evm/statedb"
+	evm "github.com/imversed/imversed/x/evm/types"
+	feemarkettypes "github.com/imversed/imversed/x/feemarket/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
-	"github.com/tharsis/ethermint/crypto/ethsecp256k1"
-	"github.com/tharsis/ethermint/encoding"
-	"github.com/tharsis/ethermint/server/config"
-	"github.com/tharsis/ethermint/tests"
-	ethermint "github.com/tharsis/ethermint/types"
-	"github.com/tharsis/ethermint/x/evm/statedb"
-	evm "github.com/tharsis/ethermint/x/evm/types"
-	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 
-	"github.com/tharsis/evmos/v3/app"
-	"github.com/tharsis/evmos/v3/contracts"
-	"github.com/tharsis/evmos/v3/x/erc20/types"
+	"github.com/imversed/imversed/app"
+	"github.com/imversed/imversed/contracts"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 type KeeperTestSuite struct {
 	suite.Suite
 
 	ctx              sdk.Context
-	app              *app.Evmos
+	app              *app.ImversedApp
 	queryClientEvm   evm.QueryClient
 	queryClient      types.QueryClient
 	address          common.Address
@@ -93,7 +92,7 @@ func (suite *KeeperTestSuite) DoSetupTest(t require.TestingT) {
 	feemarketGenesis.Params.NoBaseFee = false
 
 	// init app
-	suite.app = app.Setup(checkTx, feemarketGenesis)
+	suite.app = app.Setup(checkTx, nil)
 
 	if suite.mintFeeCollector {
 		// mint some coin to fee collector
@@ -159,7 +158,7 @@ func (suite *KeeperTestSuite) DoSetupTest(t require.TestingT) {
 	types.RegisterQueryServer(queryHelper, suite.app.Erc20Keeper)
 	suite.queryClient = types.NewQueryClient(queryHelper)
 
-	acc := &ethermint.EthAccount{
+	acc := &imversed.EthAccount{
 		BaseAccount: authtypes.NewBaseAccount(sdk.AccAddress(suite.address.Bytes()), nil, 0, 0),
 		CodeHash:    common.BytesToHash(crypto.Keccak256(nil)).String(),
 	}

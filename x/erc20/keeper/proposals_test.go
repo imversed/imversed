@@ -3,15 +3,11 @@ package keeper_test
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/tharsis/ethermint/tests"
-
-	"github.com/tharsis/evmos/v3/x/erc20/types"
-	inflationtypes "github.com/tharsis/evmos/v3/x/inflation/types"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 const (
@@ -51,6 +47,7 @@ func (suite *KeeperTestSuite) setupRegisterERC20Pair(contractType int) common.Ad
 	return contractAddr
 }
 
+/*
 func (suite *KeeperTestSuite) setupRegisterCoin() (banktypes.Metadata, *types.TokenPair) {
 	suite.SetupTest()
 	validMetadata := banktypes.Metadata{
@@ -231,7 +228,7 @@ func (suite KeeperTestSuite) TestRegisterCoin() {
 		})
 	}
 }
-
+*/
 func (suite KeeperTestSuite) TestRegisterERC20() {
 	var (
 		contractAddr common.Address

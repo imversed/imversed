@@ -14,10 +14,10 @@ import (
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 
-	"github.com/tharsis/ethermint/testutil/network"
+	"github.com/imversed/imversed/testutil/network"
 
-	evmosnetwork "github.com/tharsis/evmos/v3/testutil/network"
-	"github.com/tharsis/evmos/v3/x/erc20/client/cli"
+	evmosnetwork "github.com/imversed/imversed/testutil/network"
+	"github.com/imversed/imversed/x/erc20/client/cli"
 )
 
 type IntegrationTestSuite struct {

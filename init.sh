@@ -15,11 +15,11 @@ TRACE="--trace"
 
 # remove existing daemon and client
 rm -rf ~/.imversed
-#rm -fr ~/go/bin/imversed
+rm -rf ~/go/bin/imversed
 #
 ignite chain build
 #
-#mv ~/go/bin/imversedd ~/go/bin/imversed
+mv ~/go/bin/imversedd ~/go/bin/imversed
 
 #make install
 

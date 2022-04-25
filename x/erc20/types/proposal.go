@@ -10,7 +10,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
-	ethermint "github.com/tharsis/ethermint/types"
+	imversed "github.com/imversed/imversed/types"
 )
 
 // constants
@@ -118,7 +118,7 @@ func ValidateErc20Denom(denom string) error {
 		return fmt.Errorf("invalid denom. %s denomination should be prefixed with the format 'erc20/", denom)
 	}
 
-	return ethermint.ValidateAddress(denomSplit[1])
+	return imversed.ValidateAddress(denomSplit[1])
 }
 
 // NewRegisterERC20Proposal returns new instance of RegisterERC20Proposal
@@ -140,7 +140,7 @@ func (*RegisterERC20Proposal) ProposalType() string {
 
 // ValidateBasic performs a stateless check of the proposal fields
 func (rtbp *RegisterERC20Proposal) ValidateBasic() error {
-	if err := ethermint.ValidateAddress(rtbp.Erc20Address); err != nil {
+	if err := imversed.ValidateAddress(rtbp.Erc20Address); err != nil {
 		return sdkerrors.Wrap(err, "ERC20 address")
 	}
 	return govtypes.ValidateAbstract(rtbp)
@@ -167,7 +167,7 @@ func (*ToggleTokenRelayProposal) ProposalType() string {
 func (etrp *ToggleTokenRelayProposal) ValidateBasic() error {
 	// check if the token is a hex address, if not, check if it is a valid SDK
 	// denom
-	if err := ethermint.ValidateAddress(etrp.Token); err != nil {
+	if err := imversed.ValidateAddress(etrp.Token); err != nil {
 		if err := sdk.ValidateDenom(etrp.Token); err != nil {
 			return err
 		}
@@ -196,11 +196,11 @@ func (*UpdateTokenPairERC20Proposal) ProposalType() string {
 
 // ValidateBasic performs a stateless check of the proposal fields
 func (p *UpdateTokenPairERC20Proposal) ValidateBasic() error {
-	if err := ethermint.ValidateAddress(p.Erc20Address); err != nil {
+	if err := imversed.ValidateAddress(p.Erc20Address); err != nil {
 		return sdkerrors.Wrap(err, "ERC20 address")
 	}
 
-	if err := ethermint.ValidateAddress(p.NewErc20Address); err != nil {
+	if err := imversed.ValidateAddress(p.NewErc20Address); err != nil {
 		return sdkerrors.Wrap(err, "new ERC20 address")
 	}
 

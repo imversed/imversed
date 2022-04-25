@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/tharsis/ethermint/tests"
-	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	"github.com/imversed/imversed/tests"
+	evmtypes "github.com/imversed/imversed/x/evm/types"
 
-	"github.com/tharsis/evmos/v3/contracts"
-	"github.com/tharsis/evmos/v3/x/erc20/types"
+	"github.com/imversed/imversed/contracts"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 func (suite *KeeperTestSuite) TestQueryERC20() {
