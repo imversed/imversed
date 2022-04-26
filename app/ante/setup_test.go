@@ -1,4 +1,4 @@
-package anteHandlerCustom_test
+package ante_test
 
 import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"

@@ -1,4 +1,4 @@
-package anteHandlerCustom_test
+package ante_test
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec/types"

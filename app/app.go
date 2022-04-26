@@ -1,7 +1,7 @@
 package app
 
 import (
-	ante "github.com/fulldivevr/imversed/x/anteHandlerCustom"
+	ante "github.com/fulldivevr/imversed/app/ante"
 	"io"
 	"net/http"
 	"os"

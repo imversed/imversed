@@ -1,4 +1,4 @@
-package anteHandlerCustom
+package ante
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec/legacy"

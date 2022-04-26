@@ -1,4 +1,4 @@
-package anteHandlerCustom
+package ante
 
 import (
 	"errors"
