@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
-
-	"github.com/imversed/imversed/version"
 )
 
 const (
@@ -20,7 +16,6 @@ var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Print version info",
 	RunE: func(_ *cobra.Command, _ []string) error {
-		fmt.Println(version.Version())
 		return nil
 	},
 }

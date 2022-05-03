@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/imversed/imversed/x/nft/types"
@@ -10,10 +9,7 @@ import (
 
 // HasDenomID returns whether the specified denom ID exists
 func (k Keeper) HasDenomID(ctx sdk.Context, id string) bool {
-	fmt.Println("HasDenomID")
-	fmt.Println(k.storeKey)
-
-	store :=  ctx.KVStore(k.storeKey)
+	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.KeyDenomID(id))
 }
 

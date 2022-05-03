@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
@@ -42,7 +41,6 @@ import (
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
@@ -296,7 +294,6 @@ func NewImversedApp(
 		baseAppOptions...,
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	fmt.Println("!!VERSION", version.Version)
 
 	bApp.SetVersion("v1.0")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
