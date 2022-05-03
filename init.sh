@@ -18,7 +18,8 @@ rm -rf ~/.imversed
 rm -rf ~/go/bin/imversed
 #
 ignite chain build
-#
+#starport c build
+
 mv ~/go/bin/imversedd ~/go/bin/imversed
 
 #make install
