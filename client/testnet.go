@@ -41,7 +41,7 @@ import (
 	"github.com/imversed/imversed/server/config"
 	srvflags "github.com/imversed/imversed/server/flags"
 	ethermint "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	"github.com/imversed/imversed/testutil/network"
 )

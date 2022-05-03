@@ -34,8 +34,8 @@ import (
 	"github.com/imversed/imversed/rpc/ethereum/types"
 	"github.com/imversed/imversed/server/config"
 	ethermint "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
-	feemarkettypes "github.com/imversed/imversed/x/feemarket/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 )
 
 // Backend implements the functionality shared within namespaces.

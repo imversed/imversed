@@ -52,7 +52,7 @@ import (
 	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/server/config"
 	ethermint "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	"github.com/imversed/imversed/app"
 )

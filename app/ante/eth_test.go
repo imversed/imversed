@@ -8,8 +8,8 @@ import (
 	"github.com/imversed/imversed/app/ante"
 	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/tests"
-	"github.com/imversed/imversed/x/evm/statedb"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	"github.com/tharsis/ethermint/x/evm/statedb"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 )

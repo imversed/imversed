@@ -34,9 +34,9 @@ import (
 	ante "github.com/imversed/imversed/app/ante"
 	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/tests"
-	"github.com/imversed/imversed/x/evm/statedb"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
-	feemarkettypes "github.com/imversed/imversed/x/feemarket/types"
+	"github.com/tharsis/ethermint/x/evm/statedb"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )

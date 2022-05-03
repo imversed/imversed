@@ -11,7 +11,7 @@ import (
 	"github.com/imversed/imversed/app"
 	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/tests"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 func TestTxEncoding(t *testing.T) {

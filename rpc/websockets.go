@@ -30,7 +30,7 @@ import (
 	"github.com/imversed/imversed/rpc/ethereum/pubsub"
 	"github.com/imversed/imversed/rpc/ethereum/types"
 	"github.com/imversed/imversed/server/config"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 type WebsocketsServer interface {

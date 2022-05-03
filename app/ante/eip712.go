@@ -18,7 +18,7 @@ import (
 	"github.com/imversed/imversed/crypto/ethsecp256k1"
 	"github.com/imversed/imversed/ethereum/eip712"
 	ethermint "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 var ethermintCodec codec.ProtoCodecMarshaler

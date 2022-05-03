@@ -9,9 +9,9 @@ import (
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 
 	ethermint "github.com/imversed/imversed/types"
-	evmkeeper "github.com/imversed/imversed/x/evm/keeper"
-	"github.com/imversed/imversed/x/evm/statedb"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmkeeper "github.com/tharsis/ethermint/x/evm/keeper"
+	"github.com/tharsis/ethermint/x/evm/statedb"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"

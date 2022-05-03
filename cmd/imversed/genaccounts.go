@@ -22,7 +22,7 @@ import (
 
 	"github.com/imversed/imversed/crypto/hd"
 	ethermint "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 const (

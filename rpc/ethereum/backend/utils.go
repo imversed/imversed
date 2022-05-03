@@ -16,7 +16,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/imversed/imversed/rpc/ethereum/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 // SetTxDefaults populates tx message with default values in case they are not

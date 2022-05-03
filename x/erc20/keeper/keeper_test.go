@@ -35,10 +35,10 @@ import (
 	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/tests"
 	imversed "github.com/imversed/imversed/types"
-	"github.com/imversed/imversed/x/evm/statedb"
-	evm "github.com/imversed/imversed/x/evm/types"
-	feemarkettypes "github.com/imversed/imversed/x/feemarket/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
+	"github.com/tharsis/ethermint/x/evm/statedb"
+	evm "github.com/tharsis/ethermint/x/evm/types"
+	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 
 	"github.com/imversed/imversed/app"
 	"github.com/imversed/imversed/contracts"

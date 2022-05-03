@@ -39,7 +39,7 @@ import (
 	"github.com/imversed/imversed/rpc/ethereum/backend"
 	rpctypes "github.com/imversed/imversed/rpc/ethereum/types"
 	imversed "github.com/imversed/imversed/types"
-	evmtypes "github.com/imversed/imversed/x/evm/types"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
 // PublicAPI is the eth_ prefixed set of APIs in the Web3 JSON-RPC spec.
