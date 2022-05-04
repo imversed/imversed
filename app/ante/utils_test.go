@@ -11,7 +11,7 @@ import (
 	types3 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/imversed/imversed/ethereum/eip712"
-	"github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"

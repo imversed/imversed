@@ -48,10 +48,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/imversed/imversed/crypto/hd"
 	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/server/config"
-	ethermint "github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/crypto/hd"
+	ethermint "github.com/tharsis/ethermint/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	"github.com/imversed/imversed/app"

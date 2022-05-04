@@ -33,7 +33,7 @@ import (
 
 	"github.com/imversed/imversed/rpc/ethereum/types"
 	"github.com/imversed/imversed/server/config"
-	ethermint "github.com/imversed/imversed/types"
+	ethermint "github.com/tharsis/ethermint/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 )

@@ -35,10 +35,10 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 
-	"github.com/imversed/imversed/crypto/hd"
 	"github.com/imversed/imversed/rpc/ethereum/backend"
 	rpctypes "github.com/imversed/imversed/rpc/ethereum/types"
-	imversed "github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/crypto/hd"
+	imversed "github.com/tharsis/ethermint/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 

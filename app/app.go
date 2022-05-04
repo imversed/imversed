@@ -2,6 +2,11 @@ package app
 
 import (
 	"encoding/json"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
@@ -9,10 +14,6 @@ import (
 	poolsmodule "github.com/imversed/imversed/x/pools"
 	poolsmodulekeeper "github.com/imversed/imversed/x/pools/keeper"
 	poolsmoduletypes "github.com/imversed/imversed/x/pools/types"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
@@ -109,7 +110,7 @@ import (
 
 	"github.com/imversed/imversed/app/ante"
 	srvflags "github.com/imversed/imversed/server/flags"
-	imversed "github.com/imversed/imversed/types"
+	imversed "github.com/tharsis/ethermint/types"
 	"github.com/tharsis/ethermint/x/evm"
 	evmrest "github.com/tharsis/ethermint/x/evm/client/rest"
 	evmkeeper "github.com/tharsis/ethermint/x/evm/keeper"

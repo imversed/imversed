@@ -33,12 +33,12 @@ import (
 	"github.com/imversed/imversed/app"
 	ethermintclient "github.com/imversed/imversed/client"
 	"github.com/imversed/imversed/client/debug"
-	"github.com/imversed/imversed/crypto/hd"
 	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/server"
 	servercfg "github.com/imversed/imversed/server/config"
 	srvflags "github.com/imversed/imversed/server/flags"
-	ethermint "github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/crypto/hd"
+	ethermint "github.com/tharsis/ethermint/types"
 )
 
 const EnvPrefix = "ETHERMINT"

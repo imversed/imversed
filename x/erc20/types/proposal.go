@@ -10,7 +10,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
-	imversed "github.com/imversed/imversed/types"
+	imversed "github.com/tharsis/ethermint/types"
 )
 
 // constants

@@ -15,9 +15,9 @@ import (
 
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
-	"github.com/imversed/imversed/crypto/ethsecp256k1"
 	"github.com/imversed/imversed/ethereum/eip712"
-	ethermint "github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/crypto/ethsecp256k1"
+	ethermint "github.com/tharsis/ethermint/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 

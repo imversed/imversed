@@ -10,8 +10,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 
-	"github.com/imversed/imversed/crypto/hd"
-	ethermint "github.com/imversed/imversed/types"
+	"github.com/tharsis/ethermint/crypto/hd"
+	ethermint "github.com/tharsis/ethermint/types"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -24,7 +24,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 
-	"github.com/imversed/imversed/crypto/ethsecp256k1"
+	"github.com/tharsis/ethermint/crypto/ethsecp256k1"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 

@@ -2,7 +2,7 @@ package config
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ethermint "github.com/imversed/imversed/types"
+	ethermint "github.com/tharsis/ethermint/types"
 )
 
 const (

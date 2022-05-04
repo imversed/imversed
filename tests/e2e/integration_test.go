@@ -30,7 +30,7 @@ import (
 
 	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/testutil/network"
-	ethermint "github.com/imversed/imversed/types"
+	ethermint "github.com/tharsis/ethermint/types"
 )
 
 // var _ = Describe("E2e", func() {

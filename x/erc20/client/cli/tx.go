@@ -15,7 +15,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
-	imversed "github.com/imversed/imversed/types"
+	imversed "github.com/tharsis/ethermint/types"
 
 	"github.com/imversed/imversed/x/erc20/types"
 )
