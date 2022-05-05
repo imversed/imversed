@@ -10,7 +10,7 @@ import (
 	types2 "github.com/cosmos/cosmos-sdk/x/bank/types"
 	types3 "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/imversed/imversed/ethereum/eip712"
+	"github.com/tharsis/ethermint/ethereum/eip712"
 	"github.com/tharsis/ethermint/types"
 
 	"github.com/ethereum/go-ethereum/common"

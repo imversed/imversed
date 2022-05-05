@@ -7,7 +7,7 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/imversed/imversed/ethereum/eip712"
+	"github.com/tharsis/ethermint/ethereum/eip712"
 
 	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 
