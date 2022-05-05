@@ -32,8 +32,8 @@ import (
 
 	"github.com/imversed/imversed/app"
 	ante "github.com/imversed/imversed/app/ante"
-	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/tests"
+	"github.com/tharsis/ethermint/encoding"
 	"github.com/tharsis/ethermint/x/evm/statedb"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"

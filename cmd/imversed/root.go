@@ -31,13 +31,13 @@ import (
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 
 	"github.com/imversed/imversed/app"
-	"github.com/imversed/imversed/encoding"
 	"github.com/imversed/imversed/server"
 	servercfg "github.com/imversed/imversed/server/config"
 	srvflags "github.com/imversed/imversed/server/flags"
 	ethermintclient "github.com/tharsis/ethermint/client"
 	"github.com/tharsis/ethermint/client/debug"
 	"github.com/tharsis/ethermint/crypto/hd"
+	"github.com/tharsis/ethermint/encoding"
 	ethermint "github.com/tharsis/ethermint/types"
 )
 
