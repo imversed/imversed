@@ -106,7 +106,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/imversed/imversed/client/docs/statik"
+	_ "github.com/tharsis/ethermint/client/docs/statik"
 
 	"github.com/imversed/imversed/app/ante"
 	srvflags "github.com/imversed/imversed/server/flags"
