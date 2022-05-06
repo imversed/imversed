@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"github.com/imversed/imversed/rpc/ethereum/types"
+	"github.com/tharsis/ethermint/rpc/ethereum/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
