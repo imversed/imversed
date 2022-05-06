@@ -109,7 +109,7 @@ import (
 	_ "github.com/tharsis/ethermint/client/docs/statik"
 
 	"github.com/imversed/imversed/app/ante"
-	srvflags "github.com/imversed/imversed/server/flags"
+	srvflags "github.com/tharsis/ethermint/server/flags"
 	imversed "github.com/tharsis/ethermint/types"
 	"github.com/tharsis/ethermint/x/evm"
 	evmrest "github.com/tharsis/ethermint/x/evm/client/rest"

@@ -6,8 +6,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/imversed/imversed/app/ante"
-	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/tests"
+	"github.com/tharsis/ethermint/server/config"
 	"github.com/tharsis/ethermint/x/evm/statedb"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 

@@ -30,11 +30,11 @@ import (
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/tests"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	"github.com/tharsis/ethermint/crypto/ethsecp256k1"
 	"github.com/tharsis/ethermint/encoding"
+	"github.com/tharsis/ethermint/server/config"
 	imversed "github.com/tharsis/ethermint/types"
 	"github.com/tharsis/ethermint/x/evm/statedb"
 	evm "github.com/tharsis/ethermint/x/evm/types"

@@ -23,7 +23,7 @@ import (
 
 	"github.com/imversed/imversed/rpc/ethereum/backend"
 	rpctypes "github.com/imversed/imversed/rpc/ethereum/types"
-	"github.com/imversed/imversed/server/config"
+	"github.com/tharsis/ethermint/server/config"
 )
 
 // API is the private miner prefixed set of APIs in the Miner JSON-RPC spec.

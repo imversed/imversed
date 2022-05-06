@@ -28,8 +28,8 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient/gethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 
-	"github.com/imversed/imversed/server/config"
 	"github.com/imversed/imversed/testutil/network"
+	"github.com/tharsis/ethermint/server/config"
 	ethermint "github.com/tharsis/ethermint/types"
 )
 

@@ -29,7 +29,7 @@ import (
 	rpcfilters "github.com/imversed/imversed/rpc/ethereum/namespaces/eth/filters"
 	"github.com/imversed/imversed/rpc/ethereum/pubsub"
 	"github.com/imversed/imversed/rpc/ethereum/types"
-	"github.com/imversed/imversed/server/config"
+	"github.com/tharsis/ethermint/server/config"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
 
