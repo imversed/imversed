@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -268,268 +269,268 @@ func (suite *KeeperTestSuite) TestCreatePool() {
 	}
 }
 
-// func (suite *KeeperTestSuite) TestJoinPool() {
-// 	tests := []struct {
-// 		fn func(poolId uint64)
-// 	}{
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				balancesBefore := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc2)
-// 				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
-// 				suite.Require().NoError(err)
-// 				suite.Require().Equal(types.OneShare.MulRaw(50).String(), suite.app.BankKeeper.GetBalance(suite.ctx, acc2, "pools/pool/1").Amount.String())
-// 				balancesAfter := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc2)
+func (suite *KeeperTestSuite) TestJoinPool() {
+	tests := []struct {
+		fn func(poolId uint64)
+	}{
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				balancesBefore := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc2)
+				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.OneShare.MulRaw(50).String(), suite.app.BankKeeper.GetBalance(suite.ctx, acc2, "pools/pool/1").Amount.String())
+				balancesAfter := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc2)
 
-// 				deltaBalances, _ := balancesBefore.SafeSub(balancesAfter)
-// 				// The pool was created with the 10000foo, 10000bar, and the pool share was minted as 100000000pools/pool/1.
-// 				// Thus, to get the 50*OneShare pools/pool/1, (10000foo, 10000bar) * (1 / 2) balances should be provided.
-// 				suite.Require().Equal("5000", deltaBalances.AmountOf("foo").String())
-// 				suite.Require().Equal("5000", deltaBalances.AmountOf("bar").String())
+				deltaBalances, _ := balancesBefore.SafeSub(balancesAfter)
+				// The pool was created with the 10000foo, 10000bar, and the pool share was minted as 100000000pools/pool/1.
+				// Thus, to get the 50*OneShare pools/pool/1, (10000foo, 10000bar) * (1 / 2) balances should be provided.
+				suite.Require().Equal("5000", deltaBalances.AmountOf("foo").String())
+				suite.Require().Equal("5000", deltaBalances.AmountOf("bar").String())
 
-// 				liquidity := suite.app.PoolsKeeper.GetTotalLiquidity(suite.ctx)
-// 				suite.Require().Equal("15000bar,15000foo", liquidity.String())
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				err := keeper.JoinPool(suite.ctx, acc2, poolId, sdk.NewInt(0), sdk.Coins{})
-// 				suite.Require().Error(err, "can't join the pool with requesting 0 share amount")
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				err := keeper.JoinPool(suite.ctx, acc2, poolId, sdk.NewInt(-1), sdk.Coins{})
-// 				suite.Require().Error(err, "can't join the pool with requesting negative share amount")
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				// Test the "tokenInMaxs"
-// 				// In this case, to get the 50 * OneShare amount of share token, the foo, bar token are expected to be provided as 5000 amounts.
-// 				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{
-// 					sdk.NewCoin("foo", sdk.NewInt(4999)),
-// 				})
-// 				suite.Require().Error(err)
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				// Test the "tokenInMaxs"
-// 				// In this case, to get the 50 * OneShare amount of share token, the foo, bar token are expected to be provided as 5000 amounts.
-// 				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{
-// 					sdk.NewCoin("foo", sdk.NewInt(5000)),
-// 				})
-// 				suite.Require().NoError(err)
+				liquidity := suite.app.PoolsKeeper.GetTotalLiquidity(suite.ctx)
+				suite.Require().Equal("15000bar,15000foo", liquidity.String())
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				err := keeper.JoinPool(suite.ctx, acc2, poolId, sdk.NewInt(0), sdk.Coins{})
+				suite.Require().Error(err, "can't join the pool with requesting 0 share amount")
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				err := keeper.JoinPool(suite.ctx, acc2, poolId, sdk.NewInt(-1), sdk.Coins{})
+				suite.Require().Error(err, "can't join the pool with requesting negative share amount")
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				// Test the "tokenInMaxs"
+				// In this case, to get the 50 * OneShare amount of share token, the foo, bar token are expected to be provided as 5000 amounts.
+				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{
+					sdk.NewCoin("foo", sdk.NewInt(4999)),
+				})
+				suite.Require().Error(err)
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				// Test the "tokenInMaxs"
+				// In this case, to get the 50 * OneShare amount of share token, the foo, bar token are expected to be provided as 5000 amounts.
+				err := keeper.JoinPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{
+					sdk.NewCoin("foo", sdk.NewInt(5000)),
+				})
+				suite.Require().NoError(err)
 
-// 				liquidity := suite.app.PoolsKeeper.GetTotalLiquidity(suite.ctx)
-// 				suite.Require().Equal("15000bar,15000foo", liquidity.String())
-// 			},
-// 		},
-// 	}
+				liquidity := suite.app.PoolsKeeper.GetTotalLiquidity(suite.ctx)
+				suite.Require().Equal("15000bar,15000foo", liquidity.String())
+			},
+		},
+	}
 
-// 	for _, test := range tests {
-// 		suite.SetupTest()
+	for _, test := range tests {
+		suite.SetupTest()
 
-// 		// Mint some assets to the accounts.
-// 		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
-// 			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
-// 				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
-// 				sdk.NewCoin("foo", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("bar", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("baz", sdk.NewInt(10000000)),
-// 			))
-// 			if err != nil {
-// 				panic(err)
-// 			}
-// 		}
+		// Mint some assets to the accounts.
+		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
+			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
+				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+				sdk.NewCoin("foo", sdk.NewInt(10000000)),
+				sdk.NewCoin("bar", sdk.NewInt(10000000)),
+				sdk.NewCoin("baz", sdk.NewInt(10000000)),
+			))
+			if err != nil {
+				panic(err)
+			}
+		}
 
-// 		// Create the pool at first
-// 		poolId, err := suite.app.PoolsKeeper.CreatePool(suite.ctx, acc1, types.PoolParams{
-// 			SwapFee: sdk.NewDecWithPrec(1, 2),
-// 			ExitFee: sdk.NewDecWithPrec(1, 2),
-// 		}, []types.PoolAsset{{
-// 			Weight: sdk.NewInt(100),
-// 			Token:  sdk.NewCoin("foo", sdk.NewInt(10000)),
-// 		}, {
-// 			Weight: sdk.NewInt(100),
-// 			Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
-// 		}})
-// 		suite.Require().NoError(err)
+		// Create the pool at first
+		poolId, err := suite.app.PoolsKeeper.CreatePool(suite.ctx, acc1, types.PoolParams{
+			SwapFee: sdk.NewDecWithPrec(1, 2),
+			ExitFee: sdk.NewDecWithPrec(1, 2),
+		}, []types.PoolAsset{{
+			Weight: sdk.NewInt(100),
+			Token:  sdk.NewCoin("foo", sdk.NewInt(10000)),
+		}, {
+			Weight: sdk.NewInt(100),
+			Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
+		}})
+		suite.Require().NoError(err)
 
-// 		test.fn(poolId)
-// 	}
-// }
+		test.fn(poolId)
+	}
+}
 
-// func (suite *KeeperTestSuite) TestExitPool() {
-// 	tests := []struct {
-// 		fn func(poolId uint64)
-// 	}{
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
-// 				// Acc2 has no share token.
-// 				err := keeper.ExitPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
-// 				suite.Require().Error(err)
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
+func (suite *KeeperTestSuite) TestExitPool() {
+	tests := []struct {
+		fn func(poolId uint64)
+	}{
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
+				// Acc2 has no share token.
+				err := keeper.ExitPool(suite.ctx, acc2, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
+				suite.Require().Error(err)
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
 
-// 				balancesBefore := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc1)
-// 				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.InitPoolSharesSupply.QuoRaw(2), sdk.Coins{})
-// 				suite.Require().NoError(err)
-// 				// (100 - 50) * OneShare should remain.
-// 				suite.Require().Equal(types.InitPoolSharesSupply.QuoRaw(2).String(), suite.app.BankKeeper.GetBalance(suite.ctx, acc1, "pools/pool/1").Amount.String())
-// 				balancesAfter := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc1)
+				balancesBefore := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc1)
+				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.InitPoolSharesSupply.QuoRaw(2), sdk.Coins{})
+				suite.Require().NoError(err)
+				// (100 - 50) * OneShare should remain.
+				suite.Require().Equal(types.InitPoolSharesSupply.QuoRaw(2).String(), suite.app.BankKeeper.GetBalance(suite.ctx, acc1, "pools/pool/1").Amount.String())
+				balancesAfter := suite.app.BankKeeper.GetAllBalances(suite.ctx, acc1)
 
-// 				deltaBalances, _ := balancesBefore.SafeSub(balancesAfter)
-// 				// The pool was created with the 10000foo, 10000bar, and the pool share was minted as 100*OneShare pools/pool/1.
-// 				// Thus, to refund the 50*OneShare pools/pool/1, (10000foo, 10000bar) * (1 / 2) balances should be refunded.
-// 				suite.Require().Equal("-5000", deltaBalances.AmountOf("foo").String())
-// 				suite.Require().Equal("-5000", deltaBalances.AmountOf("bar").String())
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
+				deltaBalances, _ := balancesBefore.SafeSub(balancesAfter)
+				// The pool was created with the 10000foo, 10000bar, and the pool share was minted as 100*OneShare pools/pool/1.
+				// Thus, to refund the 50*OneShare pools/pool/1, (10000foo, 10000bar) * (1 / 2) balances should be refunded.
+				suite.Require().Equal("-5000", deltaBalances.AmountOf("foo").String())
+				suite.Require().Equal("-5000", deltaBalances.AmountOf("bar").String())
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
 
-// 				err := keeper.ExitPool(suite.ctx, acc1, poolId, sdk.NewInt(0), sdk.Coins{})
-// 				suite.Require().Error(err, "can't join the pool with requesting 0 share amount")
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
+				err := keeper.ExitPool(suite.ctx, acc1, poolId, sdk.NewInt(0), sdk.Coins{})
+				suite.Require().Error(err, "can't join the pool with requesting 0 share amount")
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
 
-// 				err := keeper.ExitPool(suite.ctx, acc1, poolId, sdk.NewInt(-1), sdk.Coins{})
-// 				suite.Require().Error(err, "can't join the pool with requesting negative share amount")
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
+				err := keeper.ExitPool(suite.ctx, acc1, poolId, sdk.NewInt(-1), sdk.Coins{})
+				suite.Require().Error(err, "can't join the pool with requesting negative share amount")
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
 
-// 				// Test the "tokenOutMins"
-// 				// In this case, to refund the 50000000 amount of share token, the foo, bar token are expected to be refunded as 5000 amounts.
-// 				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{
-// 					sdk.NewCoin("foo", sdk.NewInt(5001)),
-// 				})
-// 				suite.Require().Error(err)
-// 			},
-// 		},
-// 		{
-// 			fn: func(poolId uint64) {
-// 				keeper := suite.app.PoolsKeeper
+				// Test the "tokenOutMins"
+				// In this case, to refund the 50000000 amount of share token, the foo, bar token are expected to be refunded as 5000 amounts.
+				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{
+					sdk.NewCoin("foo", sdk.NewInt(5001)),
+				})
+				suite.Require().Error(err)
+			},
+		},
+		{
+			fn: func(poolId uint64) {
+				keeper := suite.app.PoolsKeeper
 
-// 				// Test the "tokenOutMins"
-// 				// In this case, to refund the 50000000 amount of share token, the foo, bar token are expected to be refunded as 5000 amounts.
-// 				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{
-// 					sdk.NewCoin("foo", sdk.NewInt(5000)),
-// 				})
-// 				suite.Require().NoError(err)
-// 			},
-// 		},
-// 	}
+				// Test the "tokenOutMins"
+				// In this case, to refund the 50000000 amount of share token, the foo, bar token are expected to be refunded as 5000 amounts.
+				err := keeper.ExitPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{
+					sdk.NewCoin("foo", sdk.NewInt(5000)),
+				})
+				suite.Require().NoError(err)
+			},
+		},
+	}
 
-// 	for _, test := range tests {
-// 		suite.SetupTest()
+	for _, test := range tests {
+		suite.SetupTest()
 
-// 		// Mint some assets to the accounts.
-// 		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
-// 			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
-// 				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
-// 				sdk.NewCoin("foo", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("bar", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("baz", sdk.NewInt(10000000)),
-// 			))
-// 			if err != nil {
-// 				panic(err)
-// 			}
+		// Mint some assets to the accounts.
+		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
+			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
+				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+				sdk.NewCoin("foo", sdk.NewInt(10000000)),
+				sdk.NewCoin("bar", sdk.NewInt(10000000)),
+				sdk.NewCoin("baz", sdk.NewInt(10000000)),
+			))
+			if err != nil {
+				panic(err)
+			}
 
-// 			// Create the pool at first
-// 			poolId, err := suite.app.PoolsKeeper.CreatePool(suite.ctx, acc1, types.PoolParams{
-// 				SwapFee: sdk.NewDecWithPrec(1, 2),
-// 				ExitFee: sdk.NewDec(0),
-// 			}, []types.PoolAsset{{
-// 				Weight: sdk.NewInt(100),
-// 				Token:  sdk.NewCoin("foo", sdk.NewInt(10000)),
-// 			}, {
-// 				Weight: sdk.NewInt(100),
-// 				Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
-// 			}})
-// 			suite.Require().NoError(err)
+			// Create the pool at first
+			poolId, err := suite.app.PoolsKeeper.CreatePool(suite.ctx, acc1, types.PoolParams{
+				SwapFee: sdk.NewDecWithPrec(1, 2),
+				ExitFee: sdk.NewDec(0),
+			}, []types.PoolAsset{{
+				Weight: sdk.NewInt(100),
+				Token:  sdk.NewCoin("foo", sdk.NewInt(10000)),
+			}, {
+				Weight: sdk.NewInt(100),
+				Token:  sdk.NewCoin("bar", sdk.NewInt(10000)),
+			}})
+			suite.Require().NoError(err)
 
-// 			test.fn(poolId)
-// 		}
-// 	}
-// }
+			test.fn(poolId)
+		}
+	}
+}
 
-// func (suite *KeeperTestSuite) TestActivePool() {
-// 	type testCase struct {
-// 		blockTime  time.Time
-// 		expectPass bool
-// 	}
+func (suite *KeeperTestSuite) TestActivePool() {
+	type testCase struct {
+		blockTime  time.Time
+		expectPass bool
+	}
 
-// 	testCases := []testCase{
-// 		{time.Unix(1000, 0), true},
-// 		{time.Unix(2000, 0), true},
-// 	}
+	testCases := []testCase{
+		{time.Unix(1000, 0), true},
+		{time.Unix(2000, 0), true},
+	}
 
-// 	for _, tc := range testCases {
-// 		suite.SetupTest()
+	for _, tc := range testCases {
+		suite.SetupTest()
 
-// 		// Mint some assets to the accounts.
-// 		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
-// 			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
-// 				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
-// 				sdk.NewCoin("foo", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("bar", sdk.NewInt(10000000)),
-// 				sdk.NewCoin("baz", sdk.NewInt(10000000)),
-// 			))
-// 			if err != nil {
-// 				panic(err)
-// 			}
+		// Mint some assets to the accounts.
+		for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
+			err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
+				sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+				sdk.NewCoin("foo", sdk.NewInt(10000000)),
+				sdk.NewCoin("bar", sdk.NewInt(10000000)),
+				sdk.NewCoin("baz", sdk.NewInt(10000000)),
+			))
+			if err != nil {
+				panic(err)
+			}
 
-// 			// Create the pool at first
-// 			poolId := suite.preparePoolWithPoolParams(types.PoolParams{
-// 				SwapFee: sdk.NewDec(0),
-// 				ExitFee: sdk.NewDec(0),
-// 			})
-// 			suite.ctx = suite.ctx.WithBlockTime(tc.blockTime)
+			// Create the pool at first
+			poolId := suite.preparePoolWithPoolParams(types.PoolParams{
+				SwapFee: sdk.NewDec(0),
+				ExitFee: sdk.NewDec(0),
+			})
+			suite.ctx = suite.ctx.WithBlockTime(tc.blockTime)
 
-// 			// uneffected by start time
-// 			err = suite.app.PoolsKeeper.JoinPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
-// 			suite.Require().NoError(err)
-// 			err = suite.app.PoolsKeeper.ExitPool(suite.ctx, acc1, poolId, types.InitPoolSharesSupply.QuoRaw(2), sdk.Coins{})
-// 			suite.Require().NoError(err)
+			// uneffected by start time
+			err = suite.app.PoolsKeeper.JoinPool(suite.ctx, acc1, poolId, types.OneShare.MulRaw(50), sdk.Coins{})
+			suite.Require().NoError(err)
+			err = suite.app.PoolsKeeper.ExitPool(suite.ctx, acc1, poolId, types.InitPoolSharesSupply.QuoRaw(2), sdk.Coins{})
+			suite.Require().NoError(err)
 
-// 			foocoin := sdk.NewCoin("foo", sdk.NewInt(10))
+			foocoin := sdk.NewCoin("foo", sdk.NewInt(10))
 
-// 			if tc.expectPass {
-// 				_, err = suite.app.PoolsKeeper.JoinSwapExternAmountIn(suite.ctx, acc1, poolId, foocoin, sdk.ZeroInt())
-// 				suite.Require().NoError(err)
-// 				_, err = suite.app.PoolsKeeper.JoinSwapShareAmountOut(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.NewInt(1000000000000000000))
-// 				suite.Require().NoError(err)
-// 				_, err = suite.app.PoolsKeeper.ExitSwapShareAmountIn(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.ZeroInt())
-// 				suite.Require().NoError(err)
-// 				_, err = suite.app.PoolsKeeper.ExitSwapExternAmountOut(suite.ctx, acc1, poolId, foocoin, sdk.NewInt(1000000000000000000))
-// 				suite.Require().NoError(err)
-// 			} else {
-// 				_, err = suite.app.PoolsKeeper.JoinSwapExternAmountIn(suite.ctx, acc1, poolId, foocoin, sdk.ZeroInt())
-// 				suite.Require().Error(err)
-// 				_, err = suite.app.PoolsKeeper.JoinSwapShareAmountOut(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.NewInt(1000000000000000000))
-// 				suite.Require().Error(err)
-// 				_, err = suite.app.PoolsKeeper.ExitSwapShareAmountIn(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.ZeroInt())
-// 				suite.Require().Error(err)
-// 				_, err = suite.app.PoolsKeeper.ExitSwapExternAmountOut(suite.ctx, acc1, poolId, foocoin, sdk.NewInt(1000000000000000000))
-// 				suite.Require().Error(err)
-// 			}
-// 		}
-// 	}
-// }
+			if tc.expectPass {
+				_, err = suite.app.PoolsKeeper.JoinSwapExternAmountIn(suite.ctx, acc1, poolId, foocoin, sdk.ZeroInt())
+				suite.Require().NoError(err)
+				_, err = suite.app.PoolsKeeper.JoinSwapShareAmountOut(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.NewInt(1000000000000000000))
+				suite.Require().NoError(err)
+				_, err = suite.app.PoolsKeeper.ExitSwapShareAmountIn(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.ZeroInt())
+				suite.Require().NoError(err)
+				_, err = suite.app.PoolsKeeper.ExitSwapExternAmountOut(suite.ctx, acc1, poolId, foocoin, sdk.NewInt(1000000000000000000))
+				suite.Require().NoError(err)
+			} else {
+				_, err = suite.app.PoolsKeeper.JoinSwapExternAmountIn(suite.ctx, acc1, poolId, foocoin, sdk.ZeroInt())
+				suite.Require().Error(err)
+				_, err = suite.app.PoolsKeeper.JoinSwapShareAmountOut(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.NewInt(1000000000000000000))
+				suite.Require().Error(err)
+				_, err = suite.app.PoolsKeeper.ExitSwapShareAmountIn(suite.ctx, acc1, poolId, "foo", types.OneShare.MulRaw(10), sdk.ZeroInt())
+				suite.Require().Error(err)
+				_, err = suite.app.PoolsKeeper.ExitSwapExternAmountOut(suite.ctx, acc1, poolId, foocoin, sdk.NewInt(1000000000000000000))
+				suite.Require().Error(err)
+			}
+		}
+	}
+}

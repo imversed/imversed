@@ -1,6 +1,3 @@
-//go:build norace
-// +build norace
-
 package network_test
 
 import (
@@ -22,7 +19,9 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
 	var err error
-	s.network, err = network.New(s.T(), s.T().TempDir(), network.DefaultConfig())
+	cfg := network.DefaultConfig()
+	cfg.NumValidators = 1
+	s.network, err = network.New(s.T(), s.T().TempDir(), cfg)
 	s.Require().NoError(err)
 
 	_, err = s.network.WaitForHeight(1)

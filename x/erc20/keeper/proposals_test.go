@@ -2,10 +2,13 @@ package keeper_test
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/ethereum/go-ethereum/common"
+
+	"github.com/imversed/imversed/tests"
 
 	"github.com/imversed/imversed/x/erc20/types"
 )
@@ -47,7 +50,6 @@ func (suite *KeeperTestSuite) setupRegisterERC20Pair(contractType int) common.Ad
 	return contractAddr
 }
 
-/*
 func (suite *KeeperTestSuite) setupRegisterCoin() (banktypes.Metadata, *types.TokenPair) {
 	suite.SetupTest()
 	validMetadata := banktypes.Metadata{
@@ -69,7 +71,7 @@ func (suite *KeeperTestSuite) setupRegisterCoin() (banktypes.Metadata, *types.To
 		Display: cosmosTokenBase,
 	}
 
-	err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(validMetadata.Base, 1)})
+	err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(validMetadata.Base, 1)})
 	suite.Require().NoError(err)
 
 	// pair := types.NewTokenPair(contractAddr, cosmosTokenBase, true, types.OWNER_MODULE)
@@ -151,53 +153,53 @@ func (suite KeeperTestSuite) TestRegisterCoin() {
 					Display: cosmosTokenDisplay,
 				}
 
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(validMetadata.Base, 1)})
+				err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(validMetadata.Base, 1)})
 				suite.Require().NoError(err)
 				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, validMetadata)
 			},
 			false,
-		},
-		{
-			"evm denom registration - evm",
-			func() {
-				metadata.Base = "evm"
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
-				suite.Require().NoError(err)
+		}, /*
+			{
+				"evm denom registration - evm",
+				func() {
+					metadata.Base = "evm"
+					err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
+					suite.Require().NoError(err)
+				},
+				false,
 			},
-			false,
-		},
-		{
-			"evm denom registration - evmos",
-			func() {
-				metadata.Base = "evmos"
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
-				suite.Require().NoError(err)
+			{
+				"evm denom registration - evmos",
+				func() {
+					metadata.Base = "evmos"
+					err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
+					suite.Require().NoError(err)
+				},
+				false,
 			},
-			false,
-		},
-		{
-			"evm denom registration - aevmos",
-			func() {
-				metadata.Base = "aevmos"
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
-				suite.Require().NoError(err)
+			{
+				"evm denom registration - aevmos",
+				func() {
+					metadata.Base = "aevmos"
+					err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
+					suite.Require().NoError(err)
+				},
+				false,
 			},
-			false,
-		},
-		{
-			"evm denom registration - wevmos",
-			func() {
-				metadata.Base = "wevmos"
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
-				suite.Require().NoError(err)
-			},
-			false,
-		},
+			{
+				"evm denom registration - wevmos",
+				func() {
+					metadata.Base = "wevmos"
+					err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
+					suite.Require().NoError(err)
+				},
+				false,
+			},*/
 		{
 			"ok",
 			func() {
 				metadata.Base = cosmosTokenBase
-				err := suite.app.BankKeeper.MintCoins(suite.ctx, inflationtypes.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
+				err := suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, sdk.Coins{sdk.NewInt64Coin(metadata.Base, 1)})
 				suite.Require().NoError(err)
 			},
 			true,
@@ -228,7 +230,7 @@ func (suite KeeperTestSuite) TestRegisterCoin() {
 		})
 	}
 }
-*/
+
 func (suite KeeperTestSuite) TestRegisterERC20() {
 	var (
 		contractAddr common.Address

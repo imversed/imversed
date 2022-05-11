@@ -2,24 +2,26 @@ package cli_test
 
 import (
 	"fmt"
+	ethermint "github.com/tharsis/ethermint/types"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
 	"github.com/imversed/imversed/app"
+	//"github.com/cosmos/cosmos-sdk/testutil/network"
+	"github.com/imversed/imversed/testutil/network"
 	"github.com/imversed/imversed/x/pools/client/cli"
 	poolstestutil "github.com/imversed/imversed/x/pools/client/testutil"
 	"github.com/imversed/imversed/x/pools/types"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
+	"github.com/tharsis/ethermint/crypto/hd"
 
 	testnet "github.com/imversed/imversed/testutil/network"
 )
@@ -34,7 +36,9 @@ type IntegrationTestSuite struct {
 func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
+	var err error
 	s.cfg = testnet.DefaultConfig()
+	s.cfg.NumValidators = 1
 
 	// modification to pay fee with test bond denom "stake"
 	genesisState := app.ModuleBasics.DefaultGenesis(s.cfg.Codec)
@@ -44,9 +48,10 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	genesisState[types.ModuleName] = poolsGenJson
 	s.cfg.GenesisState = genesisState
 
-	s.network = network.New(s.T(), s.cfg)
+	s.network, err = network.New(s.T(), s.T().TempDir(), s.cfg)
+	s.Require().NoError(err)
 
-	_, err := s.network.WaitForHeight(1)
+	_, err = s.network.WaitForHeight(1)
 	s.Require().NoError(err)
 
 	val := s.network.Validators[0]
@@ -68,12 +73,13 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 	val := s.network.Validators[0]
 
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewCreatePoolAddr",
-		keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())
 
-	_, err = banktestutil.MsgSendExec(
+	var buf testutil.BufferWriter
+	buf, err = banktestutil.MsgSendExec(
 		val.ClientCtx,
 		val.Address,
 		newAddr,
@@ -81,6 +87,7 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
 	)
+	_ = buf
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -295,7 +302,7 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 func (s IntegrationTestSuite) TestNewJoinPoolCmd() {
 	val := s.network.Validators[0]
 
-	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewJoinPoolAddr", keyring.English, sdk.FullFundraiserPath, "", hd.Secp256k1)
+	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewJoinPoolAddr", keyring.English, ethermint.BIP44HDPath, "", hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())
@@ -433,7 +440,7 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountOutCmd() {
 	val := s.network.Validators[0]
 
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewSwapExactAmountOut",
-		keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())
@@ -497,7 +504,7 @@ func (s IntegrationTestSuite) TestNewJoinSwapExternAmountInCmd() {
 	val := s.network.Validators[0]
 
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewJoinSwapExternAmountIn",
-		keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())
@@ -605,7 +612,7 @@ func (s IntegrationTestSuite) TestNewJoinSwapShareAmountOutCmd() {
 	val := s.network.Validators[0]
 
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewJoinSwapShareAmountOutAddr", keyring.English,
-		sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())
@@ -1093,7 +1100,7 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountInCmd() {
 	val := s.network.Validators[0]
 
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewSwapExactAmountIn",
-		keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
 	newAddr := sdk.AccAddress(info.GetPubKey().Address())

@@ -6,8 +6,6 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"strings"
-
 	"github.com/imversed/imversed/contracts"
 	"github.com/imversed/imversed/x/erc20/types"
 )
@@ -19,12 +17,12 @@ func (k Keeper) RegisterCoin(ctx sdk.Context, coinMetadata banktypes.Metadata) (
 	if !params.EnableErc20 {
 		return nil, sdkerrors.Wrap(types.ErrERC20Disabled, "registration is currently disabled by governance")
 	}
-
-	// prohibit denominations that contain the evm denom
-	if strings.Contains(coinMetadata.Base, "evm") {
-		return nil, sdkerrors.Wrapf(types.ErrEVMDenom, "cannot register the EVM denomination %s", coinMetadata.Base)
-	}
-
+	/*
+		// prohibit denominations that contain the evm denom
+		if strings.Contains(coinMetadata.Base, "evm") {
+			return nil, sdkerrors.Wrapf(types.ErrEVMDenom, "cannot register the EVM denomination %s", coinMetadata.Base)
+		}
+	*/
 	// check if the denomination already registered
 	if k.IsDenomRegistered(ctx, coinMetadata.Name) {
 		return nil, sdkerrors.Wrapf(types.ErrTokenPairAlreadyExists, "coin denomination already registered: %s", coinMetadata.Name)

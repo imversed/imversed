@@ -23,6 +23,7 @@ var _ = strconv.IntSize
 func networkWithCurrencyObjects(t *testing.T, n int) (*network.Network, []types.Currency) {
 	t.Helper()
 	cfg := network.DefaultConfig()
+	cfg.NumValidators = 1
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -34,7 +35,8 @@ func networkWithCurrencyObjects(t *testing.T, n int) (*network.Network, []types.
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.CurrencyList
+	net, _ := network.New(t, t.TempDir(), cfg)
+	return net, state.CurrencyList
 }
 
 func TestShowCurrency(t *testing.T) {

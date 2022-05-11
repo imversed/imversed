@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"github.com/tharsis/ethermint/encoding"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -14,7 +15,6 @@ import (
 	"path/filepath"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/tendermint/spm/cosmoscmd"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -82,10 +82,9 @@ func (suite *KeeperSuite) SetupTest() {
 
 	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(imversedapp.ModuleBasics)
 
-	app := *imversedapp.New(logger, db, nil, true,
-		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
+	app := *imversedapp.NewImversedApp(logger, db, nil, true,
+		map[int64]bool{}, homePath, 0, encoding.MakeConfig(imversedapp.ModuleBasics), EmptyAppOptions{})
 
 	suite.app = app
 	suite.ctx = app.BaseApp.NewUncachedContext(false, tmproto.Header{})

@@ -16,7 +16,7 @@ import (
 	"github.com/tharsis/ethermint/encoding"
 )
 
-func TestEthermintAppExport(t *testing.T) {
+func TestImversedAppExport(t *testing.T) {
 	db := dbm.NewMemDB()
 	app := NewImversedApp(log.NewTMLogger(log.NewSyncWriter(os.Stdout)), db, nil, true, map[int64]bool{}, DefaultNodeHome, 0, encoding.MakeConfig(ModuleBasics), simapp.EmptyAppOptions{})
 
@@ -27,7 +27,7 @@ func TestEthermintAppExport(t *testing.T) {
 	// Initialize the chain
 	app.InitChain(
 		abci.RequestInitChain{
-			ChainId:       "ethermint_9000-1",
+			ChainId:       "imversed_1234-1",
 			Validators:    []abci.ValidatorUpdate{},
 			AppStateBytes: stateBytes,
 		},

@@ -1,6 +1,3 @@
-//go:build norace
-// +build norace
-
 package testutil
 
 import (
@@ -68,7 +65,7 @@ func (s *IntegrationTestSuite) TestCmdParams() {
 			[]string{
 				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 			},
-			`{"params":{"enable_intrarelayer":true,"token_pair_voting_period":"172800s","enable_evm_hook":true}}`,
+			`{"params":{"enable_erc20":true,"enable_evm_hook":true}}`,
 		},
 	}
 

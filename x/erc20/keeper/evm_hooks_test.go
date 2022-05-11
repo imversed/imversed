@@ -10,7 +10,7 @@ import (
 
 	"github.com/imversed/imversed/contracts"
 	"github.com/imversed/imversed/tests"
-	"github.com/tharsis/ethermint/types"
+	"github.com/imversed/imversed/x/erc20/types"
 )
 
 // ensureHooksSet tries to set the hooks on EVMKeeper, this will fail if the erc20 hook is already set

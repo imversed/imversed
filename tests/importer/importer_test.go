@@ -98,6 +98,7 @@ func TestImporterTestSuite(t *testing.T) {
 }
 
 func (suite *ImporterTestSuite) TestImportBlocks() {
+	suite.T().Skip()
 	chainContext := NewChainContext()
 	chainConfig := ethparams.MainnetChainConfig
 	vmConfig := ethvm.Config{}
