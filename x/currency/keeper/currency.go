@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 )
 
 func (k Keeper) HasCurrency(ctx sdk.Context, currency types.Currency) bool {

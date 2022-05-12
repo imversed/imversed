@@ -6,7 +6,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 type msgServer struct {

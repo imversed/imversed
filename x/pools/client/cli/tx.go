@@ -15,7 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 func NewTxCmd() *cobra.Command {

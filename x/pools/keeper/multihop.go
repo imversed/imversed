@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 // MultihopSwapExactAmountIn defines the input denom and input amount for the first pool,

@@ -3,8 +3,8 @@ package pools
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/fulldivevr/imversed/x/pools/keeper"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/keeper"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 // NewHandler returns a handler for "pools" type messages.

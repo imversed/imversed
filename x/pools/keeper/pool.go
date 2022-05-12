@@ -9,7 +9,7 @@ import (
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 func (k Keeper) MarshalPool(pool types.PoolI) ([]byte, error) {

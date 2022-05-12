@@ -1,8 +1,8 @@
 package keeper_test
 
 import (
-	"github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/keeper"
+	"github.com/imversed/imversed/x/nft/types"
 )
 
 func (suite *KeeperSuite) TestSetCollection() {

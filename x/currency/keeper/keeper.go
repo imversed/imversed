@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/x/currency/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )

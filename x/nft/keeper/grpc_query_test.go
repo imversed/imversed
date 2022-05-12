@@ -2,7 +2,8 @@ package keeper_test
 
 import (
 	gocontext "context"
-	"github.com/fulldivevr/imversed/x/nft/types"
+
+	"github.com/imversed/imversed/x/nft/types"
 )
 
 func (suite *KeeperSuite) TestSupply() {

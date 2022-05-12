@@ -2,9 +2,10 @@ package keeper_test
 
 import (
 	"encoding/binary"
-	"github.com/fulldivevr/imversed/x/nft/exported"
-	keep "github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/types"
+
+	"github.com/imversed/imversed/x/nft/exported"
+	keep "github.com/imversed/imversed/x/nft/keeper"
+	"github.com/imversed/imversed/x/nft/types"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 )

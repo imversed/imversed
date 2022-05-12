@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/keeper"
+	"github.com/imversed/imversed/x/nft/types"
 )
 
 // NewHandler routes the messages to the handlers

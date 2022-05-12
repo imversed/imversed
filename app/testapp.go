@@ -2,14 +2,10 @@ package app
 
 import (
 	"encoding/json"
-	"io"
-	"os"
-	"path/filepath"
-
-	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
+	"github.com/tharsis/ethermint/encoding"
+	"os"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
 	dbm "github.com/tendermint/tm-db"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -22,31 +18,26 @@ func (ao EmptyAppOptions) Get(o string) interface{} {
 }
 
 func CreateTestApp() *ImversedApp {
-	userHomeDir, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
 
-	homePath := filepath.Join(userHomeDir, ".simapp")
+	homePath := DefaultNodeHome
 
-	logger := log.NewTMLogger(log.NewSyncWriter(io.Discard))
+	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(ModuleBasics)
 
-	testapp := New(logger, db, nil, true,
-		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
+	testapp := NewImversedApp(logger, db, nil, true,
+		map[int64]bool{}, homePath, 0, encoding.MakeConfig(ModuleBasics), EmptyAppOptions{})
 
-	genesisState := NewDefaultGenesisState(testapp.AppCodec())
-	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
+	genesisState := NewDefaultGenesisState()
+	stateBytes, err := json.MarshalIndent(genesisState, "", "  ")
 	if err != nil {
 		panic(err)
 	}
 
 	testapp.InitChain(
 		abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simapp.DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
+			ChainId:       "imversed_1234-1",
+			Validators:    []abci.ValidatorUpdate{},
+			AppStateBytes: stateBytes,
 		},
 	)
 

@@ -1,44 +1,37 @@
 package main
 
 import (
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	dbm "github.com/tendermint/tm-db"
-	"io"
 	"os"
 
+	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
-	"github.com/fulldivevr/imversed/app"
-	"github.com/tendermint/spm/cosmoscmd"
-	"github.com/tendermint/tendermint/libs/log"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/imversed/imversed/app"
+	cmdcfg "github.com/imversed/imversed/cmd/config"
 )
 
 func main() {
-	rootCmd, _ := cosmoscmd.NewRootCmd(
-		app.Name,
-		app.AccountAddressPrefix,
-		app.DefaultNodeHome,
-		app.Name,
-		app.ModuleBasics,
-		AppCtorAdapter,
-		// this line is used by starport scaffolding # root/arguments
-	)
+	setupConfig()
+	cmdcfg.RegisterDenoms()
+
+	rootCmd, _ := NewRootCmd()
+
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
-		os.Exit(1)
+		switch e := err.(type) {
+		case server.ErrorCode:
+			os.Exit(e.Code)
+
+		default:
+			os.Exit(1)
+		}
 	}
 }
 
-func AppCtorAdapter(
-	logger log.Logger,
-	db dbm.DB,
-	traceStore io.Writer,
-	loadLatest bool,
-	skipUpgradeHeights map[int64]bool,
-	homePath string,
-	invCheckPeriod uint,
-	encodingConfig cosmoscmd.EncodingConfig,
-	appOpts servertypes.AppOptions,
-	baseAppOptions ...func(*baseapp.BaseApp),
-) cosmoscmd.App {
-	return app.New(logger, db, traceStore, loadLatest, skipUpgradeHeights, homePath, invCheckPeriod, encodingConfig, appOpts, baseAppOptions...)
+func setupConfig() {
+	// set the address prefixes
+	config := sdk.GetConfig()
+	cmdcfg.SetBech32Prefixes(config)
+	cmdcfg.SetBip44CoinType(config)
+	config.Seal()
 }

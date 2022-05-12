@@ -11,7 +11,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	appParams "github.com/fulldivevr/imversed/app/params"
+	cmdcfg "github.com/imversed/imversed/cmd/config"
 )
 
 var ymlAssetTest = []PoolAsset{
@@ -26,7 +26,8 @@ var ymlAssetTest = []PoolAsset{
 }
 
 func TestPoolMarshalYAML(t *testing.T) {
-	appParams.InitConfig()
+	cmdcfg.SetBech32Prefixes(sdk.GetConfig())
+
 	pacc, err := NewPool(defaultPoolId, PoolParams{
 		SwapFee: defaultSwapFee,
 		ExitFee: defaultExitFee,
@@ -64,7 +65,8 @@ func TestPoolMarshalYAML(t *testing.T) {
 }
 
 func TestLBPPoolMarshalYAML(t *testing.T) {
-	appParams.InitConfig()
+	cmdcfg.SetBech32Prefixes(sdk.GetConfig())
+
 	lbpParams := SmoothWeightChangeParams{
 		Duration: time.Hour,
 		TargetPoolWeights: []PoolAsset{

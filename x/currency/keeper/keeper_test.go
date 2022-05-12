@@ -5,15 +5,16 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/tharsis/ethermint/encoding"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/fulldivevr/imversed/app"
-	"github.com/fulldivevr/imversed/testutil"
-	"github.com/fulldivevr/imversed/x/currency/keeper"
-	"github.com/fulldivevr/imversed/x/currency/types"
+	"github.com/imversed/imversed/app"
+	"github.com/imversed/imversed/testutil"
+	"github.com/imversed/imversed/x/currency/keeper"
+	"github.com/imversed/imversed/x/currency/types"
 	"github.com/stretchr/testify/suite"
-	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
@@ -58,10 +59,10 @@ func (suite *KeeperSuite) SetupTest() {
 
 	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	db := dbm.NewMemDB()
-	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
-
-	app := *app.New(logger, db, nil, true,
-		map[int64]bool{}, homePath, 0, encoding, EmptyAppOptions{})
+	//encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
+	encCfg := encoding.MakeConfig(app.ModuleBasics)
+	app := *app.NewImversedApp(logger, db, nil, true,
+		map[int64]bool{}, homePath, 0, encCfg, EmptyAppOptions{})
 
 	suite.app = app
 	suite.ctx = app.BaseApp.NewUncachedContext(false, tmproto.Header{})

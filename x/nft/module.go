@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"math/rand"
+
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	//"math/rand"
 
@@ -20,13 +21,14 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+
 	//simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/fulldivevr/imversed/x/nft/client/cli"
-	"github.com/fulldivevr/imversed/x/nft/client/rest"
-	"github.com/fulldivevr/imversed/x/nft/keeper"
-	"github.com/fulldivevr/imversed/x/nft/simulation"
-	"github.com/fulldivevr/imversed/x/nft/types"
+	"github.com/imversed/imversed/x/nft/client/cli"
+	"github.com/imversed/imversed/x/nft/client/rest"
+	"github.com/imversed/imversed/x/nft/keeper"
+	"github.com/imversed/imversed/x/nft/simulation"
+	"github.com/imversed/imversed/x/nft/types"
 )
 
 var (
@@ -100,7 +102,7 @@ type AppModule struct {
 }
 
 func (am AppModule) ConsensusVersion() uint64 {
-	return 4
+	return 1
 }
 
 // NewAppModule creates a new AppModule object

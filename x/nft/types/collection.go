@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/fulldivevr/imversed/x/nft/exported"
+	"github.com/imversed/imversed/x/nft/exported"
 )
 
 // NewCollection creates a new NFT Collection

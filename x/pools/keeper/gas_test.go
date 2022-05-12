@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/fulldivevr/imversed/x/pools/types"
+	"github.com/imversed/imversed/x/pools/types"
 )
 
 var (
@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 	suite.Require().NoError(err)
 
 	firstJoinGas := suite.measureJoinPoolGas(defaultAddr, poolId, minShareOutAmount, defaultCoins)
-	suite.Assert().Equal(64433, int(firstJoinGas))
+	suite.Assert().Equal(73799, int(firstJoinGas))
 
 	for i := 1; i < startAveragingAt; i++ {
 		err := suite.app.PoolsKeeper.JoinPool(suite.ctx, defaultAddr, poolId, minShareOutAmount, sdk.Coins{})
@@ -79,8 +79,8 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 
 	avgGas, maxGas := suite.measureAvgAndMaxJoinPoolGas(totalNumJoins, defaultAddr, poolIDFn, minShareOutAmountFn, maxCoinsFn)
 	fmt.Printf("test deets: total %d of pools joined, begin average at %d\n", totalNumJoins, startAveragingAt)
-	suite.Assert().Equal(65951, int(avgGas), "average gas / join pool")
-	suite.Assert().Equal(66050, int(maxGas), "max gas / join pool")
+	suite.Assert().Equal(75317, int(avgGas), "average gas / join pool")
+	suite.Assert().Equal(75416, int(maxGas), "max gas / join pool")
 }
 
 func (suite *KeeperTestSuite) TestRepeatedJoinPoolDistinctDenom() {
