@@ -679,6 +679,7 @@ func NewImversedApp(
 		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 		SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		MaxTxGasWanted:  maxGasWanted,
+		NFTKeeper:       app.NFTKeeper,
 	}
 
 	if err := options.Validate(); err != nil {
