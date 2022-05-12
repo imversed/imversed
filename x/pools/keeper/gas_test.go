@@ -62,7 +62,7 @@ func (suite *KeeperTestSuite) TestJoinPoolGas() {
 
 	// mint some assets to the accounts
 	err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, defaultAddr, sdk.NewCoins(
-		sdk.NewCoin("nimv", sdk.NewInt(10000000000000)),
+		sdk.NewCoin("aimv", sdk.NewInt(10000000000000)),
 		sdk.NewCoin("foo", sdk.NewInt(10000000000000000)),
 		sdk.NewCoin("bar", sdk.NewInt(10000000000000000)),
 		sdk.NewCoin("baz", sdk.NewInt(10000000000000000)),
@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestRepeatedJoinPoolDistinctDenom() {
 
 	// mint some usomo to account
 	err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, defaultAddr, sdk.NewCoins(
-		sdk.NewCoin("nimv", sdk.NewInt(1000000000000000000)),
+		sdk.NewCoin("aimv", sdk.NewInt(1000000000000000000)),
 	))
 	suite.Require().NoError(err)
 

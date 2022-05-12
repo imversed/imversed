@@ -49,7 +49,7 @@ func (suite *KeeperTestSuite) preparePoolWithPoolParams(poolParams types.PoolPar
 	// Mint some assets to the accounts.
 	for _, acc := range []sdk.AccAddress{acc1, acc2, acc3} {
 		err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, acc, sdk.NewCoins(
-			sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+			sdk.NewCoin("aimv", sdk.NewInt(10000000000)),
 			sdk.NewCoin("foo", sdk.NewInt(10000000)),
 			sdk.NewCoin("bar", sdk.NewInt(10000000)),
 			sdk.NewCoin("baz", sdk.NewInt(10000000)),

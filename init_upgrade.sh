@@ -32,18 +32,18 @@ rm -rf ~/.imversed
 # Set moniker and chain-id for Ethermint (Moniker can be anything, chain-id must be an integer)
 ~/go/bin/imversed init $MONIKER --chain-id $CHAINID
 
-# Change parameter token denominations to nimv
-cat $HOME/.imversed/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="nimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
-cat $HOME/.imversed/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="nimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
-cat $HOME/.imversed/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="nimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
-cat $HOME/.imversed/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="nimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
+# Change parameter token denominations to aimv
+cat $HOME/.imversed/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
+cat $HOME/.imversed/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
+cat $HOME/.imversed/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
+cat $HOME/.imversed/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
 
 # increase block time (?)
 cat $HOME/.imversed/config/genesis.json | jq '.consensus_params["block"]["time_iota_ms"]="1000"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
 
 # Set gas limit in genesis
 cat $HOME/.imversed/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="10000000"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
-sed -i -e 's/minimum-gas-prices = ""/minimum-gas-prices = "0.001nimv"/g' ~/.imversed/config/app.toml &&
+sed -i -e 's/minimum-gas-prices = ""/minimum-gas-prices = "0.001aimv"/g' ~/.imversed/config/app.toml &&
 cat <<< $(jq '.app_state.gov.voting_params.voting_period = "30s"' $HOME/.imversed/config/genesis.json) > $HOME/.imversed/config/genesis.json &&
 sed -i -e 's/api = "eth,net,web3"/api = "eth,txpool,personal,net,debug,web3,miner"/g' ~/.imversed/config/app.toml &&
 
@@ -79,10 +79,10 @@ if [[ $1 == "pending" ]]; then
 fi
 
 # Allocate genesis accounts (cosmos formatted addresses)
-~/go/bin/imversed add-genesis-account $KEY 100000000000000000000000000nimv --keyring-backend $KEYRING
+~/go/bin/imversed add-genesis-account $KEY 100000000000000000000000000aimv --keyring-backend $KEYRING
 
 # Sign genesis transaction
-~/go/bin/imversed gentx $KEY 1000000000000000000000nimv --keyring-backend $KEYRING --chain-id $CHAINID
+~/go/bin/imversed gentx $KEY 1000000000000000000000aimv --keyring-backend $KEYRING --chain-id $CHAINID
 
 # Collect genesis tx
 ~/go/bin/imversed collect-gentxs

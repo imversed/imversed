@@ -44,7 +44,7 @@ func TestPoolsInitGenesis(t *testing.T) {
 		Pools:          []*codectypes.Any{any},
 		NextPoolNumber: 2,
 		Params: types.Params{
-			PoolCreationFee: sdk.Coins{sdk.NewInt64Coin("nimv", 1000_000_000)},
+			PoolCreationFee: sdk.Coins{sdk.NewInt64Coin("aimv", 1000_000_000)},
 		},
 	}, app.AppCodec())
 
@@ -72,7 +72,7 @@ func TestPoolsExportGenesis(t *testing.T) {
 
 	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
 	err := simapp.FundAccount(app.BankKeeper, ctx, acc1, sdk.NewCoins(
-		sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+		sdk.NewCoin("aimv", sdk.NewInt(10000000000)),
 		sdk.NewInt64Coin("foo", 100000),
 		sdk.NewInt64Coin("bar", 100000),
 	))
@@ -115,7 +115,7 @@ func TestMarshalUnmarshalGenesis(t *testing.T) {
 	am := pools.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper)
 	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
 	err := simapp.FundAccount(app.BankKeeper, ctx, acc1, sdk.NewCoins(
-		sdk.NewCoin("nimv", sdk.NewInt(10000000000)),
+		sdk.NewCoin("aimv", sdk.NewInt(10000000000)),
 		sdk.NewInt64Coin("foo", 100000),
 		sdk.NewInt64Coin("bar", 100000),
 	))
