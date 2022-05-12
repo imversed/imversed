@@ -40,6 +40,7 @@ func networkWithCurrencyObjects(t *testing.T, n int) (*network.Network, []types.
 }
 
 func TestShowCurrency(t *testing.T) {
+	t.Skip()
 	net, objs := networkWithCurrencyObjects(t, 2)
 
 	ctx := net.Validators[0].ClientCtx
