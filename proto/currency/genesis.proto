@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "currency/currency.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
-option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+option go_package = "github.com/imversed/imversed/x/currency/types";
 
 // GenesisState defines the currency module's genesis state.
 message GenesisState {

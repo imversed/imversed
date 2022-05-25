@@ -3,7 +3,7 @@ package fulldivevr.imversed.currency;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+option go_package = "github.com/imversed/imversed/x/currency/types";
 
 message Currency {
   string denom = 1; 

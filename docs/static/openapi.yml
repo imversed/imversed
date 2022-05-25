@@ -11769,7 +11769,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /fulldivevr/imversed/currency/currency:
+  /imversed/imversed/currency/currency:
     get:
       summary: Queries a list of currency items.
       operationId: FulldivevrImversedCurrencyCurrencyAll
@@ -11891,7 +11891,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/fulldivevr/imversed/currency/currency/{denom}':
+  '/imversed/imversed/currency/currency/{denom}':
     get:
       summary: Queries a currency by index.
       operationId: FulldivevrImversedCurrencyCurrency
@@ -11935,7 +11935,7 @@ paths:
           type: string
       tags:
         - Query
-  /fulldivevr/imversed/currency/params:
+  /imversed/imversed/currency/params:
     get:
       summary: Parameters queries the parameters of the module.
       operationId: FulldivevrImversedCurrencyParams
