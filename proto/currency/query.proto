@@ -7,22 +7,22 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "currency/currency.proto";
 // this line is used by starport scaffolding # 1
 
-option go_package = "github.com/fulldivevr/imversed/x/currency/types";
+option go_package = "github.com/imversed/imversed/x/currency/types";
 
 // Query defines the gRPC querier service.
 service Query {
     // Queries a currency by index.
 	rpc Currency(QueryGetCurrencyRequest) returns (QueryGetCurrencyResponse) {
-		option (google.api.http).get = "/fulldivevr/imversed/currency/currency/{denom}";
+		option (google.api.http).get = "/imversed/imversed/currency/currency/{denom}";
 	}
 
 	// Queries a list of currency items.
 	rpc CurrencyAll(QueryAllCurrencyRequest) returns (QueryAllCurrencyResponse) {
-		option (google.api.http).get = "/fulldivevr/imversed/currency/currency";
+		option (google.api.http).get = "/imversed/imversed/currency/currency";
 	}
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/fulldivevr/imversed/currency/params";
+    option (google.api.http).get = "/imversed/imversed/currency/params";
   }
 
 // this line is used by starport scaffolding # 2

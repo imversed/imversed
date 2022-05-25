@@ -16,7 +16,7 @@ message Params {
 }
 
 
-option go_package = "github.com/fulldivevr/imversed/x/pools/types";
+option go_package = "github.com/imversed/imversed/x/pools/types";
 
 // GenesisState defines the pools module's genesis state.
 message GenesisState {
