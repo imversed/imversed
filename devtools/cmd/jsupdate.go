@@ -65,16 +65,6 @@ func newChainWithHomeFlags(cmd *cobra.Command, chainOption ...chain.Option) (*ch
 	return chain.New(absPath, chainOption...)
 }
 
-func getHome(cmd *cobra.Command) (home string) {
-	home, _ = cmd.Flags().GetString(flagHome)
-	return
-}
-
-func flagGetPath(cmd *cobra.Command) (path string) {
-	path, _ = cmd.Flags().GetString(flagPath)
-	return
-}
-
 func generate(ctx context.Context, c chain.Chain) error {
 	conf, err := c.Config()
 	if err != nil {
@@ -115,8 +105,6 @@ func generate(ctx context.Context, c chain.Chain) error {
 	if err := cosmosgen.Generate(ctx, c.app.Path, conf.Build.Proto.Path, options...); err != nil {
 		return &CannotBuildAppError{err}
 	}
-
-	c.protoBuiltAtLeastOnce = true
 
 	return nil
 }
