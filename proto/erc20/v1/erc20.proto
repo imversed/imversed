@@ -1,9 +1,9 @@
 syntax = "proto3";
-package evmos.erc20.v1;
+package imversed.erc20.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos/bank/v1beta1/bank.proto";
-option go_package = "github.com/tharsis/evmos/v3/x/erc20/types";
+option go_package = "github.com/imversed/imversed/x/erc20/types";
 
 // Owner enumerates the ownership of a ERC20 contract.
 enum Owner {
