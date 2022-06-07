@@ -8,7 +8,7 @@ import (
 
 func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
 	app.UpgradeKeeper.SetUpgradeHandler(
-		"v1.1",
+		"v3.1",
 		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 			return app.mm.RunMigrations(ctx, cfg, vm)
 		},

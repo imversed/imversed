@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
@@ -19,6 +20,7 @@ import (
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
 
+	"github.com/tendermint/spm/openapiconsole"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -296,7 +298,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.0")
+	bApp.SetVersion("v3.1")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -828,6 +830,10 @@ func (app *ImversedApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 	if apiConfig.Swagger {
 		RegisterSwaggerAPI(clientCtx, apiSvr.Router)
 	}
+
+	// register app's OpenAPI routes.
+	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
+	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(appName, "/static/openapi.yml"))
 }
 
 func (app *ImversedApp) RegisterTxService(clientCtx client.Context) {
