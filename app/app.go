@@ -298,7 +298,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.0")
+	bApp.SetVersion("v3.1")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
