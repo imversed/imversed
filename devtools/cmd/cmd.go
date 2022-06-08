@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"path/filepath"
 
+	"github.com/ignite-hq/cli/ignite/services/chain"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +13,7 @@ func New(ctx context.Context) *cobra.Command {
 	cobra.EnableCommandSorting = false
 
 	c := &cobra.Command{
-		Use:   "go run devtools/main.go",
+		Use:   "devtools [command]",
 		Short: "devtools make sense",
 		// Long: ``,
 		SilenceUsage:  true,
@@ -19,6 +21,16 @@ func New(ctx context.Context) *cobra.Command {
 	}
 
 	c.AddCommand(NewJSUpdate(ctx))
+	c.AddCommand(NewDiscoverModules(ctx))
 
 	return c
+}
+
+func newChain(cmd *cobra.Command) (*chain.Chain, error) {
+	absPath, err := filepath.Abs("")
+	if err != nil {
+		return nil, err
+	}
+
+	return chain.New(absPath, chain.EnableThirdPartyModuleCodegen())
 }
