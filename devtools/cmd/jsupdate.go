@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ignite-hq/cli/ignite/pkg/cliui/clispinner"
-	"github.com/ignite-hq/cli/ignite/services/chain"
+	"github.com/imversed/imversed/devtools/chain"
 	"github.com/spf13/cobra"
 )
 
@@ -31,12 +31,12 @@ func JSUpdateHandler(cmd *cobra.Command, args []string) error {
 	s := clispinner.New().SetText("JS Client update...")
 	defer s.Stop()
 
-	c, err := newChain(cmd)
+	c, appPath, err := newChain(cmd)
 	if err != nil {
 		return err
 	}
 
-	if err := c.Generate(cmd.Context(), chain.GenerateVuex()); err != nil {
+	if err := chain.ChainGenerateTS(cmd.Context(), *c, appPath); err != nil {
 		return err
 	}
 

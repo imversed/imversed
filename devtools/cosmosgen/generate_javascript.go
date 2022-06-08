@@ -48,7 +48,8 @@ func (g *generator) generateJS() error {
 		return err
 	}
 
-	return jsg.generateVuexModuleLoader()
+	// return jsg.generateVuexModuleLoader()
+	return nil
 }
 
 func (g *jsGenerator) generateModules() error {
@@ -102,7 +103,7 @@ func (g *jsGenerator) generateModule(ctx context.Context, tsprotoPluginPath, app
 		m.Pkg.Path,
 		includePaths,
 		tsOut,
-		protoc.Plugin(tsprotoPluginPath, "--ts_proto_opt=snakeToCamel=false"),
+		protoc.Plugin(tsprotoPluginPath, "--ts_proto_opt=snakeToCamel=keys,json"),
 	)
 	if err != nil {
 		return err

@@ -10,6 +10,36 @@ import (
 	"github.com/ignite-hq/cli/ignite/pkg/gomodulepath"
 )
 
+var TSModuleNames = map[string]string{
+	"ethermint.evm.v1":                                   "evm",
+	"ethermint.feemarket.v1":                             "feemarket",
+	"cosmos.auth.v1beta1":                                "auth",
+	"cosmos.authz.v1beta1":                               "authz",
+	"cosmos.bank.v1beta1":                                "bank",
+	"cosmos.base.tendermint.v1beta1":                     "tendermint",
+	"cosmos.crisis.v1beta1":                              "crisis",
+	"cosmos.distribution.v1beta1":                        "distribution",
+	"cosmos.evidence.v1beta1":                            "evidence",
+	"cosmos.feegrant.v1beta1":                            "feegrant",
+	"cosmos.gov.v1beta1":                                 "gov",
+	"cosmos.mint.v1beta1":                                "mint",
+	"cosmos.params.v1beta1":                              "params",
+	"cosmos.slashing.v1beta1":                            "slashing",
+	"cosmos.staking.v1beta1":                             "staking",
+	"cosmos.tx.v1beta1":                                  "tx",
+	"cosmos.upgrade.v1beta1":                             "upgrade",
+	"cosmos.vesting.v1beta1":                             "vesting",
+	"imversed.currency":                                  "currency",
+	"imversed.nft":                                       "nft",
+	"imversed.pools.v1beta1":                             "pools",
+	"ibc.applications.interchain_accounts.controller.v1": "ibc-accounts-controller",
+	"ibc.applications.interchain_accounts.host.v1":       "ibc-accounts-host",
+	"ibc.applications.transfer.v1":                       "ibc-transfer",
+	"ibc.core.channel.v1":                                "ibc-channel",
+	"ibc.core.client.v1":                                 "ibc-client",
+	"ibc.core.connection.v1":                             "ibc-connection",
+}
+
 // generateOptions used to configure code generation.
 type generateOptions struct {
 	includeDirs []string
@@ -53,6 +83,13 @@ func WithVuexGeneration(includeThirdPartyModules bool, out ModulePathFunc, store
 		o.jsOut = out
 		o.jsIncludeThirdParty = includeThirdPartyModules
 		o.vuexStoreRootPath = storeRootPath
+	}
+}
+
+func WithJSUpdateGeneration(includeThirdPartyModules bool, out ModulePathFunc) Option {
+	return func(o *generateOptions) {
+		o.jsOut = out
+		o.jsIncludeThirdParty = includeThirdPartyModules
 	}
 }
 
@@ -155,4 +192,38 @@ func VuexStoreModulePath(rootPath string) ModulePathFunc {
 		appModulePath := gomodulepath.ExtractAppPath(m.GoModulePath)
 		return filepath.Join(rootPath, appModulePath, m.Pkg.Name, "module")
 	}
+}
+
+func TSModulePath(rootPath string) ModulePathFunc {
+	return func(m module.Module) string {
+		modulePath := TSModuleNames[m.Pkg.Name]
+		if modulePath == "" {
+			modulePath = m.Pkg.Name
+		}
+		return filepath.Join(rootPath, modulePath)
+	}
+}
+
+func DiscoverModules(ctx context.Context, appPath, protoDir string) (map[string][]module.Module, error) {
+	g := &generator{
+		ctx:          ctx,
+		appPath:      appPath,
+		protoDir:     protoDir,
+		o:            &generateOptions{},
+		thirdModules: make(map[string][]module.Module),
+	}
+
+	if err := g.setup(); err != nil {
+		return nil, err
+	}
+
+	allModules := make(map[string][]module.Module)
+	for _, module := range g.appModules {
+		allModules[appPath] = append(allModules[appPath], module)
+	}
+	for path, modules := range g.thirdModules {
+		allModules[path] = append(allModules[path], modules...)
+	}
+
+	return allModules, nil
 }

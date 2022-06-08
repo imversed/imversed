@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ignite-hq/cli/ignite/pkg/cosmosgen"
 	"github.com/ignite-hq/cli/ignite/services/chain"
+	"github.com/imversed/imversed/devtools/cosmosgen"
 )
 
 type generateOptions struct {
@@ -15,16 +15,17 @@ type generateOptions struct {
 	isOpenAPIEnabled bool
 }
 
-func chainGenerateTS(
-	c chain.Chain,
+func ChainGenerateTS(
 	ctx context.Context,
+	c chain.Chain,
+	appPath string,
 ) error {
 	conf, err := c.Config()
 	if err != nil {
 		return err
 	}
 
-	if err := cosmosgen.InstallDependencies(ctx, c.app.Path); err != nil {
+	if err := cosmosgen.InstallDependencies(ctx, appPath); err != nil {
 		return err
 	}
 
@@ -39,15 +40,14 @@ func chainGenerateTS(
 	jsClientSrcPath := "sdk/js-client/src"
 
 	options = append(options,
-		cosmosgen.WithVuexGeneration(
+		cosmosgen.WithJSUpdateGeneration(
 			enableThirdPartyModuleCodegen,
-			cosmosgen.VuexStoreModulePath(storeRootPath),
-			storeRootPath,
+			cosmosgen.TSModulePath(jsClientSrcPath),
 		),
 	)
 
-	if err := cosmosgen.Generate(ctx, c.app.Path, conf.Build.Proto.Path, options...); err != nil {
-		return &CannotBuildAppError{err}
+	if err := cosmosgen.Generate(ctx, appPath, conf.Build.Proto.Path, options...); err != nil {
+		return err
 	}
 
 	return nil

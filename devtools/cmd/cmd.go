@@ -26,11 +26,16 @@ func New(ctx context.Context) *cobra.Command {
 	return c
 }
 
-func newChain(cmd *cobra.Command) (*chain.Chain, error) {
+func newChain(cmd *cobra.Command) (*chain.Chain, string, error) {
 	absPath, err := filepath.Abs("")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	return chain.New(absPath, chain.EnableThirdPartyModuleCodegen())
+	c, err := chain.New(absPath, chain.EnableThirdPartyModuleCodegen())
+	if err != nil {
+		return nil, "", err
+	}
+
+	return c, absPath, nil
 }

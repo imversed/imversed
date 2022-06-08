@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/ignite-hq/cli/ignite/pkg/cosmosanalysis/module"
-	"github.com/ignite-hq/cli/ignite/pkg/gomodule"
-	"github.com/imversed/imversed/devtools/chain/modules"
+	"github.com/imversed/imversed/devtools/cosmosgen"
 	"github.com/spf13/cobra"
 )
 
@@ -28,41 +26,14 @@ func DiscoverModulesHandler(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	modfile, err := gomodule.ParseAt(appPath)
+	allModules, err := cosmosgen.DiscoverModules(cmd.Context(), appPath, "proto")
 	if err != nil {
 		return err
 	}
 
-	deps, err := gomodule.ResolveDependencies(modfile)
-	if err != nil {
-		return err
-	}
-
-	appModules, err := modules.DiscoverModules(cmd.Context(), appPath, appPath, "proto")
-	if err != nil {
-		return err
-	}
-
-	thirdPartyModules := make(map[string][]module.Module)
-	for _, dep := range deps {
-		path, err := gomodule.LocatePath(cmd.Context(), appPath, dep)
-		if err != nil {
-			return err
-		}
-		thirdPartyDiscovered, err := modules.DiscoverModules(cmd.Context(), appPath, path, "")
-		if err != nil {
-			return err
-		}
-		thirdPartyModules[path] = append(thirdPartyModules[path], thirdPartyDiscovered...)
-	}
-
-	for _, module := range appModules {
-		fmt.Printf("%s %s\n", module.Pkg.Name, module.Pkg.GoImportName)
-	}
-
-	for _, modules := range thirdPartyModules {
+	for path, modules := range allModules {
 		for _, module := range modules {
-			fmt.Printf("%s %s\n", module.Pkg.Name, module.Pkg.GoImportName)
+			fmt.Printf("- path: %s\n  name: %s\n  go_module_path: %s\n  pkg:\n    name: %s\n    path: %s\n    gp_import_name: %s\n", path, module.Name, module.GoModulePath, module.Pkg.Name, module.Pkg.Path, module.Pkg.GoImportName)
 		}
 	}
 
