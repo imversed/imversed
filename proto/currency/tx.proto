@@ -1,5 +1,5 @@
 syntax = "proto3";
-package fulldivevr.imversed.currency;
+package imversed.currency;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
