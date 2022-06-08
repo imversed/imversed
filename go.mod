@@ -1,6 +1,6 @@
 module github.com/imversed/imversed
 
-go 1.17
+go 1.18
 
 require (
 	github.com/cosmos/cosmos-sdk v0.45.4
@@ -10,8 +10,11 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
+	github.com/iancoleman/strcase v0.2.0
+	github.com/mattn/go-zglob v0.0.3
 	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.19.0
+	github.com/otiai10/copy v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/rakyll/statik v0.1.7
 	github.com/regen-network/cosmos-proto v0.3.1
@@ -19,10 +22,12 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.1
+	github.com/takuoki/gocase v1.0.0
 	github.com/tendermint/spm v0.1.9
 	github.com/tendermint/tendermint v0.34.19
 	github.com/tendermint/tm-db v0.6.7
 	github.com/tharsis/ethermint v0.15.0
+	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3
 	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
@@ -50,29 +55,24 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/gookit/color v1.5.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3 // indirect
-	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
-	github.com/mattn/go-zglob v0.0.3 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/moby/sys/mount v0.3.1 // indirect
 	github.com/moby/sys/mountinfo v0.6.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/opencontainers/runc v1.1.0 // indirect
-	github.com/otiai10/copy v1.6.0 // indirect
 	github.com/radovskyb/watcher v1.0.7 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/takuoki/gocase v1.0.0 // indirect
 	github.com/tendermint/spn v0.2.1-0.20220511154430-aeab7a5b2bc0 // indirect
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
@@ -191,7 +191,7 @@ require (
 	go.etcd.io/bbolt v1.3.6 // indirect
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f // indirect
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
