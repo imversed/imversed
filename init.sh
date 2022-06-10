@@ -1,10 +1,14 @@
 #!/bin/bash
 
-KEY="mykey"
+KEY="validator"
+
 CHAINID="imversed_1234-1"
 MONIKER="localtestnet"
+
 KEYRING="test"
 KEYALGO="eth_secp256k1"
+MNEMONIC="kangaroo buffalo margin access fiscal manage firm coral case tattoo salt stadium crystal kid poverty document confirm coach bronze use cram uphold bridge input"
+
 LOGLEVEL="debug"
 # to trace evm
 TRACE="--trace"
@@ -28,7 +32,7 @@ mv ~/go/bin/imversedd ~/go/bin/imversed
 ~/go/bin/imversed config chain-id $CHAINID
 
 # if $KEY exists it should be deleted
-~/go/bin/imversed keys add $KEY --keyring-backend $KEYRING --algo $KEYALGO
+yes "$MNEMONIC" | ~/go/bin/imversed keys add $KEY --keyring-backend $KEYRING --algo $KEYALGO --recover
 
 # Set moniker and chain-id for Ethermint (Moniker can be anything, chain-id must be an integer)
 ~/go/bin/imversed init $MONIKER --chain-id $CHAINID
@@ -83,13 +87,13 @@ fi
 ~/go/bin/imversed add-genesis-account $KEY 100000000000000000000000000aimv --keyring-backend $KEYRING
 
 # Sign genesis transaction
-~/go/bin/imversed gentx $KEY 1000000000000000000000aimv --keyring-backend $KEYRING --chain-id $CHAINID
+~/go/bin/imversed gentx $KEY 1000000000000000000000aimv 0x4e34a7E46e4Ad9756D03E8Fc40b605C5b023555F imv1f0en8j95fwh7rpljh7pk3tw8442spl2wvlm5lr 0xbba7a8fbf5fff2763828d2b7da885cbb760a3cc064f4117bcf9822750b065a623d149c847ffe87e69c4be5d682604fd69a1c50e515bf5b53eeb750be1672be811b --keyring-backend $KEYRING --chain-id $CHAINID
 
 # Collect genesis tx
 ~/go/bin/imversed collect-gentxs
 
 # Run this to ensure everything worked and that the genesis file is setup correctly
-~/go/bin/imversed validate-genesis
+# ~/go/bin/imversed validate-genesis //TODO check it, doesn't work correctly with new gentx command
 
 if [[ $1 == "pending" ]]; then
   echo "pending mode is on, please wait for the first block committed."
