@@ -1,0 +1,36 @@
+accounts:
+  - name: alice
+    coins: ["2000000000000000000000aimv"]
+  - name: bob
+    coins: ["3000000000000000000000aimv"]
+validator:
+  name: alice
+  staked: "100000000000000000000aimv"
+build:
+  main: cmd/imversed
+  binary: imversed
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+init:
+  app:
+    minimum-gas-prices: 0.1aimv
+genesis:
+  app_state:
+    bank:
+      denom_metadata:
+        - base: aimv
+          display: imversed
+          name: imversed
+          symbol: imv
+          description: The native staking token of the Imversed.
+          denom_units:
+            - denom: aimv
+              exponent: 0
+              aliases: [ "aimv" ]
+            - denom: imversed
+              exponent: 18
+              aliases: [ "imv", "imversed" ]
+    currency:
+      params:
+        txMintCurrencyCost: "10000000"
