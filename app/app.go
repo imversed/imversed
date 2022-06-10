@@ -127,6 +127,11 @@ import (
 
 	currencymodule "github.com/imversed/imversed/x/currency"
 	"github.com/imversed/imversed/x/nft"
+
+	gravity "github.com/peggyjv/gravity-bridge/module/v2/x/gravity"
+	gravityclient "github.com/peggyjv/gravity-bridge/module/v2/x/gravity/client"
+	gravitykeeper "github.com/peggyjv/gravity-bridge/module/v2/x/gravity/keeper"
+	gravitytypes "github.com/peggyjv/gravity-bridge/module/v2/x/gravity/types"
 )
 
 func init() {
@@ -161,6 +166,8 @@ var (
 			// erc20 proposals handlers
 			erc20client.RegisterCoinProposalHandler, erc20client.RegisterERC20ProposalHandler,
 			erc20client.ToggleTokenRelayProposalHandler, erc20client.UpdateTokenPairERC20ProposalHandler,
+			// gravity proposal handlers
+			gravityclient.ProposalHandler,
 		),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
@@ -181,6 +188,7 @@ var (
 		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
+		gravity.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -197,6 +205,8 @@ var (
 		poolsmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		// erc20 module
 		erc20types.ModuleName: {authtypes.Minter, authtypes.Burner},
+		// gravity module
+		gravitytypes.ModuleName: {authtypes.Minter, authtypes.Burner},
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -244,6 +254,7 @@ type ImversedApp struct {
 	IBCKeeper        *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
 	EvidenceKeeper   evidencekeeper.Keeper
 	TransferKeeper   ibctransferkeeper.Keeper
+	GravityKeeper    gravitykeeper.Keeper
 
 	// erc20 keeper
 	Erc20Keeper erc20keeper.Keeper
@@ -318,6 +329,7 @@ func NewImversedApp(
 		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
+		gravitytypes.StoreKey,
 	)
 
 	// Add the EVM transient store key
@@ -380,7 +392,7 @@ func NewImversedApp(
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper = *stakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
+		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks(), app.GravityKeeper.Hooks()),
 	)
 
 	app.AuthzKeeper = authzkeeper.NewKeeper(keys[authzkeeper.StoreKey], appCodec, app.BaseApp.MsgServiceRouter())
@@ -437,6 +449,20 @@ func NewImversedApp(
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
 	)
 
+	app.GravityKeeper = gravitykeeper.NewKeeper(
+		appCodec,
+		keys[gravitytypes.StoreKey],
+		app.GetSubspace(gravitytypes.ModuleName),
+		app.AccountKeeper,
+		app.StakingKeeper,
+		app.BankKeeper,
+		app.SlashingKeeper,
+		app.DistrKeeper,
+		sdk.DefaultPowerReduction,
+		app.ModuleAccountAddressesToNames([]string{}),
+		app.ModuleAccountAddressesToNames([]string{distrtypes.ModuleName}),
+	)
+
 	// register the proposal types
 	govRouter := govtypes.NewRouter()
 	govRouter.AddRoute(govtypes.RouterKey, govtypes.ProposalHandler).
@@ -445,7 +471,9 @@ func NewImversedApp(
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
 		// er20 router
-		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper))
+		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper)).
+		// gravity router
+		AddRoute(gravitytypes.RouterKey, gravity.NewCommunityPoolEthereumSpendProposalHandler(app.GravityKeeper))
 
 	govKeeper := govkeeper.NewKeeper(
 		appCodec, keys[govtypes.StoreKey], app.GetSubspace(govtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
@@ -521,6 +549,7 @@ func NewImversedApp(
 		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
+		gravity.NewAppModule(app.GravityKeeper, app.BankKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -556,6 +585,8 @@ func NewImversedApp(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		// gravity
+		gravitytypes.ModuleName,
 	)
 
 	// NOTE: fee market module must go last in order to retrieve the block gas used.
@@ -587,6 +618,8 @@ func NewImversedApp(
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
 		nfttypes.ModuleName,
+		// gravity
+		gravitytypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -621,6 +654,8 @@ func NewImversedApp(
 		feemarkettypes.ModuleName,
 		// erc20
 		erc20types.ModuleName,
+		// gravity
+		gravitytypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -741,6 +776,16 @@ func (app *ImversedApp) ModuleAccountAddrs() map[string]bool {
 	}
 
 	return modAccAddrs
+}
+
+// ModuleAccountNames returns a map of module account address to module name
+func (app *ImversedApp) ModuleAccountAddressesToNames(moduleAccounts []string) map[string]string {
+	modAccNames := make(map[string]string)
+	for _, acc := range moduleAccounts {
+		modAccNames[authtypes.NewModuleAddress(acc).String()] = acc
+	}
+
+	return modAccNames
 }
 
 // BlockedAddrs returns all the app's module account addresses that are not
@@ -891,5 +936,7 @@ func initParamsKeeper(
 	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
+	// gravity
+	paramsKeeper.Subspace(gravitytypes.ModuleName)
 	return paramsKeeper
 }
