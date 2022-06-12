@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"io"
 	"net/http"
 	"os"
@@ -300,6 +301,10 @@ func NewImversedApp(
 
 	bApp.SetVersion("v3.1")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
+
+	minGasPriceHelper.SetBaseApp(bApp)
+
+	minGasPriceHelper.Helper.Set("0.002aimv")
 
 	keys := sdk.NewKVStoreKeys(
 		// SDK keys
