@@ -15,12 +15,12 @@ TRACE="--trace"
 
 # remove existing daemon and client
 rm -rf ~/.imversed
-rm -rf ~/go/bin/imversed
+#rm -rf ~/go/bin/imversed
+##
+##ignite chain build
+#starport c build
 #
-#ignite chain build
-starport c build
-
-mv ~/go/bin/imversedd ~/go/bin/imversed
+#mv ~/go/bin/imversedd ~/go/bin/imversed
 
 #make install
 
