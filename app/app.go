@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"io"
 	"net/http"
 	"os"
@@ -30,6 +31,11 @@ import (
 	erc20client "github.com/imversed/imversed/x/erc20/client"
 	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
+
+	"github.com/imversed/imversed/x/infr"
+	infrclient "github.com/imversed/imversed/x/infr/client"
+	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
+	infrtypes "github.com/imversed/imversed/x/infr/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -161,6 +167,8 @@ var (
 			// erc20 proposals handlers
 			erc20client.RegisterCoinProposalHandler, erc20client.RegisterERC20ProposalHandler,
 			erc20client.ToggleTokenRelayProposalHandler, erc20client.UpdateTokenPairERC20ProposalHandler,
+			// infr proposals handlers
+			infrclient.ChangeMinGasPricesProposalHandler,
 		),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
@@ -181,6 +189,7 @@ var (
 		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
+		infr.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -260,6 +269,7 @@ type ImversedApp struct {
 	NFTKeeper      nftkeeper.Keeper
 	CurrencyKeeper currencymodulekeeper.Keeper
 	PoolsKeeper    poolsmodulekeeper.Keeper
+	InfrKeeper     infrkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -298,8 +308,10 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.1")
+	bApp.SetVersion("v3.2")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
+
+	minGasPriceHelper.SetBaseApp(bApp)
 
 	keys := sdk.NewKVStoreKeys(
 		// SDK keys
@@ -318,6 +330,7 @@ func NewImversedApp(
 		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
+		infrtypes.StoreKey,
 	)
 
 	// Add the EVM transient store key
@@ -409,6 +422,10 @@ func NewImversedApp(
 		),
 	)
 
+	app.InfrKeeper = infrkeeper.NewKeeper(
+		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
+	)
+
 	// Create custom keepers
 	app.CurrencyKeeper = *currencymodulekeeper.NewKeeper(
 		appCodec,
@@ -445,7 +462,9 @@ func NewImversedApp(
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
 		// er20 router
-		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper))
+		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper)).
+		// infr router
+		AddRoute(infrtypes.RouterKey, infr.NewInfrProposalHandler(&app.InfrKeeper))
 
 	govKeeper := govkeeper.NewKeeper(
 		appCodec, keys[govtypes.StoreKey], app.GetSubspace(govtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
@@ -521,6 +540,7 @@ func NewImversedApp(
 		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
+		infr.NewAppModule(appCodec, app.InfrKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -556,6 +576,7 @@ func NewImversedApp(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		infrtypes.ModuleName,
 	)
 
 	// NOTE: fee market module must go last in order to retrieve the block gas used.
@@ -587,6 +608,7 @@ func NewImversedApp(
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
 		nfttypes.ModuleName,
+		infrtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -621,6 +643,8 @@ func NewImversedApp(
 		feemarkettypes.ModuleName,
 		// erc20
 		erc20types.ModuleName,
+
+		infrtypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -891,5 +915,6 @@ func initParamsKeeper(
 	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
+	paramsKeeper.Subspace(infrtypes.ModuleName)
 	return paramsKeeper
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package imversed.infr;
+
+option go_package = "github.com/imversed/imversed/x/infr/types";
+
+import "gogoproto/gogo.proto";
+// GenesisState defines the module's genesis state.
+message GenesisState {
+  // module parameters
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// Params defines the infr module params
+message Params {
+  string minGasPrices = 1;
+}
