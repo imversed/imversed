@@ -18,7 +18,7 @@ protoc_gen_doc() {
 protoc_gen_gocosmos
 #protoc_gen_doc
 
-proto_dirs=$(find ./proto/erc20 -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
+proto_dirs=$(find ./proto/infr -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 # TODO: migrate to `buf build`
 for dir in $proto_dirs; do
 #  buf
