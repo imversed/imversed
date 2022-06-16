@@ -11,8 +11,6 @@ import (
 	"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
-	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
-	nfttypes "github.com/imversed/imversed/x/nft/types"
 	poolsmodule "github.com/imversed/imversed/x/pools"
 	poolsmodulekeeper "github.com/imversed/imversed/x/pools/keeper"
 	poolsmoduletypes "github.com/imversed/imversed/x/pools/types"
@@ -132,7 +130,6 @@ import (
 	_ "github.com/ethereum/go-ethereum/eth/tracers/native"
 
 	currencymodule "github.com/imversed/imversed/x/currency"
-	"github.com/imversed/imversed/x/nft"
 )
 
 func init() {
@@ -186,7 +183,6 @@ var (
 		// Evmos modules
 		erc20.AppModuleBasic{},
 		// custom modules
-		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
 		infr.AppModuleBasic{},
@@ -266,7 +262,6 @@ type ImversedApp struct {
 	FeeMarketKeeper feemarketkeeper.Keeper
 
 	// Custom keepers
-	NFTKeeper      nftkeeper.Keeper
 	CurrencyKeeper currencymodulekeeper.Keeper
 	PoolsKeeper    poolsmodulekeeper.Keeper
 	InfrKeeper     infrkeeper.Keeper
@@ -327,7 +322,6 @@ func NewImversedApp(
 		// erc20 keys
 		erc20types.StoreKey,
 		// custom modules keys
-		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
 		infrtypes.StoreKey,
@@ -447,8 +441,6 @@ func NewImversedApp(
 	)
 	app.PoolsKeeper = *poolsKeeper.SetHooks(poolsmoduletypes.NewMultiPoolsHooks())
 
-	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
-
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
@@ -537,7 +529,6 @@ func NewImversedApp(
 		// erc20 app modules
 		erc20.NewAppModule(app.Erc20Keeper, app.AccountKeeper),
 		// Custom modules
-		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		infr.NewAppModule(appCodec, app.InfrKeeper),
@@ -563,7 +554,6 @@ func NewImversedApp(
 		// no-op modules
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		authtypes.ModuleName,
 		banktypes.ModuleName,
@@ -607,7 +597,6 @@ func NewImversedApp(
 		vestingtypes.ModuleName,
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
 		infrtypes.ModuleName,
 	)
 
@@ -629,7 +618,6 @@ func NewImversedApp(
 		ibchost.ModuleName,
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
@@ -705,7 +693,6 @@ func NewImversedApp(
 		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 		SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		MaxTxGasWanted:  maxGasWanted,
-		NFTKeeper:       app.NFTKeeper,
 	}
 
 	if err := options.Validate(); err != nil {
@@ -912,7 +899,6 @@ func initParamsKeeper(
 	// erc20 subspaces
 	paramsKeeper.Subspace(erc20types.ModuleName)
 	// custom subspaces
-	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
 	paramsKeeper.Subspace(infrtypes.ModuleName)
