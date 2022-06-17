@@ -157,10 +157,10 @@ func (msg MsgRegisterCoin) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateTokenPairERC20 updates token pair
-func NewMsgUpdateTokenPairERC20(erc20Address string, newErc20Address string, sender sdk.AccAddress) *MsgUpdateTokenPairERC20 { // nolint: interfacer
+func NewMsgUpdateTokenPairERC20(erc20Address common.Address, newErc20Address common.Address, sender sdk.AccAddress) *MsgUpdateTokenPairERC20 { // nolint: interfacer
 	return &MsgUpdateTokenPairERC20{
-		Erc20Address:    erc20Address,
-		NewErc20Address: newErc20Address,
+		Erc20Address:    erc20Address.String(),
+		NewErc20Address: newErc20Address.String(),
 		Sender:          sender.String(),
 	}
 }
