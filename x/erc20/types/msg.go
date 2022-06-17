@@ -3,7 +3,6 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
 )
@@ -11,11 +10,13 @@ import (
 var (
 	_ sdk.Msg = &MsgConvertCoin{}
 	_ sdk.Msg = &MsgConvertERC20{}
+	_ sdk.Msg = &MsgRegisterCoin{}
 )
 
 const (
 	TypeMsgConvertCoin  = "convert_coin"
 	TypeMsgConvertERC20 = "convert_ERC20"
+	TypeMsgRegisterCoin = "register_coin"
 )
 
 // NewMsgConvertCoin creates a new instance of MsgConvertCoin
@@ -111,5 +112,44 @@ func (msg *MsgConvertERC20) GetSignBytes() []byte {
 // GetSigners defines whose signature is required
 func (msg MsgConvertERC20) GetSigners() []sdk.AccAddress {
 	addr := common.HexToAddress(msg.Sender)
+	return []sdk.AccAddress{addr.Bytes()}
+}
+
+// NewMsgRegisterCoin creates a new instance of MsgRegisterCoin
+func NewMsgRegisterCoin() *MsgConvertERC20 { // nolint: interfacer
+
+	//return &MsgRegisterCoin{
+	//	Metadata:
+	//}
+	return nil
+}
+
+// Route should return the name of the module
+func (msg MsgRegisterCoin) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg MsgRegisterCoin) Type() string { return TypeMsgRegisterCoin }
+
+// ValidateBasic runs stateless checks on the message
+func (msg MsgRegisterCoin) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgRegisterCoin) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg MsgRegisterCoin) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+
 	return []sdk.AccAddress{addr.Bytes()}
 }

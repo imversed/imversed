@@ -4,6 +4,7 @@ package imversed.erc20.v1;
 import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/bank/v1beta1/bank.proto";
 
 option go_package = "github.com/imversed/imversed/x/erc20/types";
 
@@ -19,6 +20,10 @@ service Msg {
   rpc ConvertERC20(MsgConvertERC20) returns (MsgConvertERC20Response) {
     option (google.api.http).get = "/imversed/erc20/v1/tx/convert_erc20";
   };
+
+  rpc RegisterCoin(MsgRegisterCoin) returns (MsgRegisterCoinResponse) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/register_coin";
+  }
 }
 
 // MsgConvertCoin defines a Msg to convert a Cosmos Coin to a ERC20 token
@@ -52,3 +57,12 @@ message MsgConvertERC20 {
 
 // MsgConvertERC20Response returns no fields
 message MsgConvertERC20Response {}
+
+message MsgRegisterCoin {
+  // token pair of Cosmos native denom and ERC20 token address
+  cosmos.bank.v1beta1.Metadata metadata = 1 [ (gogoproto.nullable) = false ];
+
+  string sender = 2;
+}
+
+message MsgRegisterCoinResponse {}
