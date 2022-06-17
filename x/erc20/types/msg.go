@@ -10,6 +10,7 @@ import (
 var (
 	_ sdk.Msg = &MsgConvertCoin{}
 	_ sdk.Msg = &MsgConvertERC20{}
+	_ sdk.Msg = &MsgUpdateTokenPairERC20{}
 	_ sdk.Msg = &MsgRegisterCoin{}
 )
 
@@ -17,6 +18,7 @@ const (
 	TypeMsgConvertCoin  = "convert_coin"
 	TypeMsgConvertERC20 = "convert_ERC20"
 	TypeMsgRegisterCoin = "register_coin"
+	TypeMsgUpdateTokenPairERC20 = "update_token_pair_erc20"
 )
 
 // NewMsgConvertCoin creates a new instance of MsgConvertCoin
@@ -152,4 +154,56 @@ func (msg MsgRegisterCoin) GetSigners() []sdk.AccAddress {
 	}
 
 	return []sdk.AccAddress{addr.Bytes()}
+}
+
+// NewMsgUpdateTokenPairERC20 updates token pair
+func NewMsgUpdateTokenPairERC20(erc20Address string, newErc20Address string, sender sdk.AccAddress) *MsgUpdateTokenPairERC20 { // nolint: interfacer
+	return &MsgUpdateTokenPairERC20{
+		Erc20Address:    erc20Address,
+		NewErc20Address: newErc20Address,
+		Sender:          sender.String(),
+	}
+}
+
+// Route should return the name of the module
+func (msg MsgUpdateTokenPairERC20) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg MsgUpdateTokenPairERC20) Type() string { return TypeMsgUpdateTokenPairERC20 }
+
+// ValidateBasic runs stateless checks on the message
+func (msg MsgUpdateTokenPairERC20) ValidateBasic() error {
+	// TODO: validation
+	//if err := ValidateErc20Denom(msg.Coin.Denom); err != nil {
+	//	if err := ibctransfertypes.ValidateIBCDenom(msg.Coin.Denom); err != nil {
+	//		return err
+	//	}
+	//}
+	//
+	//if !msg.Coin.Amount.IsPositive() {
+	//	return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cannot mint a non-positive amount")
+	//}
+	//_, err := sdk.AccAddressFromBech32(msg.Sender)
+	//if err != nil {
+	//	return sdkerrors.Wrap(err, "invalid sender address")
+	//}
+	//if !common.IsHexAddress(msg.Receiver) {
+	//	return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid receiver hex address %s", msg.Receiver)
+	//}
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgUpdateTokenPairERC20) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg MsgUpdateTokenPairERC20) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+
+	return []sdk.AccAddress{addr}
 }
