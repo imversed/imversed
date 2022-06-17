@@ -246,3 +246,103 @@ func (suite *MsgsTestSuite) TestMsgConvertERC20() {
 		}
 	}
 }
+
+func (suite *MsgsTestSuite) TestMsgUpdateTokenPairErc20Getters() {
+	msgInvalid := MsgUpdateTokenPairERC20{}
+
+	msg := NewMsgUpdateTokenPairERC20(
+		tests.GenerateAddress(),
+		tests.GenerateAddress(),
+		sdk.AccAddress(tests.GenerateAddress().Bytes()),
+	)
+	suite.Require().Equal(RouterKey, msg.Route())
+	suite.Require().Equal(TypeMsgUpdateTokenPairERC20, msg.Type())
+	suite.Require().NotNil(msgInvalid.GetSignBytes())
+	suite.Require().NotNil(msg.GetSigners())
+}
+
+func (suite *MsgsTestSuite) TestMsgUpdateTokenPairErc20New() {
+	testCases := []struct {
+		msg             string
+		erc20Address    common.Address
+		newErc20Address common.Address
+		sender          sdk.AccAddress
+		expectPass      bool
+	}{
+		{
+			"msg update token pair erc20 - pass",
+			tests.GenerateAddress(),
+			tests.GenerateAddress(),
+			sdk.AccAddress(tests.GenerateAddress().Bytes()),
+			true,
+		},
+	}
+
+	for i, tc := range testCases {
+		tx := NewMsgUpdateTokenPairERC20(tc.erc20Address, tc.newErc20Address, tc.sender)
+		err := tx.ValidateBasic()
+
+		if tc.expectPass {
+			suite.Require().NoError(err, "valid test %d failed: %s, %v", i, tc.msg)
+		} else {
+			suite.Require().Error(err, "invalid test %d passed: %s, %v", i, tc.msg)
+		}
+	}
+}
+
+func (suite *MsgsTestSuite) TestMsgUpdateTokenPairErc20() {
+	testCases := []struct {
+		msg             string
+		erc20Address    string
+		newErc20Address string
+		sender          string
+		expectPass      bool
+	}{
+		{
+			"invalid current contract hex address",
+			sdk.AccAddress(tests.GenerateAddress().Bytes()).String(),
+			tests.GenerateAddress().String(),
+			sdk.AccAddress(tests.GenerateAddress().Bytes()).String(),
+			false,
+		},
+		{
+			"invalid new contract hex address",
+			tests.GenerateAddress().String(),
+			sdk.AccAddress(tests.GenerateAddress().Bytes()).String(),
+			sdk.AccAddress(tests.GenerateAddress().Bytes()).String(),
+			false,
+		},
+		{
+			"invalid sender address",
+			tests.GenerateAddress().String(),
+			tests.GenerateAddress().String(),
+			tests.GenerateAddress().String(),
+			false,
+		},
+		{
+			"empty sender address",
+			tests.GenerateAddress().String(),
+			tests.GenerateAddress().String(),
+			sdk.AccAddress{}.String(),
+			false,
+		},
+		{
+			"msg update token pair erc20 - pass",
+			tests.GenerateAddress().String(),
+			tests.GenerateAddress().String(),
+			sdk.AccAddress(tests.GenerateAddress().Bytes()).String(),
+			true,
+		},
+	}
+
+	for i, tc := range testCases {
+		tx := MsgUpdateTokenPairERC20{tc.erc20Address, tc.newErc20Address, tc.sender}
+		err := tx.ValidateBasic()
+
+		if tc.expectPass {
+			suite.Require().NoError(err, "valid test %d failed: %s, %v", i, tc.msg)
+		} else {
+			suite.Require().Error(err, "invalid test %d passed: %s, %v", i, tc.msg)
+		}
+	}
+}
