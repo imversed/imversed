@@ -173,23 +173,19 @@ func (msg MsgUpdateTokenPairERC20) Type() string { return TypeMsgUpdateTokenPair
 
 // ValidateBasic runs stateless checks on the message
 func (msg MsgUpdateTokenPairERC20) ValidateBasic() error {
-	// TODO: validation
-	//if err := ValidateErc20Denom(msg.Coin.Denom); err != nil {
-	//	if err := ibctransfertypes.ValidateIBCDenom(msg.Coin.Denom); err != nil {
-	//		return err
-	//	}
-	//}
-	//
-	//if !msg.Coin.Amount.IsPositive() {
-	//	return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cannot mint a non-positive amount")
-	//}
-	//_, err := sdk.AccAddressFromBech32(msg.Sender)
-	//if err != nil {
-	//	return sdkerrors.Wrap(err, "invalid sender address")
-	//}
-	//if !common.IsHexAddress(msg.Receiver) {
-	//	return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid receiver hex address %s", msg.Receiver)
-	//}
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+
+	if !common.IsHexAddress(msg.Erc20Address) {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.Erc20Address)
+	}
+
+	if !common.IsHexAddress(msg.NewErc20Address) {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.NewErc20Address)
+	}
+
 	return nil
 }
 
