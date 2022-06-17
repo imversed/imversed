@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"math/big"
 
@@ -541,4 +542,96 @@ func (k Keeper) DeployERC20Contract(
 	}
 
 	return contractAddr, nil
+}
+
+// UpdateTokenPairERC20 updates the ERC20 token address for the registered token pair
+func (k Keeper) UpdateTokenPairERC20(
+	goCtx context.Context,
+	msg *types.MsgUpdateTokenPairERC20,
+) (*types.MsgUpdateTokenPairERC20Response, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+	fmt.Println(sender)
+	erc20Addr := common.HexToAddress(msg.Erc20Address)
+	id := k.GetERC20Map(ctx, erc20Addr)
+	if len(id) == 0 {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "token %s not registered", erc20Addr)
+	}
+
+	pair, found := k.GetTokenPair(ctx, id)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", erc20Addr)
+	}
+
+	// Get current stored metadata
+	metadata, found := k.bankKeeper.GetDenomMetaData(ctx, pair.Denom)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "could not get metadata for %s", pair.Denom)
+	}
+
+	// safety check
+	if len(metadata.DenomUnits) == 0 {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "metadata denom units for %s cannot be empty", pair.Erc20Address)
+	}
+
+	// Get new erc20 values
+	newERC20Addr := common.HexToAddress(msg.NewErc20Address)
+	erc20Data, err := k.QueryERC20(ctx, newERC20Addr)
+	if err != nil {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "could not get token %s erc20Data", newERC20Addr.String())
+	}
+
+	// compare metadata and ERC20 details
+	if metadata.Display != erc20Data.Name ||
+		metadata.Symbol != erc20Data.Symbol ||
+		metadata.Description != types.CreateDenomDescription(erc20Addr.String()) {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "metadata details (display, symbol, description) don't match the ERC20 details from %s ", pair.Erc20Address)
+	}
+
+	// check that the denom units contain one item with the same
+	// name and decimal values as the ERC20
+	found = false
+	for _, denomUnit := range metadata.DenomUnits {
+		// iterate denom units until we found the one with the ERC20 Name
+		if denomUnit.Denom != erc20Data.Name {
+			continue
+		}
+
+		// once found, check it has the same exponent
+		if denomUnit.Exponent != uint32(erc20Data.Decimals) {
+			return nil, sdkerrors.Wrapf(
+				types.ErrInternalTokenPair, "metadata denom unit exponent doesn't match the ERC20 details from %s, expected %d, got %d",
+				pair.Erc20Address, erc20Data.Decimals, denomUnit.Exponent,
+			)
+		}
+
+		// break as metadata might contain denom units for higher exponents
+		found = true
+		break
+	}
+
+	if !found {
+		return nil, sdkerrors.Wrapf(
+			types.ErrInternalTokenPair,
+			"metadata doesn't contain denom unit found for ERC20 %s (%s)",
+			erc20Data.Name, pair.Erc20Address,
+		)
+	}
+
+	// Update the metadata description with the new address
+	metadata.Description = types.CreateDenomDescription(newERC20Addr.String())
+	k.bankKeeper.SetDenomMetaData(ctx, metadata)
+	// Delete old token pair (id is changed because the ERC20 address was modifed)
+	k.DeleteTokenPair(ctx, pair)
+	// Update the address
+	pair.Erc20Address = newERC20Addr.Hex()
+	newID := pair.GetID()
+	// Set the new pair
+	k.SetTokenPair(ctx, pair)
+	// Overwrite the value because id was changed
+	k.SetDenomMap(ctx, pair.Denom, newID)
+	// Add the new address
+	k.SetERC20Map(ctx, newERC20Addr, newID)
+
+	return &types.MsgUpdateTokenPairERC20Response{}, nil
 }

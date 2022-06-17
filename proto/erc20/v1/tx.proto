@@ -24,6 +24,11 @@ service Msg {
   rpc RegisterCoin(MsgRegisterCoin) returns (MsgRegisterCoinResponse) {
     option (google.api.http).get = "/imversed/erc20/v1/tx/register_coin";
   }
+
+  // Update token pair ERC@)
+  rpc UpdateTokenPairERC20(MsgUpdateTokenPairERC20) returns (MsgUpdateTokenPairERC20Response) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/update_token_pair_erc20";
+  };
 }
 
 // MsgConvertCoin defines a Msg to convert a Cosmos Coin to a ERC20 token
@@ -66,3 +71,18 @@ message MsgRegisterCoin {
 }
 
 message MsgRegisterCoinResponse {}
+
+
+// UpdateTokenPairERC20Proposal is a gov Content type to update a token pair's
+// ERC20 contract address.
+message MsgUpdateTokenPairERC20 {
+  // contract address of ERC20 token
+  string erc20_address = 1;
+  // new address of ERC20 token contract
+  string new_erc20_address = 2;
+  // cosmos bech32 address from the owner of the given ERC20 tokens
+  string sender = 3;
+}
+
+// MsgUpdateTokenPairERC20Response returns no fields
+message MsgUpdateTokenPairERC20Response {}
