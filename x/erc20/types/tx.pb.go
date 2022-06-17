@@ -240,11 +240,6 @@ var xxx_messageInfo_MsgConvertERC20Response proto.InternalMessageInfo
 // UpdateTokenPairERC20Proposal is a gov Content type to update a token pair's
 // ERC20 contract address.
 type MsgUpdateTokenPairERC20 struct {
-	//  option (gogoproto.equal) = true;
-	//  // title of the proposal
-	//  string title = 1;
-	//  // proposal description
-	//  string description = 2;
 	// contract address of ERC20 token
 	Erc20Address string `protobuf:"bytes,1,opt,name=erc20_address,json=erc20Address,proto3" json:"erc20_address,omitempty"`
 	// new address of ERC20 token contract

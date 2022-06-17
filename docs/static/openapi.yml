@@ -33807,7 +33807,7 @@ paths:
                   additionalProperties: {}
       parameters:
         - name: erc20_address
-          description: "option (gogoproto.equal) = true;\r\n // title of the proposal\r\n string title = 1;\r\n // proposal description\r\n string description = 2;\r\ncontract address of ERC20 token"
+          description: contract address of ERC20 token
           in: query
           required: false
           type: string
