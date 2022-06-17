@@ -342,13 +342,23 @@ func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+
 			erc20Addr := args[0]
+			if err := imversed.ValidateAddress(erc20Addr); err != nil {
+				return fmt.Errorf("invalid ERC20 contract address %w", err)
+			}
+
 			newERC20Addr := args[1]
-			sender := clientCtx.GetFromAddress()
+			if err := imversed.ValidateAddress(newERC20Addr); err != nil {
+				return fmt.Errorf("invalid ERC20 contract address %w", err)
+			}
+
+			from := common.BytesToAddress(clientCtx.GetFromAddress().Bytes())
+
 			msg := &types.MsgUpdateTokenPairERC20{
-				erc20Addr,
-				newERC20Addr,
-				sender.String(),
+				Erc20Address:    erc20Addr,
+				NewErc20Address: newERC20Addr,
+				Sender:          from.Hex(),
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -356,55 +366,8 @@ func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-
-			// TODO: reimplement checks
-			//
-			//title, err := cmd.Flags().GetString(cli.FlagTitle)
-			//if err != nil {
-			//	return err
-			//}
-			//
-			//description, err := cmd.Flags().GetString(cli.FlagDescription)
-			//if err != nil {
-			//	return err
-			//}
-			//
-			//depositStr, err := cmd.Flags().GetString(cli.FlagDeposit)
-			//if err != nil {
-			//	return err
-			//}
-			//
-			//deposit, err := sdk.ParseCoinsNormalized(depositStr)
-			//if err != nil {
-			//	return err
-			//}
-
-			//
-			//from := clientCtx.GetFromAddress()
-			//content := types.NewUpdateTokenPairERC20Proposal(title, description, erc20Addr, newERC20Addr)
-			//msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
-			//if err != nil {
-			//	return err
-			//}
-
-			//if err := msg.ValidateBasic(); err != nil {
-			//	return err
-			//}
-			//return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
-	//
-	//cmd.Flags().String(cli.FlagTitle, "", "title of proposal")
-	//cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
-	//cmd.Flags().String(cli.FlagDeposit, "1aevmos", "deposit of proposal")
-	//if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-	//	panic(err)
-	//}
-	//if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-	//	panic(err)
-	//}
-	//if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-	//	panic(err)
-	//}
+	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
