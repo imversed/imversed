@@ -326,7 +326,7 @@ func (m *MsgRegisterCoinResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterCoinResponse proto.InternalMessageInfo
 
-// RegisterCoinProposal is a gov Content type to register a token pair
+// Register Erc20
 type MsgRegisterERC20 struct {
 	Erc20Address string `protobuf:"bytes,3,opt,name=erc20address,proto3" json:"erc20address,omitempty"`
 	Sender       string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -415,8 +415,7 @@ func (m *MsgRegisterERC20Response) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterERC20Response proto.InternalMessageInfo
 
-// UpdateTokenPairERC20Proposal is a gov Content type to update a token pair's
-// ERC20 contract address.
+// MsgUpdateTokenPairERC20Response updates ERC20 contract address.
 type MsgUpdateTokenPairERC20 struct {
 	// contract address of ERC20 token
 	Erc20Address string `protobuf:"bytes,1,opt,name=erc20_address,json=erc20Address,proto3" json:"erc20_address,omitempty"`
@@ -697,7 +696,7 @@ type MsgClient interface {
 	// that is registered on the token mapping.
 	ConvertERC20(ctx context.Context, in *MsgConvertERC20, opts ...grpc.CallOption) (*MsgConvertERC20Response, error)
 	RegisterCoin(ctx context.Context, in *MsgRegisterCoin, opts ...grpc.CallOption) (*MsgRegisterCoinResponse, error)
-	// Update token pair ERC20
+	// Register ERC20
 	RegisterERC20(ctx context.Context, in *MsgRegisterERC20, opts ...grpc.CallOption) (*MsgRegisterERC20Response, error)
 	// Update token pair ERC@)
 	UpdateTokenPairERC20(ctx context.Context, in *MsgUpdateTokenPairERC20, opts ...grpc.CallOption) (*MsgUpdateTokenPairERC20Response, error)
@@ -776,7 +775,7 @@ type MsgServer interface {
 	// that is registered on the token mapping.
 	ConvertERC20(context.Context, *MsgConvertERC20) (*MsgConvertERC20Response, error)
 	RegisterCoin(context.Context, *MsgRegisterCoin) (*MsgRegisterCoinResponse, error)
-	// Update token pair ERC20
+	// Register ERC20
 	RegisterERC20(context.Context, *MsgRegisterERC20) (*MsgRegisterERC20Response, error)
 	// Update token pair ERC@)
 	UpdateTokenPairERC20(context.Context, *MsgUpdateTokenPairERC20) (*MsgUpdateTokenPairERC20Response, error)

@@ -137,16 +137,15 @@ func NewConvertERC20Cmd() *cobra.Command {
 	return cmd
 }
 
-// NewRegisterCoinProposalCmd implements the command to submit a community-pool-spend proposal
+// NewRegisterCoinCmd returns a CLI command handler to register coin
 func NewRegisterCoinCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "register-coin [metadata]",
+		Use:   "register-coin [denom-metadata]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Submit a register coin proposal",
-		Long: `Submit a proposal to register a Cosmos coin to the erc20 along with an initial deposit.
-Upon passing, the
-The proposal details must be supplied via a JSON file.`,
-		Example: fmt.Sprintf(`$ %s tx gov submit-proposal register-coin <path/to/metadata.json> --from=<key_or_address>
+		Short: "Register coin",
+		Long: `Register a Cosmos coin to the erc20 along with an initial deposit.
+Upon passing, denom details must be supplied via a JSON file.`,
+		Example: fmt.Sprintf(`$ %s tx erc20 register-coin <path/to/metadata.json> --from=<key_or_address>
 
 Where metadata.json contains (example):
 
@@ -154,19 +153,19 @@ Where metadata.json contains (example):
   "description": "staking, gas and governance token of the Evmos testnets"
   "denom_units": [
 		{
-			"denom": "aevmos",
+			"denom": "aimv",
 			"exponent": 0,
 			"aliases": ["atto evmos"]
 		},
 		{
-			"denom": "evmos",
+			"denom": "imv",
 			"exponent": 18
 		}
 	],
-	"base": "aevmos",
-	"display: "evmos",
-	"name": "Evmos",
-	"symbol": "EVMOS"
+	"base": "aimv",
+	"display: "imversed",
+	"name": "Imversed",
+	"symbol": "IMV"
 }`, version.AppName,
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -198,14 +197,14 @@ Where metadata.json contains (example):
 	return cmd
 }
 
-// NewRegisterERC20Cmd implements the command to submit a community-pool-spend proposal
+// NewRegisterERC20Cmd returns a CLI command handler to register erc20 token
 func NewRegisterERC20Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "register-erc20 [erc20-address]",
 		Args:    cobra.ExactArgs(1),
-		Short:   "Submit a proposal to register an ERC20 token",
-		Long:    "Submit a proposal to register an ERC20 token to the erc20 along with an initial deposit.",
-		Example: fmt.Sprintf("$ %s tx gov submit-proposal register-erc20 <path/to/proposal.json> --from=<key_or_address>", version.AppName),
+		Short:   "Register an ERC20 token",
+		Long:    "Register an ERC20 token to the erc20.",
+		Example: fmt.Sprintf("$ %s tx erc20register-erc20 --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -233,13 +232,13 @@ func NewRegisterERC20Cmd() *cobra.Command {
 	return cmd
 }
 
-// ToggleTokenRelayCmd implements the command to toggle token relay
+// ToggleTokenRelayCmd returns a CLI command handler to toggle token relay
 func ToggleTokenRelayCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "toggle-token-relay [token]",
 		Args:    cobra.ExactArgs(1),
-		Short:   "Submit a toggle token relay proposal",
-		Long:    "Submit a proposal to toggle the relaying of a token pair along with an initial deposit.",
+		Short:   "Toggle token relay proposal",
+		Long:    "Toggle the relaying of a token pair.",
 		Example: fmt.Sprintf("$ %s tx erc20 toggle-token-relay <denom_or_contract> --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -266,7 +265,7 @@ func ToggleTokenRelayCmd() *cobra.Command {
 	return cmd
 }
 
-// NewUpdateTokenPairERC20Cmd implements the command to update erc20 token pair
+// NewUpdateTokenPairERC20Cmd returns a CLI command handler to update erc20 token pair
 func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update-token-pair-erc20 [erc20_address] [new_erc20_address]",

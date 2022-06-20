@@ -124,8 +124,9 @@ func (msg MsgConvertERC20) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr.Bytes()}
 }
 
+// TODO: reimplement in tests needs
 // NewMsgRegisterCoin creates a new instance of MsgRegisterCoin
-func NewMsgRegisterCoin() *MsgConvertERC20 { // nolint: interfacer
+func NewMsgRegisterCoin() *MsgRegisterCoin { // nolint: interfacer
 
 	//return &MsgRegisterCoin{
 	//	Metadata:
@@ -163,7 +164,7 @@ func (msg MsgRegisterCoin) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr.Bytes()}
 }
 
-// NewMsgUpdateTokenPairERC20 updates token pair
+// NewMsgUpdateTokenPairERC20 creates a new instance of MsgUpdateTokenPairERC20
 func NewMsgUpdateTokenPairERC20(erc20Address common.Address, newErc20Address common.Address, sender sdk.AccAddress) *MsgUpdateTokenPairERC20 { // nolint: interfacer
 	return &MsgUpdateTokenPairERC20{
 		Erc20Address:    erc20Address.String(),
@@ -211,8 +212,9 @@ func (msg MsgUpdateTokenPairERC20) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr}
 }
 
-// NewMsgRegisterCoin creates a new instance of MsgRegisterCoin
-func NewMsgRegisterERC20() *MsgConvertERC20 { // nolint: interfacer
+// TODO: reimplement in tests needs
+// NewMsgRegisterERC20 creates a new instance of MsgRegisterERC20
+func NewMsgRegisterERC20() *MsgRegisterERC20 { // nolint: interfacer
 
 	//return &MsgRegisterCoin{
 	//	Metadata:
@@ -250,7 +252,7 @@ func (msg MsgRegisterERC20) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr.Bytes()}
 }
 
-// NewMsgToggleTokenRelay updates token pair
+// NewMsgToggleTokenRelay creates a new instance of MsgToggleTokenRelay
 func NewMsgToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRelay { // nolint: interfacer
 	return &MsgToggleTokenRelay{
 		Token:  token,
