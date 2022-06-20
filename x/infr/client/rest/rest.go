@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	govrest "github.com/cosmos/cosmos-sdk/x/gov/client/rest"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	"github.com/imversed/imversed/x/erc20/types"
+	"github.com/imversed/imversed/x/infr/types"
 	"net/http"
 )
 
@@ -38,7 +38,7 @@ func newChangeMinGasPricesHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		content := types.NewToggleTokenRelayProposal(req.Title, req.Description, req.Dime)
+		content := types.NewChangeMinGasPricesProposal(req.Title, req.Description, req.Dime)
 		msg, err := govtypes.NewMsgSubmitProposal(content, req.Deposit, fromAddr)
 		if rest.CheckBadRequestError(w, err) {
 			return

@@ -21,9 +21,10 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		(*sdk.Msg)(nil),
 		&MsgConvertCoin{},
 		&MsgConvertERC20{},
+		&MsgUpdateTokenPairERC20{},
 		&MsgRegisterCoin{},
 		&MsgRegisterERC20{},
-		&MsgUpdateTokenPairERC20{},
+		&MsgToggleTokenRelay{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

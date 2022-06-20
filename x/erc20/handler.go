@@ -28,9 +28,8 @@ func NewHandler(server types.MsgServer) sdk.Handler {
 		case *types.MsgRegisterERC20:
 			res, err := server.RegisterERC20(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
-			//	TODO: ToggleRelayProposal
-			//case *types.Msg:
-			//	res, err := server.RegisterCoin(sdk.WrapSDKContext(ctx), msg)
+		case *types.MsgToggleTokenRelay:
+			res, err := server.ToggleTokenRelay(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		default:
 			err := sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", types.ModuleName, msg)

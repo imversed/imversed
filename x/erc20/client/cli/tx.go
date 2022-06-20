@@ -244,42 +244,27 @@ func ToggleTokenRelayCmd() *cobra.Command {
 		Long:    "Submit a proposal to toggle the relaying of a token pair along with an initial deposit.",
 		Example: fmt.Sprintf("$ %s tx erc20 toggle-token-relay <denom_or_contract> --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// TODO
-			//clientCtx, err := client.GetClientTxContext(cmd)
-			//if err != nil {
-			//	return err
-			//}
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
-			//from := clientCtx.GetFromAddress()
-			//token := args[0]
-			//content := types.NewToggleTokenRelayProposal(title, description, token)
-			//
-			//msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
-			//if err != nil {
-			//	return err
-			//}
-			//
-			//if err := msg.ValidateBasic(); err != nil {
-			//	return err
-			//}
+			from := clientCtx.GetFromAddress()
+			token := args[0]
 
-			//return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-			return nil
+			msg := &types.MsgToggleTokenRelay{
+				Token:  token,
+				Sender: from.String(),
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
-
-	//cmd.Flags().String(cli.FlagTitle, "", "title of proposal")
-	//cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
-	//cmd.Flags().String(cli.FlagDeposit, "1aevmos", "deposit of proposal")
-	//if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-	//	panic(err)
-	//}
-	//if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-	//	panic(err)
-	//}
-	//if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-	//	panic(err)
-	//}
+	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
 

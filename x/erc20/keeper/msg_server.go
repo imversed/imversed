@@ -729,21 +729,35 @@ func (k Keeper) UpdateTokenPairERC20(
 	return &types.MsgUpdateTokenPairERC20Response{}, nil
 }
 
-// ToggleRelay toggles relaying for a given token pair
-func (k Keeper) ToggleRelay(ctx sdk.Context, token string) (types.TokenPair, error) {
-	// TODO use message, check account owner
-	id := k.GetTokenPairID(ctx, token)
+// ToggleTokenRelay toggles relaying for a given token pair
+func (k Keeper) ToggleTokenRelay(
+	goCtx context.Context,
+	msg *types.MsgToggleTokenRelay,
+) (*types.MsgToggleTokenRelayResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
+	id := k.GetTokenPairID(ctx, msg.Token)
 	if len(id) == 0 {
-		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered by id", token)
+		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered by id", msg.Token)
 	}
 
 	pair, found := k.GetTokenPair(ctx, id)
 	if !found {
-		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", token)
+		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", msg.Token)
+	}
+
+	owner, err := sdk.AccAddressFromBech32(pair.AccountOwner)
+	if err != nil {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidTokenPairAccountOwner, "invalid account owner", pair.AccountOwner)
+	}
+
+	if !sender.Equals(owner) {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidTokenPairAccountOwner, "sender is not token pair account owner")
 	}
 
 	pair.Enabled = !pair.Enabled
 
 	k.SetTokenPair(ctx, pair)
-	return pair, nil
+	return &types.MsgToggleTokenRelayResponse{}, nil
 }

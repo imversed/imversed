@@ -12,6 +12,7 @@ var (
 	_ sdk.Msg = &MsgConvertERC20{}
 	_ sdk.Msg = &MsgUpdateTokenPairERC20{}
 	_ sdk.Msg = &MsgRegisterCoin{}
+	_ sdk.Msg = &MsgToggleTokenRelay{}
 )
 
 const (
@@ -20,6 +21,7 @@ const (
 	TypeMsgRegisterCoin         = "register_coin"
 	TypeMsgRegisterERC20        = "register_erc20"
 	TypeMsgUpdateTokenPairERC20 = "update_token_pair_erc20"
+	TypeMsgToggleTokenRelay     = "toggle_token_relay"
 )
 
 // NewMsgConvertCoin creates a new instance of MsgConvertCoin
@@ -244,38 +246,10 @@ func (msg MsgRegisterERC20) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr.Bytes()}
 }
 
-//// NewToggleTokenRelayProposal returns new instance of ToggleTokenRelayProposal
-//func NewToggleTokenRelayProposal(title, description string, token string) govtypes.Content {
-//	return &ToggleTokenRelayProposal{
-//		Title:       title,
-//		Description: description,
-//		Token:       token,
-//	}
-//}
-//
-//// ProposalRoute returns router key for this proposal
-//func (*ToggleTokenRelayProposal) ProposalRoute() string { return RouterKey }
-//
-//// ProposalType returns proposal type for this proposal
-//func (*ToggleTokenRelayProposal) ProposalType() string {
-//	return ProposalTypeToggleTokenRelay
-//}
-//
-//// ValidateBasic performs a stateless check of the proposal fields
-//func (etrp *ToggleTokenRelayProposal) ValidateBasic() error {
-//	// check if the token is a hex address, if not, check if it is a valid SDK
-//	// denom
-//	if err := imversed.ValidateAddress(etrp.Token); err != nil {
-//		if err := sdk.ValidateDenom(etrp.Token); err != nil {
-//			return err
-//		}
-//	}
-//
-//	return govtypes.ValidateAbstract(etrp)
-//}
 
-// NewMsgUpdateTokenPairERC20 updates token pair
-func NewToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRelay { // nolint: interfacer
+
+// NewMsgToggleTokenRelay updates token pair
+func NewMsgToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRelay { // nolint: interfacer
 	return &MsgToggleTokenRelay{
 		Token:  token,
 		Sender: sender.String(),
@@ -286,21 +260,13 @@ func NewToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRel
 func (msg MsgToggleTokenRelay) Route() string { return RouterKey }
 
 // Type should return the action
-func (msg MsgToggleTokenRelay) Type() string { return TypeMsgUpdateTokenPairERC20 }
+func (msg MsgToggleTokenRelay) Type() string { return TypeMsgToggleTokenRelay }
 
 // ValidateBasic runs stateless checks on the message
 func (msg MsgToggleTokenRelay) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrap(err, "invalid sender address")
-	}
-
-	if !common.IsHexAddress(msg.Erc20Address) {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.Erc20Address)
-	}
-
-	if !common.IsHexAddress(msg.NewErc20Address) {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.NewErc20Address)
 	}
 
 	return nil
