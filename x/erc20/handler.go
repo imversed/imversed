@@ -19,6 +19,9 @@ func NewHandler(server types.MsgServer) sdk.Handler {
 		case *types.MsgConvertERC20:
 			res, err := server.ConvertERC20(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgUpdateTokenPairERC20:
+			res, err := server.UpdateTokenPairERC20(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgRegisterCoin:
 			res, err := server.RegisterCoin(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
