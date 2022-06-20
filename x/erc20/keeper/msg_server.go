@@ -728,3 +728,22 @@ func (k Keeper) UpdateTokenPairERC20(
 
 	return &types.MsgUpdateTokenPairERC20Response{}, nil
 }
+
+// ToggleRelay toggles relaying for a given token pair
+func (k Keeper) ToggleRelay(ctx sdk.Context, token string) (types.TokenPair, error) {
+	// TODO use message, check account owner
+	id := k.GetTokenPairID(ctx, token)
+	if len(id) == 0 {
+		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered by id", token)
+	}
+
+	pair, found := k.GetTokenPair(ctx, id)
+	if !found {
+		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", token)
+	}
+
+	pair.Enabled = !pair.Enabled
+
+	k.SetTokenPair(ctx, pair)
+	return pair, nil
+}

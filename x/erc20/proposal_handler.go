@@ -21,20 +21,3 @@ func NewErc20ProposalHandler(k *keeper.Keeper) govtypes.Handler {
 		}
 	}
 }
-
-func handleToggleRelayProposal(ctx sdk.Context, k *keeper.Keeper, p *types.ToggleTokenRelayProposal) error {
-	pair, err := k.ToggleRelay(ctx, p.Token)
-	if err != nil {
-		return err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeToggleTokenRelay,
-			sdk.NewAttribute(types.AttributeKeyCosmosCoin, pair.Denom),
-			sdk.NewAttribute(types.AttributeKeyERC20Token, pair.Erc20Address),
-		),
-	)
-
-	return nil
-}

@@ -6,7 +6,3 @@ import (
 	"github.com/imversed/imversed/x/erc20/client/cli"
 	"github.com/imversed/imversed/x/erc20/client/rest"
 )
-
-var (
-	ToggleTokenRelayProposalHandler = govclient.NewProposalHandler(cli.NewToggleTokenRelayProposalCmd, rest.ToggleTokenRelayRESTHandler)
-)

@@ -25,10 +25,6 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		&MsgRegisterERC20{},
 		&MsgUpdateTokenPairERC20{},
 	)
-	registry.RegisterImplementations(
-		(*govtypes.Content)(nil),
-		&ToggleTokenRelayProposal{},
-	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

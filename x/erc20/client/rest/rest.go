@@ -32,15 +32,6 @@ type RegisterERC20ProposalRequest struct {
 	ERC20Address string       `json:"erc20_address" yaml:"erc20_address"`
 }
 
-// ToggleTokenRelayProposalRequest defines a request for a toggle token relay proposal.
-type ToggleTokenRelayProposalRequest struct {
-	BaseReq     rest.BaseReq `json:"base_req" yaml:"base_req"`
-	Title       string       `json:"title" yaml:"title"`
-	Description string       `json:"description" yaml:"description"`
-	Deposit     sdk.Coins    `json:"deposit" yaml:"deposit"`
-	Token       string       `json:"token" yaml:"token"`
-}
-
 // UpdateTokenPairERC20ProposalRequest defines a request for a update token pair ERC20 proposal.
 type UpdateTokenPairERC20ProposalRequest struct {
 	BaseReq         rest.BaseReq `json:"base_req" yaml:"base_req"`
@@ -62,13 +53,6 @@ func RegisterERC20ProposalRESTHandler(clientCtx client.Context) govrest.Proposal
 	return govrest.ProposalRESTHandler{
 		SubRoute: types.ModuleName,
 		Handler:  newRegisterERC20ProposalHandler(clientCtx),
-	}
-}
-
-func ToggleTokenRelayRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: types.ModuleName,
-		Handler:  newToggleTokenRelayHandler(clientCtx),
 	}
 }
 
@@ -135,38 +119,5 @@ func newRegisterERC20ProposalHandler(clientCtx client.Context) http.HandlerFunc 
 		//}
 		//
 		//tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
-}
-
-// nolint: dupl
-func newToggleTokenRelayHandler(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req ToggleTokenRelayProposalRequest
-
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		content := types.NewToggleTokenRelayProposal(req.Title, req.Description, req.Token)
-		msg, err := govtypes.NewMsgSubmitProposal(content, req.Deposit, fromAddr)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
 }

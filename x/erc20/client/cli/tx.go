@@ -35,6 +35,7 @@ func NewTxCmd() *cobra.Command {
 		NewConvertERC20Cmd(),
 		NewUpdateTokenPairERC20Cmd(),
 		NewRegisterCoinCmd(),
+		ToggleTokenRelayCmd(),
 		NewRegisterERC20Cmd(),
 	)
 	return txCmd
@@ -234,79 +235,62 @@ func NewRegisterERC20Cmd() *cobra.Command {
 	return cmd
 }
 
-// NewToggleTokenRelayProposalCmd implements the command to submit a community-pool-spend proposal
-func NewToggleTokenRelayProposalCmd() *cobra.Command {
+// ToggleTokenRelayCmd implements the command to toggle token relay
+func ToggleTokenRelayCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "toggle-token-relay [token]",
 		Args:    cobra.ExactArgs(1),
 		Short:   "Submit a toggle token relay proposal",
 		Long:    "Submit a proposal to toggle the relaying of a token pair along with an initial deposit.",
-		Example: fmt.Sprintf("$ %s tx gov submit-proposal toggle-token-relay <denom_or_contract> --from=<key_or_address>", version.AppName),
+		Example: fmt.Sprintf("$ %s tx erc20 toggle-token-relay <denom_or_contract> --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
+			// TODO
+			//clientCtx, err := client.GetClientTxContext(cmd)
+			//if err != nil {
+			//	return err
+			//}
 
-			title, err := cmd.Flags().GetString(cli.FlagTitle)
-			if err != nil {
-				return err
-			}
+			//from := clientCtx.GetFromAddress()
+			//token := args[0]
+			//content := types.NewToggleTokenRelayProposal(title, description, token)
+			//
+			//msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
+			//if err != nil {
+			//	return err
+			//}
+			//
+			//if err := msg.ValidateBasic(); err != nil {
+			//	return err
+			//}
 
-			description, err := cmd.Flags().GetString(cli.FlagDescription)
-			if err != nil {
-				return err
-			}
-
-			depositStr, err := cmd.Flags().GetString(cli.FlagDeposit)
-			if err != nil {
-				return err
-			}
-
-			deposit, err := sdk.ParseCoinsNormalized(depositStr)
-			if err != nil {
-				return err
-			}
-
-			from := clientCtx.GetFromAddress()
-			token := args[0]
-			content := types.NewToggleTokenRelayProposal(title, description, token)
-
-			msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
-			if err != nil {
-				return err
-			}
-
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			//return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			return nil
 		},
 	}
 
-	cmd.Flags().String(cli.FlagTitle, "", "title of proposal")
-	cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
-	cmd.Flags().String(cli.FlagDeposit, "1aevmos", "deposit of proposal")
-	if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-		panic(err)
-	}
-	if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-		panic(err)
-	}
-	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-		panic(err)
-	}
+	//cmd.Flags().String(cli.FlagTitle, "", "title of proposal")
+	//cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
+	//cmd.Flags().String(cli.FlagDeposit, "1aevmos", "deposit of proposal")
+	//if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
+	//	panic(err)
+	//}
+	//if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
+	//	panic(err)
+	//}
+	//if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
+	//	panic(err)
+	//}
 	return cmd
 }
 
-// NewUpdateTokenPairERC20Cmd implements the command to submit a community-pool-spend proposal
+// NewUpdateTokenPairERC20Cmd implements the command to update erc20 token pair
 func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-token-pair-erc20 [erc20_address] [new_erc20_address]",
-		Args:  cobra.ExactArgs(2),
-		Short: "Update token pair ERC20",
-		Long:  `Update the ERC20 address of a token pair.`,
+		Use:     "update-token-pair-erc20 [erc20_address] [new_erc20_address]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Update token pair ERC20",
+		Long:    `Update the ERC20 address of a token pair.`,
+		Example: fmt.Sprintf("$ %s tx erc20 update-token-pair-erc20 <erc20_address> <new_erc20_address> --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

@@ -30,16 +30,3 @@ message TokenPair {
 
   string account_owner = 5;
 }
-
-// ToggleTokenRelayProposal is a gov Content type to toggle
-// the internal relaying of a token pair.
-message ToggleTokenRelayProposal {
-  option (gogoproto.equal) = true;
-  // title of the proposal
-  string title = 1;
-  // proposal description
-  string description = 2;
-  // token identifier can be either the hex contract address of the ERC20 or the
-  // Cosmos base denomination
-  string token = 3;
-}

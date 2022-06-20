@@ -161,8 +161,6 @@ var (
 		gov.NewAppModuleBasic(
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
-			// erc20 proposals handlers
-			erc20client.ToggleTokenRelayProposalHandler,
 			// infr proposals handlers
 			infrclient.ChangeMinGasPricesProposalHandler,
 		),

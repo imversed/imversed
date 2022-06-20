@@ -25,6 +25,7 @@ service Msg {
     option (google.api.http).get = "/imversed/erc20/v1/tx/register_coin";
   }
 
+  // Update token pair ERC20
   rpc RegisterERC20(MsgRegisterERC20) returns (MsgRegisterERC20Response) {
     option (google.api.http).get = "/imversed/erc20/v1/tx/register_erc20";
   }
@@ -32,6 +33,11 @@ service Msg {
   // Update token pair ERC@)
   rpc UpdateTokenPairERC20(MsgUpdateTokenPairERC20) returns (MsgUpdateTokenPairERC20Response) {
     option (google.api.http).get = "/imversed/erc20/v1/tx/update_token_pair_erc20";
+  };
+
+  // Toggle the internal relaying of a token pair
+  rpc ToggleTokenRelay(MsgToggleTokenRelay) returns (MsgToggleTokenRelayResponse) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/toggle_token_relay";
   };
 }
 
@@ -77,6 +83,7 @@ message MsgRegisterCoin {
 message MsgRegisterCoinResponse {}
 
 
+// MsgUpdateTokenPairERC20 updates a token pair's
 
 // RegisterCoinProposal is a gov Content type to register a token pair
 message MsgRegisterERC20 {
@@ -100,3 +107,16 @@ message MsgUpdateTokenPairERC20 {
 
 // MsgUpdateTokenPairERC20Response returns no fields
 message MsgUpdateTokenPairERC20Response {}
+
+
+// MsgToggleTokenRelay toggles the internal relaying of a token pair
+message MsgToggleTokenRelay {
+  // token identifier can be either the hex contract address of the ERC20 or the
+  // Cosmos base denomination
+  string token = 1;
+  // cosmos bech32 address from the owner of the given ERC20 tokens
+  string sender = 2;
+}
+
+// MsgToggleTokenRelayResponse returns no fields
+message MsgToggleTokenRelayResponse {}

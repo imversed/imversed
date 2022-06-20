@@ -18,20 +18,64 @@ func (k Keeper) verifyMetadata(ctx sdk.Context, coinMetadata banktypes.Metadata)
 	return types.EqualMetadata(meta, coinMetadata)
 }
 
-// ToggleRelay toggles relaying for a given token pair
-func (k Keeper) ToggleRelay(ctx sdk.Context, token string) (types.TokenPair, error) {
-	id := k.GetTokenPairID(ctx, token)
-	if len(id) == 0 {
-		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered by id", token)
+// CreateCoinMetadata generates the metadata to represent the ERC20 token on evmos.
+func (k Keeper) CreateCoinMetadata(ctx sdk.Context, contract common.Address) (*banktypes.Metadata, error) {
+	strContract := contract.String()
+
+	erc20Data, err := k.QueryERC20(ctx, contract)
+	if err != nil {
+		return nil, err
 	}
 
-	pair, found := k.GetTokenPair(ctx, id)
-	if !found {
-		return types.TokenPair{}, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", token)
+	_, found := k.bankKeeper.GetDenomMetaData(ctx, types.CreateDenom(strContract))
+	if found {
+		// metadata already exists; exit
+		return nil, sdkerrors.Wrap(types.ErrInternalTokenPair, "denom metadata already registered")
 	}
 
-	pair.Enabled = !pair.Enabled
+	if k.IsDenomRegistered(ctx, types.CreateDenom(strContract)) {
+		return nil, sdkerrors.Wrapf(types.ErrInternalTokenPair, "coin denomination already registered: %s", erc20Data.Name)
+	}
 
-	k.SetTokenPair(ctx, pair)
-	return pair, nil
+	// base denomination
+	base := types.CreateDenom(strContract)
+
+	// create a bank denom metadata based on the ERC20 token ABI details
+	// metadata name is should always be the contract since it's the key
+	// to the bank store
+	metadata := banktypes.Metadata{
+		Description: types.CreateDenomDescription(strContract),
+		Base:        base,
+		// NOTE: Denom units MUST be increasing
+		DenomUnits: []*banktypes.DenomUnit{
+			{
+				Denom:    base,
+				Exponent: 0,
+			},
+		},
+		Name:    types.CreateDenom(strContract),
+		Symbol:  erc20Data.Symbol,
+		Display: base,
+	}
+
+	// only append metadata if decimals > 0, otherwise validation fails
+	if erc20Data.Decimals > 0 {
+		nameSanitized := types.SanitizeERC20Name(erc20Data.Name)
+		metadata.DenomUnits = append(
+			metadata.DenomUnits,
+			&banktypes.DenomUnit{
+				Denom:    nameSanitized,
+				Exponent: uint32(erc20Data.Decimals),
+			},
+		)
+		metadata.Display = nameSanitized
+	}
+
+	if err := metadata.Validate(); err != nil {
+		return nil, sdkerrors.Wrapf(err, "ERC20 token data is invalid for contract %s", strContract)
+	}
+
+	k.bankKeeper.SetDenomMetaData(ctx, metadata)
+
+	return &metadata, nil
 }
