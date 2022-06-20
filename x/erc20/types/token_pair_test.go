@@ -1,6 +1,7 @@
 package types
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
@@ -39,9 +40,9 @@ func (suite *TokenPairTestSuite) TestTokenPairNew() {
 		{msg: "Register token pair - invalid length token (128)", erc20Address: tests.GenerateAddress(), denom: strings.Repeat("a", 129), enabled: true, owner: OWNER_MODULE, expectPass: false},
 		{msg: "Register token pair - pass", erc20Address: tests.GenerateAddress(), denom: "test", enabled: true, owner: OWNER_MODULE, expectPass: true},
 	}
-
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
 	for i, tc := range testCases {
-		tp := NewTokenPair(tc.erc20Address, tc.denom, tc.enabled, tc.owner)
+		tp := NewTokenPair(tc.erc20Address, tc.denom, tc.enabled, tc.owner, sender)
 		err := tp.Validate()
 
 		if tc.expectPass {
@@ -53,15 +54,17 @@ func (suite *TokenPairTestSuite) TestTokenPairNew() {
 }
 
 func (suite *TokenPairTestSuite) TestTokenPair() {
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
+
 	testCases := []struct {
 		msg        string
 		pair       TokenPair
 		expectPass bool
 	}{
-		{msg: "Register token pair - invalid address (no hex)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb19ZZ", "test", true, OWNER_MODULE}, expectPass: false},
-		{msg: "Register token pair - invalid address (invalid length 1)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb19", "test", true, OWNER_MODULE}, expectPass: false},
-		{msg: "Register token pair - invalid address (invalid length 2)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb194FFF", "test", true, OWNER_MODULE}, expectPass: false},
-		{msg: "pass", pair: TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE}, expectPass: true},
+		{msg: "Register token pair - invalid address (no hex)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb19ZZ", "test", true, OWNER_MODULE, sender}, expectPass: false},
+		{msg: "Register token pair - invalid address (invalid length 1)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb19", "test", true, OWNER_MODULE, sender}, expectPass: false},
+		{msg: "Register token pair - invalid address (invalid length 2)", pair: TokenPair{"0x5dCA2483280D9727c80b5518faC4556617fb194FFF", "test", true, OWNER_MODULE, sender}, expectPass: false},
+		{msg: "pass", pair: TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE, sender}, expectPass: true},
 	}
 
 	for i, tc := range testCases {
@@ -78,7 +81,8 @@ func (suite *TokenPairTestSuite) TestTokenPair() {
 func (suite *TokenPairTestSuite) TestGetID() {
 	addr := tests.GenerateAddress()
 	denom := "test"
-	pair := NewTokenPair(addr, denom, true, OWNER_MODULE)
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
+	pair := NewTokenPair(addr, denom, true, OWNER_MODULE, sender)
 	id := pair.GetID()
 	expID := tmhash.Sum([]byte(addr.String() + "|" + denom))
 	suite.Require().Equal(expID, id)
@@ -87,12 +91,15 @@ func (suite *TokenPairTestSuite) TestGetID() {
 func (suite *TokenPairTestSuite) TestGetERC20Contract() {
 	expAddr := tests.GenerateAddress()
 	denom := "test"
-	pair := NewTokenPair(expAddr, denom, true, OWNER_MODULE)
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
+	pair := NewTokenPair(expAddr, denom, true, OWNER_MODULE, sender)
 	addr := pair.GetERC20Contract()
 	suite.Require().Equal(expAddr, addr)
 }
 
 func (suite *TokenPairTestSuite) TestIsNativeCoin() {
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
+
 	testCases := []struct {
 		name       string
 		pair       TokenPair
@@ -100,17 +107,17 @@ func (suite *TokenPairTestSuite) TestIsNativeCoin() {
 	}{
 		{
 			"no owner",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_UNSPECIFIED},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_UNSPECIFIED, sender},
 			false,
 		},
 		{
 			"external ERC20 owner",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_EXTERNAL},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_EXTERNAL, sender},
 			false,
 		},
 		{
 			"pass",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE, sender},
 			true,
 		},
 	}
@@ -126,6 +133,8 @@ func (suite *TokenPairTestSuite) TestIsNativeCoin() {
 }
 
 func (suite *TokenPairTestSuite) TestIsNativeERC20() {
+	sender := sdk.AccAddress(tests.GenerateAddress().Bytes()).String()
+
 	testCases := []struct {
 		name       string
 		pair       TokenPair
@@ -133,17 +142,17 @@ func (suite *TokenPairTestSuite) TestIsNativeERC20() {
 	}{
 		{
 			"no owner",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_UNSPECIFIED},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_UNSPECIFIED, sender},
 			false,
 		},
 		{
 			"module owner",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_MODULE, sender},
 			false,
 		},
 		{
 			"pass",
-			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_EXTERNAL},
+			TokenPair{tests.GenerateAddress().String(), "test", true, OWNER_EXTERNAL, sender},
 			true,
 		},
 	}

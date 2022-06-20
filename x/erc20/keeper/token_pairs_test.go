@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/imversed/imversed/tests"
@@ -23,7 +24,9 @@ func (suite *KeeperTestSuite) TestGetAllTokenPairs() {
 		{
 			"1 pair registered",
 			func() {
-				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE)
+				sender := sdk.AccAddress(suite.address.Bytes())
+
+				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 
 				expRes = []types.TokenPair{pair}
@@ -32,8 +35,10 @@ func (suite *KeeperTestSuite) TestGetAllTokenPairs() {
 		{
 			"2 pairs registered",
 			func() {
-				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE)
-				pair2 := types.NewTokenPair(tests.GenerateAddress(), "coin2", true, types.OWNER_MODULE)
+				sender := sdk.AccAddress(suite.address.Bytes())
+
+				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE, sender.String())
+				pair2 := types.NewTokenPair(tests.GenerateAddress(), "coin2", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair2)
 
@@ -54,7 +59,9 @@ func (suite *KeeperTestSuite) TestGetAllTokenPairs() {
 }
 
 func (suite *KeeperTestSuite) TestGetTokenPairID() {
-	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+
+	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE, sender.String())
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 
 	testCases := []struct {
@@ -77,7 +84,9 @@ func (suite *KeeperTestSuite) TestGetTokenPairID() {
 }
 
 func (suite *KeeperTestSuite) TestGetTokenPair() {
-	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+
+	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE, sender.String())
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 
 	testCases := []struct {
@@ -101,7 +110,9 @@ func (suite *KeeperTestSuite) TestGetTokenPair() {
 }
 
 func (suite *KeeperTestSuite) TestDeleteTokenPair() {
-	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+
+	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE, sender.String())
 	id := pair.GetID()
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 	suite.app.Erc20Keeper.SetERC20Map(suite.ctx, pair.GetERC20Contract(), id)
@@ -138,7 +149,9 @@ func (suite *KeeperTestSuite) TestDeleteTokenPair() {
 }
 
 func (suite *KeeperTestSuite) TestIsTokenPairRegistered() {
-	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+
+	pair := types.NewTokenPair(tests.GenerateAddress(), evmtypes.DefaultEVMDenom, true, types.OWNER_MODULE, sender.String())
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 
 	testCases := []struct {
@@ -161,7 +174,8 @@ func (suite *KeeperTestSuite) TestIsTokenPairRegistered() {
 
 func (suite *KeeperTestSuite) TestIsERC20Registered() {
 	addr := tests.GenerateAddress()
-	pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+	pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE, sender.String())
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 	suite.app.Erc20Keeper.SetERC20Map(suite.ctx, addr, pair.GetID())
 	suite.app.Erc20Keeper.SetDenomMap(suite.ctx, pair.Denom, pair.GetID())
@@ -198,7 +212,9 @@ func (suite *KeeperTestSuite) TestIsERC20Registered() {
 
 func (suite *KeeperTestSuite) TestIsDenomRegistered() {
 	addr := tests.GenerateAddress()
-	pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE)
+	sender := sdk.AccAddress(suite.address.Bytes())
+
+	pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE, sender.String())
 	suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 	suite.app.Erc20Keeper.SetERC20Map(suite.ctx, addr, pair.GetID())
 	suite.app.Erc20Keeper.SetDenomMap(suite.ctx, pair.Denom, pair.GetID())
