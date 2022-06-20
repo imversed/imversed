@@ -21,6 +21,8 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		(*sdk.Msg)(nil),
 		&MsgConvertCoin{},
 		&MsgConvertERC20{},
+		&MsgRegisterCoin{},
+		&MsgUpdateTokenPairERC20{},
 	)
 	registry.RegisterImplementations(
 		(*govtypes.Content)(nil),
