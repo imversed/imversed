@@ -353,12 +353,12 @@ func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 				return fmt.Errorf("invalid ERC20 contract address %w", err)
 			}
 
-			from := common.BytesToAddress(clientCtx.GetFromAddress().Bytes())
+			from := clientCtx.GetFromAddress()
 
 			msg := &types.MsgUpdateTokenPairERC20{
 				Erc20Address:    erc20Addr,
 				NewErc20Address: newERC20Addr,
-				Sender:          from.Hex(),
+				Sender:          from.String(),
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
