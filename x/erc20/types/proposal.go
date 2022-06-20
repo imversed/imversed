@@ -5,27 +5,22 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	imversed "github.com/tharsis/ethermint/types"
 )
 
 // constants
 const (
-	ProposalTypeRegisterERC20    string = "RegisterERC20"
 	ProposalTypeToggleTokenRelay string = "ToggleTokenRelay" // #nosec
 )
 
 // Implements Proposal Interface
 var (
-	_ govtypes.Content = &RegisterERC20Proposal{}
 	_ govtypes.Content = &ToggleTokenRelayProposal{}
 )
 
 func init() {
-	govtypes.RegisterProposalType(ProposalTypeRegisterERC20)
 	govtypes.RegisterProposalType(ProposalTypeToggleTokenRelay)
-	govtypes.RegisterProposalTypeCodec(&RegisterERC20Proposal{}, "erc20/RegisterERC20Proposal")
 	govtypes.RegisterProposalTypeCodec(&ToggleTokenRelayProposal{}, "erc20/ToggleTokenRelayProposal")
 }
 
@@ -49,31 +44,6 @@ func ValidateErc20Denom(denom string) error {
 	}
 
 	return imversed.ValidateAddress(denomSplit[1])
-}
-
-// NewRegisterERC20Proposal returns new instance of RegisterERC20Proposal
-func NewRegisterERC20Proposal(title, description, erc20Addr string) govtypes.Content {
-	return &RegisterERC20Proposal{
-		Title:        title,
-		Description:  description,
-		Erc20Address: erc20Addr,
-	}
-}
-
-// ProposalRoute returns router key for this proposal
-func (*RegisterERC20Proposal) ProposalRoute() string { return RouterKey }
-
-// ProposalType returns proposal type for this proposal
-func (*RegisterERC20Proposal) ProposalType() string {
-	return ProposalTypeRegisterERC20
-}
-
-// ValidateBasic performs a stateless check of the proposal fields
-func (rtbp *RegisterERC20Proposal) ValidateBasic() error {
-	if err := imversed.ValidateAddress(rtbp.Erc20Address); err != nil {
-		return sdkerrors.Wrap(err, "ERC20 address")
-	}
-	return govtypes.ValidateAbstract(rtbp)
 }
 
 // NewToggleTokenRelayProposal returns new instance of ToggleTokenRelayProposal

@@ -22,11 +22,11 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		&MsgConvertCoin{},
 		&MsgConvertERC20{},
 		&MsgRegisterCoin{},
+		&MsgRegisterERC20{},
 		&MsgUpdateTokenPairERC20{},
 	)
 	registry.RegisterImplementations(
 		(*govtypes.Content)(nil),
-		&RegisterERC20Proposal{},
 		&ToggleTokenRelayProposal{},
 	)
 

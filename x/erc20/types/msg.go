@@ -15,9 +15,10 @@ var (
 )
 
 const (
-	TypeMsgConvertCoin  = "convert_coin"
-	TypeMsgConvertERC20 = "convert_ERC20"
-	TypeMsgRegisterCoin = "register_coin"
+	TypeMsgConvertCoin          = "convert_coin"
+	TypeMsgConvertERC20         = "convert_ERC20"
+	TypeMsgRegisterCoin         = "register_coin"
+	TypeMsgRegisterERC20        = "register_erc20"
 	TypeMsgUpdateTokenPairERC20 = "update_token_pair_erc20"
 )
 
@@ -202,4 +203,43 @@ func (msg MsgUpdateTokenPairERC20) GetSigners() []sdk.AccAddress {
 	}
 
 	return []sdk.AccAddress{addr}
+}
+
+// NewMsgRegisterCoin creates a new instance of MsgRegisterCoin
+func NewMsgRegisterERC20() *MsgConvertERC20 { // nolint: interfacer
+
+	//return &MsgRegisterCoin{
+	//	Metadata:
+	//}
+	return nil
+}
+
+// Route should return the name of the module
+func (msg MsgRegisterERC20) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg MsgRegisterERC20) Type() string { return TypeMsgRegisterERC20 }
+
+// ValidateBasic runs stateless checks on the message
+func (msg MsgRegisterERC20) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgRegisterERC20) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg MsgRegisterERC20) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+
+	return []sdk.AccAddress{addr.Bytes()}
 }

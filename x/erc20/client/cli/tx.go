@@ -35,6 +35,7 @@ func NewTxCmd() *cobra.Command {
 		NewConvertERC20Cmd(),
 		NewUpdateTokenPairERC20Cmd(),
 		NewRegisterCoinCmd(),
+		NewRegisterERC20Cmd(),
 	)
 	return txCmd
 }
@@ -198,8 +199,8 @@ Where metadata.json contains (example):
 	return cmd
 }
 
-// NewRegisterERC20ProposalCmd implements the command to submit a community-pool-spend proposal
-func NewRegisterERC20ProposalCmd() *cobra.Command {
+// NewRegisterERC20Cmd implements the command to submit a community-pool-spend proposal
+func NewRegisterERC20Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "register-erc20 [erc20-address]",
 		Args:    cobra.ExactArgs(1),
@@ -212,33 +213,13 @@ func NewRegisterERC20ProposalCmd() *cobra.Command {
 				return err
 			}
 
-			title, err := cmd.Flags().GetString(cli.FlagTitle)
-			if err != nil {
-				return err
-			}
-
-			description, err := cmd.Flags().GetString(cli.FlagDescription)
-			if err != nil {
-				return err
-			}
-
-			depositStr, err := cmd.Flags().GetString(cli.FlagDeposit)
-			if err != nil {
-				return err
-			}
-
-			deposit, err := sdk.ParseCoinsNormalized(depositStr)
-			if err != nil {
-				return err
-			}
-
 			erc20Addr := args[0]
-			from := clientCtx.GetFromAddress()
-			content := types.NewRegisterERC20Proposal(title, description, erc20Addr)
 
-			msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
-			if err != nil {
-				return err
+			from := clientCtx.GetFromAddress()
+
+			msg := &types.MsgRegisterERC20{
+				Erc20Address: erc20Addr,
+				Sender:       from.String(),
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -249,18 +230,7 @@ func NewRegisterERC20ProposalCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(cli.FlagTitle, "", "title of proposal")
-	cmd.Flags().String(cli.FlagDescription, "", "description of proposal")
-	cmd.Flags().String(cli.FlagDeposit, "1aevmos", "deposit of proposal")
-	if err := cmd.MarkFlagRequired(cli.FlagTitle); err != nil {
-		panic(err)
-	}
-	if err := cmd.MarkFlagRequired(cli.FlagDescription); err != nil {
-		panic(err)
-	}
-	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
-		panic(err)
-	}
+	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
 

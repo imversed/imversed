@@ -31,17 +31,6 @@ message TokenPair {
   string account_owner = 5;
 }
 
-// RegisterCoinProposal is a gov Content type to register a token pair
-message RegisterERC20Proposal {
-  option (gogoproto.equal) = false;
-  // title of the proposal
-  string title = 1;
-  // proposal description
-  string description = 2;
-  // contract address of ERC20 token
-  string erc20address = 3;
-}
-
 // ToggleTokenRelayProposal is a gov Content type to toggle
 // the internal relaying of a token pair.
 message ToggleTokenRelayProposal {

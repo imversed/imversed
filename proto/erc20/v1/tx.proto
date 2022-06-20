@@ -25,6 +25,10 @@ service Msg {
     option (google.api.http).get = "/imversed/erc20/v1/tx/register_coin";
   }
 
+  rpc RegisterERC20(MsgRegisterERC20) returns (MsgRegisterERC20Response) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/register_erc20";
+  }
+
   // Update token pair ERC@)
   rpc UpdateTokenPairERC20(MsgUpdateTokenPairERC20) returns (MsgUpdateTokenPairERC20Response) {
     option (google.api.http).get = "/imversed/erc20/v1/tx/update_token_pair_erc20";
@@ -72,6 +76,16 @@ message MsgRegisterCoin {
 
 message MsgRegisterCoinResponse {}
 
+
+
+// RegisterCoinProposal is a gov Content type to register a token pair
+message MsgRegisterERC20 {
+  string erc20address = 3;
+
+  string sender = 2;
+}
+
+message MsgRegisterERC20Response {}
 
 // UpdateTokenPairERC20Proposal is a gov Content type to update a token pair's
 // ERC20 contract address.

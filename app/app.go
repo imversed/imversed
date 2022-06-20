@@ -162,7 +162,6 @@ var (
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
 			// erc20 proposals handlers
-			erc20client.RegisterERC20ProposalHandler,
 			erc20client.ToggleTokenRelayProposalHandler,
 			// infr proposals handlers
 			infrclient.ChangeMinGasPricesProposalHandler,
