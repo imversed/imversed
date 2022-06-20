@@ -345,12 +345,12 @@ func NewUpdateTokenPairERC20Cmd() *cobra.Command {
 
 			erc20Addr := args[0]
 			if err := imversed.ValidateAddress(erc20Addr); err != nil {
-				return fmt.Errorf("invalid ERC20 contract address %w", err)
+				return fmt.Errorf("invalid current ERC20 contract address %w", err)
 			}
 
 			newERC20Addr := args[1]
 			if err := imversed.ValidateAddress(newERC20Addr); err != nil {
-				return fmt.Errorf("invalid ERC20 contract address %w", err)
+				return fmt.Errorf("invalid new ERC20 contract address %w", err)
 			}
 
 			from := clientCtx.GetFromAddress()
