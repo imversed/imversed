@@ -562,8 +562,12 @@ func (k Keeper) UpdateTokenPairERC20(
 	if !found {
 		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", erc20Addr)
 	}
+	owner, err := sdk.AccAddressFromBech32(pair.AccountOwner)
 
-	// TODO: check if sender is owner
+	if !sender.Equals(owner) {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidTokenPairAccountOwner, "sender is not token pair account owner")
+	}
+
 	// Get current stored metadata
 	metadata, found := k.bankKeeper.GetDenomMetaData(ctx, pair.Denom)
 	if !found {
