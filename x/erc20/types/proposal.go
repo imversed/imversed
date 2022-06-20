@@ -12,8 +12,8 @@ import (
 
 // constants
 const (
-	ProposalTypeRegisterERC20        string = "RegisterERC20"
-	ProposalTypeToggleTokenRelay     string = "ToggleTokenRelay" // #nosec
+	ProposalTypeRegisterERC20    string = "RegisterERC20"
+	ProposalTypeToggleTokenRelay string = "ToggleTokenRelay" // #nosec
 )
 
 // Implements Proposal Interface
@@ -25,7 +25,6 @@ var (
 func init() {
 	govtypes.RegisterProposalType(ProposalTypeRegisterERC20)
 	govtypes.RegisterProposalType(ProposalTypeToggleTokenRelay)
-	govtypes.RegisterProposalTypeCodec(&RegisterCoinProposal{}, "erc20/RegisterCoinProposal")
 	govtypes.RegisterProposalTypeCodec(&RegisterERC20Proposal{}, "erc20/RegisterERC20Proposal")
 	govtypes.RegisterProposalTypeCodec(&ToggleTokenRelayProposal{}, "erc20/ToggleTokenRelayProposal")
 }
