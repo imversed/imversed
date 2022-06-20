@@ -1,10 +1,13 @@
 package types
 
 import (
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
+	imversed "github.com/tharsis/ethermint/types"
+	"strings"
 )
 
 var (
@@ -12,6 +15,8 @@ var (
 	_ sdk.Msg = &MsgConvertERC20{}
 	_ sdk.Msg = &MsgUpdateTokenPairERC20{}
 	_ sdk.Msg = &MsgRegisterCoin{}
+	_ sdk.Msg = &MsgToggleTokenRelay{}
+	_ sdk.Msg = &MsgRegisterERC20{}
 )
 
 const (
@@ -20,6 +25,7 @@ const (
 	TypeMsgRegisterCoin         = "register_coin"
 	TypeMsgRegisterERC20        = "register_erc20"
 	TypeMsgUpdateTokenPairERC20 = "update_token_pair_erc20"
+	TypeMsgToggleTokenRelay     = "toggle_token_relay"
 )
 
 // NewMsgConvertCoin creates a new instance of MsgConvertCoin
@@ -242,4 +248,65 @@ func (msg MsgRegisterERC20) GetSigners() []sdk.AccAddress {
 	}
 
 	return []sdk.AccAddress{addr.Bytes()}
+}
+
+// NewMsgToggleTokenRelay updates token pair
+func NewMsgToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRelay { // nolint: interfacer
+	return &MsgToggleTokenRelay{
+		Token:  token,
+		Sender: sender.String(),
+	}
+}
+
+// Route should return the name of the module
+func (msg MsgToggleTokenRelay) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg MsgToggleTokenRelay) Type() string { return TypeMsgToggleTokenRelay }
+
+// ValidateBasic runs stateless checks on the message
+func (msg MsgToggleTokenRelay) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgToggleTokenRelay) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg MsgToggleTokenRelay) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+
+	return []sdk.AccAddress{addr}
+}
+
+// CreateDenomDescription generates a string with the coin description
+func CreateDenomDescription(address string) string {
+	return fmt.Sprintf("Cosmos coin token representation of %s", address)
+}
+
+// CreateDenom generates a string the module name plus the address to avoid conflicts with names staring with a number
+func CreateDenom(address string) string {
+	return fmt.Sprintf("%s/%s", ModuleName, address)
+}
+
+// ValidateErc20Denom checks if a denom is a valid erc20/
+// denomination
+func ValidateErc20Denom(denom string) error {
+	denomSplit := strings.SplitN(denom, "/", 2)
+
+	if len(denomSplit) != 2 || denomSplit[0] != ModuleName {
+		return fmt.Errorf("invalid denom. %s denomination should be prefixed with the format 'erc20/", denom)
+	}
+
+	return imversed.ValidateAddress(denomSplit[1])
 }

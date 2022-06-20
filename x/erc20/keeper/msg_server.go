@@ -728,3 +728,47 @@ func (k Keeper) UpdateTokenPairERC20(
 
 	return &types.MsgUpdateTokenPairERC20Response{}, nil
 }
+
+// ToggleTokenRelay toggles relaying for a given token pair
+func (k Keeper) ToggleTokenRelay(
+	goCtx context.Context,
+	msg *types.MsgToggleTokenRelay,
+) (*types.MsgToggleTokenRelayResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
+	id := k.GetTokenPairID(ctx, msg.Token)
+	if len(id) == 0 {
+		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered by id", msg.Token)
+	}
+
+	pair, found := k.GetTokenPair(ctx, id)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrTokenPairNotFound, "token '%s' not registered", msg.Token)
+	}
+
+	owner, err := sdk.AccAddressFromBech32(pair.AccountOwner)
+	if err != nil {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidTokenPairAccountOwner, "invalid account owner", pair.AccountOwner)
+	}
+
+	if !sender.Equals(owner) {
+		return nil, sdkerrors.Wrapf(types.ErrInvalidTokenPairAccountOwner, "sender is not token pair account owner")
+	}
+
+	pair.Enabled = !pair.Enabled
+
+	k.SetTokenPair(ctx, pair)
+	return &types.MsgToggleTokenRelayResponse{}, nil
+}
+
+// verify if the metadata matches the existing one, if not it sets it to the store
+func (k Keeper) verifyMetadata(ctx sdk.Context, coinMetadata banktypes.Metadata) error {
+	meta, found := k.bankKeeper.GetDenomMetaData(ctx, coinMetadata.Base)
+	if !found {
+		k.bankKeeper.SetDenomMetaData(ctx, coinMetadata)
+		return nil
+	}
+	// If it already existed, Check that is equal to what is stored
+	return types.EqualMetadata(meta, coinMetadata)
+}
