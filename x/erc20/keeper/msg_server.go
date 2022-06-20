@@ -761,3 +761,14 @@ func (k Keeper) ToggleTokenRelay(
 	k.SetTokenPair(ctx, pair)
 	return &types.MsgToggleTokenRelayResponse{}, nil
 }
+
+// verify if the metadata matches the existing one, if not it sets it to the store
+func (k Keeper) verifyMetadata(ctx sdk.Context, coinMetadata banktypes.Metadata) error {
+	meta, found := k.bankKeeper.GetDenomMetaData(ctx, coinMetadata.Base)
+	if !found {
+		k.bankKeeper.SetDenomMetaData(ctx, coinMetadata)
+		return nil
+	}
+	// If it already existed, Check that is equal to what is stored
+	return types.EqualMetadata(meta, coinMetadata)
+}

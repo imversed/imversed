@@ -1,10 +1,13 @@
 package types
 
 import (
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
+	imversed "github.com/tharsis/ethermint/types"
+	"strings"
 )
 
 var (
@@ -13,6 +16,7 @@ var (
 	_ sdk.Msg = &MsgUpdateTokenPairERC20{}
 	_ sdk.Msg = &MsgRegisterCoin{}
 	_ sdk.Msg = &MsgToggleTokenRelay{}
+	_ sdk.Msg = &MsgRegisterERC20{}
 )
 
 const (
@@ -246,8 +250,6 @@ func (msg MsgRegisterERC20) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr.Bytes()}
 }
 
-
-
 // NewMsgToggleTokenRelay updates token pair
 func NewMsgToggleTokenRelay(token string, sender sdk.AccAddress) *MsgToggleTokenRelay { // nolint: interfacer
 	return &MsgToggleTokenRelay{
@@ -285,4 +287,26 @@ func (msg MsgToggleTokenRelay) GetSigners() []sdk.AccAddress {
 	}
 
 	return []sdk.AccAddress{addr}
+}
+
+// CreateDenomDescription generates a string with the coin description
+func CreateDenomDescription(address string) string {
+	return fmt.Sprintf("Cosmos coin token representation of %s", address)
+}
+
+// CreateDenom generates a string the module name plus the address to avoid conflicts with names staring with a number
+func CreateDenom(address string) string {
+	return fmt.Sprintf("%s/%s", ModuleName, address)
+}
+
+// ValidateErc20Denom checks if a denom is a valid erc20/
+// denomination
+func ValidateErc20Denom(denom string) error {
+	denomSplit := strings.SplitN(denom, "/", 2)
+
+	if len(denomSplit) != 2 || denomSplit[0] != ModuleName {
+		return fmt.Errorf("invalid denom. %s denomination should be prefixed with the format 'erc20/", denom)
+	}
+
+	return imversed.ValidateAddress(denomSplit[1])
 }
