@@ -16,6 +16,8 @@ func (suite *KeeperTestSuite) TestTokenPairs() {
 		expRes *types.QueryTokenPairsResponse
 	)
 
+	sender := sdk.AccAddress(suite.address.Bytes())
+
 	testCases := []struct {
 		name     string
 		malleate func()
@@ -35,7 +37,7 @@ func (suite *KeeperTestSuite) TestTokenPairs() {
 				req = &types.QueryTokenPairsRequest{
 					Pagination: &query.PageRequest{Limit: 10, CountTotal: true},
 				}
-				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE)
+				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 
 				expRes = &types.QueryTokenPairsResponse{
@@ -49,8 +51,8 @@ func (suite *KeeperTestSuite) TestTokenPairs() {
 			"2 pairs registered wo/pagination",
 			func() {
 				req = &types.QueryTokenPairsRequest{}
-				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE)
-				pair2 := types.NewTokenPair(tests.GenerateAddress(), "coin2", true, types.OWNER_MODULE)
+				pair := types.NewTokenPair(tests.GenerateAddress(), "coin", true, types.OWNER_MODULE, sender.String())
+				pair2 := types.NewTokenPair(tests.GenerateAddress(), "coin2", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair2)
 
@@ -96,6 +98,8 @@ func (suite *KeeperTestSuite) TestTokenPair() {
 		expRes *types.QueryTokenPairResponse
 	)
 
+	sender := sdk.AccAddress(suite.address.Bytes())
+
 	testCases := []struct {
 		name     string
 		malleate func()
@@ -123,7 +127,7 @@ func (suite *KeeperTestSuite) TestTokenPair() {
 			"token pair found",
 			func() {
 				addr := tests.GenerateAddress()
-				pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE)
+				pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
 				suite.app.Erc20Keeper.SetERC20Map(suite.ctx, addr, pair.GetID())
 				suite.app.Erc20Keeper.SetDenomMap(suite.ctx, pair.Denom, pair.GetID())
@@ -139,7 +143,7 @@ func (suite *KeeperTestSuite) TestTokenPair() {
 			"token pair not found - with erc20 existant",
 			func() {
 				addr := tests.GenerateAddress()
-				pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE)
+				pair := types.NewTokenPair(addr, "coin", true, types.OWNER_MODULE, sender.String())
 				suite.app.Erc20Keeper.SetERC20Map(suite.ctx, addr, pair.GetID())
 				suite.app.Erc20Keeper.SetDenomMap(suite.ctx, pair.Denom, pair.GetID())
 

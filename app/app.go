@@ -26,7 +26,6 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/imversed/imversed/x/erc20"
-	erc20client "github.com/imversed/imversed/x/erc20/client"
 	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
 
@@ -161,9 +160,6 @@ var (
 		gov.NewAppModuleBasic(
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
-			// erc20 proposals handlers
-			erc20client.RegisterCoinProposalHandler, erc20client.RegisterERC20ProposalHandler,
-			erc20client.ToggleTokenRelayProposalHandler, erc20client.UpdateTokenPairERC20ProposalHandler,
 			// infr proposals handlers
 			infrclient.ChangeMinGasPricesProposalHandler,
 		),
@@ -453,8 +449,6 @@ func NewImversedApp(
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
-		// er20 router
-		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper)).
 		// infr router
 		AddRoute(infrtypes.RouterKey, infr.NewInfrProposalHandler(&app.InfrKeeper))
 

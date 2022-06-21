@@ -8,12 +8,13 @@ import (
 )
 
 // NewTokenPair returns an instance of TokenPair
-func NewTokenPair(erc20Address common.Address, denom string, enabled bool, contractOwner Owner) TokenPair {
+func NewTokenPair(erc20Address common.Address, denom string, enabled bool, contractOwner Owner, accountOwner string) TokenPair {
 	return TokenPair{
 		Erc20Address:  erc20Address.String(),
 		Denom:         denom,
 		Enabled:       true,
 		ContractOwner: contractOwner,
+		AccountOwner:  accountOwner,
 	}
 }
 

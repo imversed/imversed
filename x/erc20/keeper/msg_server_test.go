@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,166 +11,166 @@ import (
 	"github.com/imversed/imversed/x/erc20/types"
 )
 
-func (suite *KeeperTestSuite) TestConvertCoinNativeCoin() {
-	testCases := []struct {
-		name           string
-		mint           int64
-		burn           int64
-		malleate       func(common.Address)
-		expPass        bool
-		selfdestructed bool
-	}{
-		{"ok - sufficient funds", 100, 10, func(common.Address) {}, true, false},
-		{"ok - equal funds", 10, 10, func(common.Address) {}, true, false},
-		{
-			"ok - suicided contract",
-			10,
-			10,
-			func(erc20 common.Address) {
-				stateDb := suite.StateDB()
-				ok := stateDb.Suicide(erc20)
-				suite.Require().True(ok)
-				suite.Require().NoError(stateDb.Commit())
-			},
-			true,
-			true,
-		},
-		{"fail - insufficient funds", 0, 10, func(common.Address) {}, false, false},
-		{
-			"fail - minting disabled",
-			100,
-			10,
-			func(common.Address) {
-				params := types.DefaultParams()
-				params.EnableErc20 = false
-				suite.app.Erc20Keeper.SetParams(suite.ctx, params)
-			},
-			false,
-			false,
-		},
-	}
-	for _, tc := range testCases {
-		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
-			suite.mintFeeCollector = true
-			suite.SetupTest()
-			metadata, pair := suite.setupRegisterCoin()
-			suite.Require().NotNil(metadata)
-			erc20 := pair.GetERC20Contract()
-			tc.malleate(erc20)
-			suite.Commit()
+//func (suite *KeeperTestSuite) TestConvertCoinNativeCoin() {
+//	testCases := []struct {
+//		name           string
+//		mint           int64
+//		burn           int64
+//		malleate       func(common.Address)
+//		expPass        bool
+//		selfdestructed bool
+//	}{
+//		{"ok - sufficient funds", 100, 10, func(common.Address) {}, true, false},
+//		{"ok - equal funds", 10, 10, func(common.Address) {}, true, false},
+//		{
+//			"ok - suicided contract",
+//			10,
+//			10,
+//			func(erc20 common.Address) {
+//				stateDb := suite.StateDB()
+//				ok := stateDb.Suicide(erc20)
+//				suite.Require().True(ok)
+//				suite.Require().NoError(stateDb.Commit())
+//			},
+//			true,
+//			true,
+//		},
+//		{"fail - insufficient funds", 0, 10, func(common.Address) {}, false, false},
+//		{
+//			"fail - minting disabled",
+//			100,
+//			10,
+//			func(common.Address) {
+//				params := types.DefaultParams()
+//				params.EnableErc20 = false
+//				suite.app.Erc20Keeper.SetParams(suite.ctx, params)
+//			},
+//			false,
+//			false,
+//		},
+//	}
+//	for _, tc := range testCases {
+//		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
+//			suite.mintFeeCollector = true
+//			suite.SetupTest()
+//			metadata, pair := suite.setupRegisterCoin()
+//			suite.Require().NotNil(metadata)
+//			erc20 := pair.GetERC20Contract()
+//			tc.malleate(erc20)
+//			suite.Commit()
+//
+//			ctx := sdk.WrapSDKContext(suite.ctx)
+//			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
+//			sender := sdk.AccAddress(suite.address.Bytes())
+//			msg := types.NewMsgConvertCoin(
+//				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
+//				suite.address,
+//				sender,
+//			)
+//
+//			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
+//			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
+//
+//			res, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
+//			expRes := &types.MsgConvertCoinResponse{}
+//			suite.Commit()
+//			balance := suite.BalanceOf(common.HexToAddress(pair.Erc20Address), suite.address)
+//			cosmosBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender, metadata.Base)
+//
+//			if tc.expPass {
+//				suite.Require().NoError(err, tc.name)
+//
+//				acc := suite.app.EvmKeeper.GetAccountWithoutBalance(suite.ctx, erc20)
+//				if tc.selfdestructed {
+//					suite.Require().Nil(acc, "expected contract to be destroyed")
+//				} else {
+//					suite.Require().NotNil(acc)
+//				}
+//
+//				if tc.selfdestructed || !acc.IsContract() {
+//					id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, erc20.String())
+//					_, found := suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+//					suite.Require().False(found)
+//				} else {
+//					suite.Require().Equal(expRes, res)
+//					suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn).Int64())
+//					suite.Require().Equal(balance.(*big.Int).Int64(), big.NewInt(tc.burn).Int64())
+//				}
+//			} else {
+//				suite.Require().Error(err, tc.name)
+//			}
+//		})
+//	}
+//	suite.mintFeeCollector = false
+//}
 
-			ctx := sdk.WrapSDKContext(suite.ctx)
-			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
-			sender := sdk.AccAddress(suite.address.Bytes())
-			msg := types.NewMsgConvertCoin(
-				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
-				suite.address,
-				sender,
-			)
-
-			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
-			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
-
-			res, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
-			expRes := &types.MsgConvertCoinResponse{}
-			suite.Commit()
-			balance := suite.BalanceOf(common.HexToAddress(pair.Erc20Address), suite.address)
-			cosmosBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender, metadata.Base)
-
-			if tc.expPass {
-				suite.Require().NoError(err, tc.name)
-
-				acc := suite.app.EvmKeeper.GetAccountWithoutBalance(suite.ctx, erc20)
-				if tc.selfdestructed {
-					suite.Require().Nil(acc, "expected contract to be destroyed")
-				} else {
-					suite.Require().NotNil(acc)
-				}
-
-				if tc.selfdestructed || !acc.IsContract() {
-					id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, erc20.String())
-					_, found := suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
-					suite.Require().False(found)
-				} else {
-					suite.Require().Equal(expRes, res)
-					suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn).Int64())
-					suite.Require().Equal(balance.(*big.Int).Int64(), big.NewInt(tc.burn).Int64())
-				}
-			} else {
-				suite.Require().Error(err, tc.name)
-			}
-		})
-	}
-	suite.mintFeeCollector = false
-}
-
-func (suite *KeeperTestSuite) TestConvertERC20NativeCoin() {
-	testCases := []struct {
-		name      string
-		mint      int64
-		burn      int64
-		reconvert int64
-		expPass   bool
-	}{
-		{"ok - sufficient funds", 100, 10, 5, true},
-		{"ok - equal funds", 10, 10, 10, true},
-		{"fail - insufficient funds", 10, 1, 5, false},
-	}
-	for _, tc := range testCases {
-		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
-			suite.mintFeeCollector = true
-			suite.SetupTest()
-			metadata, pair := suite.setupRegisterCoin()
-			suite.Require().NotNil(metadata)
-			suite.Require().NotNil(pair)
-
-			// Precondition: Convert Coin to ERC20
-			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
-			sender := sdk.AccAddress(suite.address.Bytes())
-			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
-			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
-			msg := types.NewMsgConvertCoin(
-				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
-				suite.address,
-				sender,
-			)
-
-			ctx := sdk.WrapSDKContext(suite.ctx)
-			_, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
-			suite.Require().NoError(err, tc.name)
-			suite.Commit()
-			balance := suite.BalanceOf(common.HexToAddress(pair.Erc20Address), suite.address)
-			cosmosBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender, metadata.Base)
-			suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn).Int64())
-			suite.Require().Equal(balance, big.NewInt(tc.burn))
-
-			// Convert ERC20s back to Coins
-			ctx = sdk.WrapSDKContext(suite.ctx)
-			contractAddr := common.HexToAddress(pair.Erc20Address)
-			msgConvertERC20 := types.NewMsgConvertERC20(
-				sdk.NewInt(tc.reconvert),
-				sender,
-				contractAddr,
-				suite.address,
-			)
-
-			res, err := suite.app.Erc20Keeper.ConvertERC20(ctx, msgConvertERC20)
-			expRes := &types.MsgConvertERC20Response{}
-			suite.Commit()
-			balance = suite.BalanceOf(contractAddr, suite.address)
-			cosmosBalance = suite.app.BankKeeper.GetBalance(suite.ctx, sender, pair.Denom)
-			if tc.expPass {
-				suite.Require().NoError(err, tc.name)
-				suite.Require().Equal(expRes, res)
-				suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn+tc.reconvert).Int64())
-				suite.Require().Equal(balance.(*big.Int).Int64(), big.NewInt(tc.burn-tc.reconvert).Int64())
-			} else {
-				suite.Require().Error(err, tc.name)
-			}
-		})
-	}
-	suite.mintFeeCollector = false
-}
+//func (suite *KeeperTestSuite) TestConvertERC20NativeCoin() {
+//	testCases := []struct {
+//		name      string
+//		mint      int64
+//		burn      int64
+//		reconvert int64
+//		expPass   bool
+//	}{
+//		{"ok - sufficient funds", 100, 10, 5, true},
+//		{"ok - equal funds", 10, 10, 10, true},
+//		{"fail - insufficient funds", 10, 1, 5, false},
+//	}
+//	for _, tc := range testCases {
+//		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
+//			suite.mintFeeCollector = true
+//			suite.SetupTest()
+//			metadata, pair := suite.setupRegisterCoin()
+//			suite.Require().NotNil(metadata)
+//			suite.Require().NotNil(pair)
+//
+//			// Precondition: Convert Coin to ERC20
+//			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
+//			sender := sdk.AccAddress(suite.address.Bytes())
+//			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
+//			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
+//			msg := types.NewMsgConvertCoin(
+//				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
+//				suite.address,
+//				sender,
+//			)
+//
+//			ctx := sdk.WrapSDKContext(suite.ctx)
+//			_, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
+//			suite.Require().NoError(err, tc.name)
+//			suite.Commit()
+//			balance := suite.BalanceOf(common.HexToAddress(pair.Erc20Address), suite.address)
+//			cosmosBalance := suite.app.BankKeeper.GetBalance(suite.ctx, sender, metadata.Base)
+//			suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn).Int64())
+//			suite.Require().Equal(balance, big.NewInt(tc.burn))
+//
+//			// Convert ERC20s back to Coins
+//			ctx = sdk.WrapSDKContext(suite.ctx)
+//			contractAddr := common.HexToAddress(pair.Erc20Address)
+//			msgConvertERC20 := types.NewMsgConvertERC20(
+//				sdk.NewInt(tc.reconvert),
+//				sender,
+//				contractAddr,
+//				suite.address,
+//			)
+//
+//			res, err := suite.app.Erc20Keeper.ConvertERC20(ctx, msgConvertERC20)
+//			expRes := &types.MsgConvertERC20Response{}
+//			suite.Commit()
+//			balance = suite.BalanceOf(contractAddr, suite.address)
+//			cosmosBalance = suite.app.BankKeeper.GetBalance(suite.ctx, sender, pair.Denom)
+//			if tc.expPass {
+//				suite.Require().NoError(err, tc.name)
+//				suite.Require().Equal(expRes, res)
+//				suite.Require().Equal(cosmosBalance.Amount.Int64(), sdk.NewInt(tc.mint-tc.burn+tc.reconvert).Int64())
+//				suite.Require().Equal(balance.(*big.Int).Int64(), big.NewInt(tc.burn-tc.reconvert).Int64())
+//			} else {
+//				suite.Require().Error(err, tc.name)
+//			}
+//		})
+//	}
+//	suite.mintFeeCollector = false
+//}
 
 func (suite *KeeperTestSuite) TestConvertERC20NativeERC20() {
 	var contractAddr common.Address
@@ -457,54 +458,246 @@ func (suite *KeeperTestSuite) TestConvertNativeIBC() {
 	suite.Commit()
 }
 */
-func (suite *KeeperTestSuite) TestWrongPairOwnerERC20NativeCoin() {
+//func (suite *KeeperTestSuite) TestWrongPairOwnerERC20NativeCoin() {
+//	testCases := []struct {
+//		name      string
+//		mint      int64
+//		burn      int64
+//		reconvert int64
+//		expPass   bool
+//	}{
+//		{"ok - sufficient funds", 100, 10, 5, true},
+//	}
+//	for _, tc := range testCases {
+//		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
+//			suite.mintFeeCollector = true
+//			suite.SetupTest()
+//			metadata, pair := suite.setupRegisterCoin()
+//			suite.Require().NotNil(metadata)
+//			suite.Require().NotNil(pair)
+//
+//			// Precondition: Convert Coin to ERC20
+//			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
+//			sender := sdk.AccAddress(suite.address.Bytes())
+//			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
+//			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
+//			msg := types.NewMsgConvertCoin(
+//				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
+//				suite.address,
+//				sender,
+//			)
+//
+//			pair.ContractOwner = types.OWNER_UNSPECIFIED
+//			suite.app.Erc20Keeper.SetTokenPair(suite.ctx, *pair)
+//
+//			ctx := sdk.WrapSDKContext(suite.ctx)
+//			_, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
+//			suite.Require().Error(err, tc.name)
+//
+//			// Convert ERC20s back to Coins
+//			ctx = sdk.WrapSDKContext(suite.ctx)
+//			contractAddr := common.HexToAddress(pair.Erc20Address)
+//			msgConvertERC20 := types.NewMsgConvertERC20(
+//				sdk.NewInt(tc.reconvert),
+//				sender,
+//				contractAddr,
+//				suite.address,
+//			)
+//
+//			_, err = suite.app.Erc20Keeper.ConvertERC20(ctx, msgConvertERC20)
+//			suite.Require().Error(err, tc.name)
+//		})
+//	}
+//}
+
+func (suite KeeperTestSuite) TestUpdateTokenPairERC20() {
+	var (
+		contractAddr    common.Address
+		pair            types.TokenPair
+		metadata        banktypes.Metadata
+		newContractAddr common.Address
+	)
+
+	sender := sdk.AccAddress(suite.address.Bytes())
+
 	testCases := []struct {
-		name      string
-		mint      int64
-		burn      int64
-		reconvert int64
-		expPass   bool
+		name     string
+		malleate func()
+		expPass  bool
+		sender   sdk.AccAddress
 	}{
-		{"ok - sufficient funds", 100, 10, 5, true},
+		{
+			"token not registered",
+			func() {
+				contractAddr, err := suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+				suite.Commit()
+				pair = types.NewTokenPair(contractAddr, cosmosTokenBase, true, types.OWNER_MODULE, sender.String())
+			},
+			false,
+			sender,
+		},
+		{
+			"token not registered - pair not found",
+			func() {
+				contractAddr, err := suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+				suite.Commit()
+				pair = types.NewTokenPair(contractAddr, cosmosTokenBase, true, types.OWNER_MODULE, sender.String())
+
+				suite.app.Erc20Keeper.SetERC20Map(suite.ctx, common.HexToAddress(pair.Erc20Address), pair.GetID())
+			},
+			false,
+			sender,
+		},
+		{
+			"token not registered - Metadata not found",
+			func() {
+				contractAddr, err := suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+				suite.Commit()
+				pair = types.NewTokenPair(contractAddr, cosmosTokenBase, true, types.OWNER_MODULE, sender.String())
+
+				suite.app.Erc20Keeper.SetTokenPair(suite.ctx, pair)
+				suite.app.Erc20Keeper.SetDenomMap(suite.ctx, pair.Denom, pair.GetID())
+				suite.app.Erc20Keeper.SetERC20Map(suite.ctx, common.HexToAddress(pair.Erc20Address), pair.GetID())
+			},
+			false,
+			sender,
+		},
+		{
+			"newErc20 not found",
+			func() {
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				newContractAddr = common.Address{}
+			},
+			false,
+			sender,
+		},
+		{
+			"empty denom units",
+			func() {
+				var found bool
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, contractAddr.String())
+				pair, found = suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+				suite.Require().True(found)
+				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, banktypes.Metadata{Base: pair.Denom})
+				suite.Commit()
+
+				// Deploy a new contract with the same values
+				var err error
+				newContractAddr, err = suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+			},
+			false,
+			sender,
+		},
+		{
+			"metadata ERC20 details mismatch",
+			func() {
+				var found bool
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, contractAddr.String())
+				pair, found = suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+				suite.Require().True(found)
+				metadata := banktypes.Metadata{Base: pair.Denom, DenomUnits: []*banktypes.DenomUnit{{}}}
+				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, metadata)
+				suite.Commit()
+
+				// Deploy a new contract with the same values
+				var err error
+				newContractAddr, err = suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+			},
+			false,
+			sender,
+		},
+		{
+			"no denom unit with ERC20 name",
+			func() {
+				var found bool
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, contractAddr.String())
+				pair, found = suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+				suite.Require().True(found)
+				metadata := banktypes.Metadata{Base: pair.Denom, Display: erc20Name, Description: types.CreateDenomDescription(contractAddr.String()), Symbol: erc20Symbol, DenomUnits: []*banktypes.DenomUnit{{}}}
+				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, metadata)
+				suite.Commit()
+
+				// Deploy a new contract with the same values
+				var err error
+				newContractAddr, err = suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+			},
+			false,
+			sender,
+		},
+		{
+			"denom unit and ERC20 decimals mismatch",
+			func() {
+				var found bool
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, contractAddr.String())
+				pair, found = suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+				suite.Require().True(found)
+				metadata := banktypes.Metadata{Base: pair.Denom, Display: erc20Name, Description: types.CreateDenomDescription(contractAddr.String()), Symbol: erc20Symbol, DenomUnits: []*banktypes.DenomUnit{{Denom: erc20Name}}}
+				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, metadata)
+				suite.Commit()
+
+				// Deploy a new contract with the same values
+				var err error
+				newContractAddr, err = suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+			},
+			false,
+			sender,
+		},
+		{
+			"sender is not token pair account owner",
+			func() {
+				var found bool
+				contractAddr = suite.setupRegisterERC20Pair(contractMinterBurner)
+				id := suite.app.Erc20Keeper.GetTokenPairID(suite.ctx, contractAddr.String())
+				pair, found = suite.app.Erc20Keeper.GetTokenPair(suite.ctx, id)
+				suite.Require().True(found)
+				metadata := banktypes.Metadata{Base: pair.Denom, Display: erc20Name, Description: types.CreateDenomDescription(contractAddr.String()), Symbol: erc20Symbol, DenomUnits: []*banktypes.DenomUnit{{Denom: erc20Name, Exponent: 18}}}
+				suite.app.BankKeeper.SetDenomMetaData(suite.ctx, metadata)
+				suite.Commit()
+
+				// Deploy a new contract with the same values
+				var err error
+				newContractAddr, err = suite.DeployContract(erc20Name, erc20Symbol, erc20Decimals)
+				suite.Require().NoError(err)
+			},
+			false,
+			sender,
+		},
+		//	 TODO happy case test
 	}
 	for _, tc := range testCases {
 		suite.Run(fmt.Sprintf("Case %s", tc.name), func() {
-			suite.mintFeeCollector = true
-			suite.SetupTest()
-			metadata, pair := suite.setupRegisterCoin()
-			suite.Require().NotNil(metadata)
-			suite.Require().NotNil(pair)
+			suite.SetupTest() // reset
 
-			// Precondition: Convert Coin to ERC20
-			coins := sdk.NewCoins(sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.mint)))
-			sender := sdk.AccAddress(suite.address.Bytes())
-			suite.app.BankKeeper.MintCoins(suite.ctx, types.ModuleName, coins)
-			suite.app.BankKeeper.SendCoinsFromModuleToAccount(suite.ctx, types.ModuleName, sender, coins)
-			msg := types.NewMsgConvertCoin(
-				sdk.NewCoin(cosmosTokenBase, sdk.NewInt(tc.burn)),
-				suite.address,
-				sender,
-			)
-
-			pair.ContractOwner = types.OWNER_UNSPECIFIED
-			suite.app.Erc20Keeper.SetTokenPair(suite.ctx, *pair)
-
-			ctx := sdk.WrapSDKContext(suite.ctx)
-			_, err := suite.app.Erc20Keeper.ConvertCoin(ctx, msg)
-			suite.Require().Error(err, tc.name)
-
-			// Convert ERC20s back to Coins
-			ctx = sdk.WrapSDKContext(suite.ctx)
-			contractAddr := common.HexToAddress(pair.Erc20Address)
-			msgConvertERC20 := types.NewMsgConvertERC20(
-				sdk.NewInt(tc.reconvert),
-				sender,
+			tc.malleate()
+			msg := types.NewMsgUpdateTokenPairERC20(
 				contractAddr,
-				suite.address,
+				newContractAddr,
+				tc.sender,
 			)
+			ctx := sdk.WrapSDKContext(suite.ctx)
 
-			_, err = suite.app.Erc20Keeper.ConvertERC20(ctx, msgConvertERC20)
-			suite.Require().Error(err, tc.name)
+			_, err := suite.app.Erc20Keeper.UpdateTokenPairERC20(ctx, msg)
+
+			metadata, _ = suite.app.BankKeeper.GetDenomMetaData(suite.ctx, types.CreateDenom(contractAddr.String()))
+
+			if tc.expPass {
+				suite.Require().NoError(err, tc.name)
+				suite.Require().Equal(types.CreateDenomDescription(newContractAddr.String()), metadata.Description)
+			} else {
+				suite.Require().Error(err, tc.name)
+
+			}
 		})
 	}
 }

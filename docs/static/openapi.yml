@@ -17448,7 +17448,13 @@ paths:
                          - OWNER_UNSPECIFIED: OWNER_UNSPECIFIED defines an invalid/undefined owner.
                          - OWNER_MODULE: OWNER_MODULE erc20 is owned by the erc20 module account.
                          - OWNER_EXTERNAL: EXTERNAL erc20 is owned by an external account.
-                  description: "TokenPair defines an instance that records pairing consisting of a Cosmos\r\nnative Coin and an ERC20 token address."
+                    accountOwner:
+                      type: string
+                  description: >-
+                    TokenPair defines an instance that records pairing
+                    consisting of a Cosmos
+
+                    native Coin and an ERC20 token address.
               pagination:
                 description: pagination defines the pagination in the response.
                 type: object
@@ -17583,7 +17589,13 @@ paths:
                        - OWNER_UNSPECIFIED: OWNER_UNSPECIFIED defines an invalid/undefined owner.
                        - OWNER_MODULE: OWNER_MODULE erc20 is owned by the erc20 module account.
                        - OWNER_EXTERNAL: EXTERNAL erc20 is owned by an external account.
-                description: "TokenPair defines an instance that records pairing consisting of a Cosmos\r\nnative Coin and an ERC20 token address."
+                  accountOwner:
+                    type: string
+                description: >-
+                  TokenPair defines an instance that records pairing consisting
+                  of a Cosmos
+
+                  native Coin and an ERC20 token address.
             description: "QueryTokenPairResponse is the response type for the Query/TokenPair RPC\r\nmethod."
         default:
           description: An unexpected error response.
@@ -17613,7 +17625,9 @@ paths:
         - Query
   /imversed/erc20/v1/tx/convert_coin:
     get:
-      summary: "ConvertCoin mints a ERC20 representation of the SDK Coin denom that is\r\nregistered on the token mapping."
+      summary: |-
+        ConvertCoin mints a ERC20 representation of the SDK Coin denom that is
+        registered on the token mapping.
       operationId: ImversedErc20V1ConvertCoin
       responses:
         '200':
@@ -17662,7 +17676,11 @@ paths:
         - Msg
   /imversed/erc20/v1/tx/convert_erc20:
     get:
-      summary: "ConvertERC20 mints a Cosmos coin representation of the ERC20 token contract\r\nthat is registered on the token mapping."
+      summary: >-
+        ConvertERC20 mints a Cosmos coin representation of the ERC20 token
+        contract
+
+        that is registered on the token mapping.
       operationId: ImversedErc20V1ConvertERC20
       responses:
         '200':
@@ -17706,6 +17724,206 @@ paths:
           type: string
         - name: sender
           description: sender hex address from the owner of the given ERC20 tokens
+          in: query
+          required: false
+          type: string
+      tags:
+        - Msg
+  /imversed/erc20/v1/tx/register_coin:
+    get:
+      operationId: ImversedErc20V1RegisterCoin
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: metadata.description
+          in: query
+          required: false
+          type: string
+        - name: metadata.base
+          description: >-
+            base represents the base denom (should be the DenomUnit with
+            exponent = 0).
+          in: query
+          required: false
+          type: string
+        - name: metadata.display
+          description: |-
+            display indicates the suggested denom that should be
+            displayed in clients.
+          in: query
+          required: false
+          type: string
+        - name: metadata.name
+          description: |-
+            name defines the name of the token (eg: Cosmos Atom)
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: string
+        - name: metadata.symbol
+          description: >-
+            symbol is the token symbol usually shown on exchanges (eg: ATOM).
+            This can
+
+            be the same as the display.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: string
+        - name: sender
+          in: query
+          required: false
+          type: string
+      tags:
+        - Msg
+  /imversed/erc20/v1/tx/register_erc20:
+    get:
+      summary: Register ERC20
+      operationId: ImversedErc20V1RegisterERC20
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: erc20address
+          in: query
+          required: false
+          type: string
+        - name: sender
+          in: query
+          required: false
+          type: string
+      tags:
+        - Msg
+  /imversed/erc20/v1/tx/toggle_token_relay:
+    get:
+      summary: Toggle the internal relaying of a token pair
+      operationId: ImversedErc20V1ToggleTokenRelay
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            title: MsgToggleTokenRelayResponse returns no fields
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: token
+          description: >-
+            token identifier can be either the hex contract address of the ERC20
+            or the
+
+            Cosmos base denomination
+          in: query
+          required: false
+          type: string
+        - name: sender
+          description: cosmos bech32 address from the owner of the given ERC20 tokens
+          in: query
+          required: false
+          type: string
+      tags:
+        - Msg
+  /imversed/erc20/v1/tx/update_token_pair_erc20:
+    get:
+      summary: Update token pair ERC@)
+      operationId: ImversedErc20V1UpdateTokenPairERC20
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            title: MsgUpdateTokenPairERC20Response returns no fields
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: erc20Address
+          description: contract address of ERC20 token
+          in: query
+          required: false
+          type: string
+        - name: newErc20Address
+          description: new address of ERC20 token contract
+          in: query
+          required: false
+          type: string
+        - name: sender
+          description: cosmos bech32 address from the owner of the given ERC20 tokens
           in: query
           required: false
           type: string
@@ -29213,6 +29431,16 @@ definitions:
   imversed.erc20.v1.MsgConvertERC20Response:
     type: object
     title: MsgConvertERC20Response returns no fields
+  imversed.erc20.v1.MsgRegisterCoinResponse:
+    type: object
+  imversed.erc20.v1.MsgRegisterERC20Response:
+    type: object
+  imversed.erc20.v1.MsgToggleTokenRelayResponse:
+    type: object
+    title: MsgToggleTokenRelayResponse returns no fields
+  imversed.erc20.v1.MsgUpdateTokenPairERC20Response:
+    type: object
+    title: MsgUpdateTokenPairERC20Response returns no fields
   imversed.erc20.v1.Owner:
     type: string
     enum:
@@ -29285,7 +29513,13 @@ definitions:
                - OWNER_UNSPECIFIED: OWNER_UNSPECIFIED defines an invalid/undefined owner.
                - OWNER_MODULE: OWNER_MODULE erc20 is owned by the erc20 module account.
                - OWNER_EXTERNAL: EXTERNAL erc20 is owned by an external account.
-        description: "TokenPair defines an instance that records pairing consisting of a Cosmos\r\nnative Coin and an ERC20 token address."
+          accountOwner:
+            type: string
+        description: >-
+          TokenPair defines an instance that records pairing consisting of a
+          Cosmos
+
+          native Coin and an ERC20 token address.
     description: "QueryTokenPairResponse is the response type for the Query/TokenPair RPC\r\nmethod."
   imversed.erc20.v1.QueryTokenPairsResponse:
     type: object
@@ -29320,7 +29554,13 @@ definitions:
                  - OWNER_UNSPECIFIED: OWNER_UNSPECIFIED defines an invalid/undefined owner.
                  - OWNER_MODULE: OWNER_MODULE erc20 is owned by the erc20 module account.
                  - OWNER_EXTERNAL: EXTERNAL erc20 is owned by an external account.
-          description: "TokenPair defines an instance that records pairing consisting of a Cosmos\r\nnative Coin and an ERC20 token address."
+            accountOwner:
+              type: string
+          description: >-
+            TokenPair defines an instance that records pairing consisting of a
+            Cosmos
+
+            native Coin and an ERC20 token address.
       pagination:
         description: pagination defines the pagination in the response.
         type: object
@@ -29368,7 +29608,11 @@ definitions:
            - OWNER_UNSPECIFIED: OWNER_UNSPECIFIED defines an invalid/undefined owner.
            - OWNER_MODULE: OWNER_MODULE erc20 is owned by the erc20 module account.
            - OWNER_EXTERNAL: EXTERNAL erc20 is owned by an external account.
-    description: "TokenPair defines an instance that records pairing consisting of a Cosmos\r\nnative Coin and an ERC20 token address."
+      accountOwner:
+        type: string
+    description: |-
+      TokenPair defines an instance that records pairing consisting of a Cosmos
+      native Coin and an ERC20 token address.
   imversed.pools.v1beta1.MsgCreatePoolResponse:
     type: object
   imversed.pools.v1beta1.MsgExitPoolResponse:
