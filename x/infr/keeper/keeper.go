@@ -14,6 +14,9 @@ type Keeper struct {
 	storeKey   sdk.StoreKey
 	cdc        codec.BinaryCodec
 	paramstore paramtypes.Subspace
+
+	accountKeeper types.AccountKeeper
+	evmKeeper     types.EVMKeeper
 }
 
 // NewKeeper creates new instances of the erc20 Keeper
@@ -21,6 +24,8 @@ func NewKeeper(
 	storeKey sdk.StoreKey,
 	cdc codec.BinaryCodec,
 	ps paramtypes.Subspace,
+	ak types.AccountKeeper,
+	ek types.EVMKeeper,
 ) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -31,6 +36,9 @@ func NewKeeper(
 		storeKey:   storeKey,
 		cdc:        cdc,
 		paramstore: ps,
+
+		accountKeeper: ak,
+		evmKeeper:     ek,
 	}
 }
 
