@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/imversed/imversed/contracts"
 	"github.com/imversed/imversed/x/erc20/types"
+	erc20types "github.com/imversed/imversed/x/erc20/types"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 	"math/big"
 )
@@ -44,7 +45,7 @@ func (h Hooks) PostTxProcessing(
 	nonce, err := h.k.accountKeeper.GetSequence(ctx, msg.From().Bytes())
 
 	if err != nil {
-		return err
+		return nil
 	}
 
 	contractAddr := crypto.CreateAddress(caller.Address(), nonce-1)
@@ -52,170 +53,75 @@ func (h Hooks) PostTxProcessing(
 	account := common.BytesToAddress(msg.From().Bytes())
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "name")
-
 	if err != nil {
-		return err
+		return nil
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "symbol")
-
 	if err != nil {
-		return err
+		return nil
 	}
-	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "decimals")
 
+	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "decimals")
 	if err != nil {
-		return err
+		return nil
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "totalSupply")
-
 	if err != nil {
-		return err
+		return nil
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "balanceOf", account)
-
 	if err != nil {
-		return err
+		return nil
 	}
+
 	am := big.NewInt(1)
 	res, err = h.k.CallEVM(ctx, erc20, account, contractAddr, false, "transfer", account, am)
-
 	if err != nil {
 		return nil
 	}
 
 	event, err := erc20.EventByID(common.HexToHash(res.Logs[0].Topics[0]))
-	_ = event
+	if err != nil {
+		return nil
+	}
+	if event.RawName != "Transfer" {
+		return nil
+	}
 
 	am2 := big.NewInt(2)
 	res, err = h.k.CallEVM(ctx, erc20, account, contractAddr, true, "approve", account, am2)
-
 	if err != nil {
-		return err
+		return nil
 	}
 
 	event, err = erc20.EventByID(common.HexToHash(res.Logs[0].Topics[0]))
-	_ = event
+	if event.RawName != "Approval" {
+		return nil
+	}
 
 	res, err = h.k.CallEVM(ctx, erc20, account, contractAddr, false, "allowance", account, account)
-
 	if err != nil {
-		return err
+		return nil
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, account, contractAddr, false, "transferFrom", account, account, am)
-
 	if err != nil {
-		return err
+		return nil
 	}
 
-	_ = res
-	/*
-		for i, log := range receipt.Logs {
-			if len(log.Topics) < 3 {
-				continue
-			}
+	event, err = erc20.EventByID(common.HexToHash(res.Logs[0].Topics[0]))
+	if err != nil {
+		return nil
+	}
+	if event.RawName != "Transfer" {
+		return nil
+	}
 
-			eventID := log.Topics[0] // event ID
+	cosmosAddress := h.k.accountKeeper.GetAccount(gctx, msg.From().Bytes()).GetAddress()
+	_, err = h.k.erc20Keeper.RegisterERC20(sdk.WrapSDKContext(gctx), erc20types.NewMsgRegisterERC20(contractAddr.String(), cosmosAddress.String()))
 
-			event, err := erc20.EventByID(eventID)
-			if err != nil {
-				// invalid event for ERC20
-				continue
-			}
-
-			if event.Name != types.ERC20EventTransfer {
-				h.k.Logger(ctx).Info("emitted event", "name", event.Name, "signature", event.Sig)
-				continue
-			}
-
-			transferEvent, err := erc20.Unpack(event.Name, log.Data)
-			if err != nil {
-				h.k.Logger(ctx).Error("failed to unpack transfer event", "error", err.Error())
-				continue
-			}
-
-			if len(transferEvent) == 0 {
-				continue
-			}
-
-			tokens, ok := transferEvent[0].(*big.Int)
-			// safety check and ignore if amount not positive
-			if !ok || tokens == nil || tokens.Sign() != 1 {
-				continue
-			}
-
-			// check that the contract is a registered token pair
-			contractAddr := log.Address
-
-			id := h.k.GetERC20Map(ctx, contractAddr)
-
-			if len(id) == 0 {
-				// no token is registered for the caller contract
-				continue
-			}
-
-			pair, found := h.k.GetTokenPair(ctx, id)
-			if !found {
-				continue
-			}
-
-			// check that conversion for the pair is enabled
-			if !pair.Enabled {
-				// continue to allow transfers for the ERC20 in case the token pair is disabled
-				h.k.Logger(ctx).Debug(
-					"ERC20 token -> Cosmos coin conversion is disabled for pair",
-					"coin", pair.Denom, "contract", pair.Erc20Address,
-				)
-				continue
-			}
-
-			// ignore as the burning always transfers to the zero address
-			to := common.BytesToAddress(log.Topics[2].Bytes())
-			if !bytes.Equal(to.Bytes(), types.ModuleAddress.Bytes()) {
-				continue
-			}
-
-			// check that the event is Burn from the ERC20Burnable interface
-			// NOTE: assume that if they are burning the token that has been registered as a pair, they want to mint a Cosmos coin
-
-			// create the corresponding sdk.Coin that is paired with ERC20
-			coins := sdk.Coins{{Denom: pair.Denom, Amount: sdk.NewIntFromBigInt(tokens)}}
-
-			// Mint the coin only if ERC20 is external
-			switch pair.ContractOwner {
-			case types.OWNER_MODULE:
-				_, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, true, "burn", tokens)
-			case types.OWNER_EXTERNAL:
-				err = h.k.bankKeeper.MintCoins(ctx, types.ModuleName, coins)
-			default:
-				err = types.ErrUndefinedOwner
-			}
-
-			if err != nil {
-				h.k.Logger(ctx).Debug(
-					"failed to process EVM hook for ER20 -> coin conversion",
-					"coin", pair.Denom, "contract", pair.Erc20Address, "error", err.Error(),
-				)
-				continue
-			}
-
-			// Only need last 20 bytes from log.topics
-			from := common.BytesToAddress(log.Topics[1].Bytes())
-			recipient := sdk.AccAddress(from.Bytes())
-
-			// transfer the tokens from ModuleAccount to sender address
-			if err := h.k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, recipient, coins); err != nil {
-				h.k.Logger(ctx).Debug(
-					"failed to process EVM hook for ER20 -> coin conversion",
-					"tx-hash", receipt.TxHash.Hex(), "log-idx", i,
-					"coin", pair.Denom, "contract", pair.Erc20Address, "error", err.Error(),
-				)
-				continue
-			}
-		}
-	*/
 	return nil
 }

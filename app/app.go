@@ -408,7 +408,7 @@ func NewImversedApp(
 
 	app.InfrKeeper = infrkeeper.NewKeeper(
 		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
-		app.AccountKeeper, app.EvmKeeper,
+		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper,
 	)
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(

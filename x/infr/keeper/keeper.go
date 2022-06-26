@@ -17,6 +17,7 @@ type Keeper struct {
 
 	accountKeeper types.AccountKeeper
 	evmKeeper     types.EVMKeeper
+	erc20Keeper   types.Erc20Keeper
 }
 
 // NewKeeper creates new instances of the erc20 Keeper
@@ -26,6 +27,7 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	ak types.AccountKeeper,
 	ek types.EVMKeeper,
+	er types.Erc20Keeper,
 ) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -39,6 +41,7 @@ func NewKeeper(
 
 		accountKeeper: ak,
 		evmKeeper:     ek,
+		erc20Keeper:   er,
 	}
 }
 
