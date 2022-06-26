@@ -214,12 +214,12 @@ func (msg MsgUpdateTokenPairERC20) GetSigners() []sdk.AccAddress {
 
 // TODO: reimplement in tests needs
 // NewMsgRegisterERC20 creates a new instance of MsgRegisterERC20
-func NewMsgRegisterERC20() *MsgRegisterERC20 { // nolint: interfacer
+func NewMsgRegisterERC20(address string, sender string) *MsgRegisterERC20 { // nolint: interfacer
 
-	//return &MsgRegisterCoin{
-	//	Metadata:
-	//}
-	return nil
+	return &MsgRegisterERC20{
+		Erc20Address: address,
+		Sender:       sender,
+	}
 }
 
 // Route should return the name of the module
