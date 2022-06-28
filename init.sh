@@ -38,6 +38,7 @@ yes "$MNEMONIC" | ~/go/bin/imversed keys add $KEY --keyring-backend $KEYRING --a
 ~/go/bin/imversed init $MONIKER --chain-id $CHAINID
 
 # Change parameter token denominations to aimv
+cat $HOME/.imversed/config/genesis.json | jq '.app_state["bank"]["denom_metadata"] += [{"name":"Imversed Token","symbol":"IMV","base":"aimv","display":"imv","description":"The native staking token of the Imversed.","denom_units":[{"denom":"aimv","exponent":0,"aliases":["attoimversed"]},{"denom":"imv","exponent":18,"aliases":["imversed"]}]}]' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
 cat $HOME/.imversed/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
 cat $HOME/.imversed/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
 cat $HOME/.imversed/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="aimv"' > $HOME/.imversed/config/tmp_genesis.json && mv $HOME/.imversed/config/tmp_genesis.json $HOME/.imversed/config/genesis.json
