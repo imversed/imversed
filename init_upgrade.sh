@@ -100,11 +100,11 @@ cp ~/go/bin/imversed $DAEMON_HOME/cosmovisor/genesis/bin &&
 
 starport c build --release &&
 tar -zxvf release/imversed_darwin_amd64.tar.gz  &&
-mv imversedd imversed &&
+#mv imversedd imversed &&
 
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.1/bin &&
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.2/bin &&
 # copy binary with upgrade
 
-cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.1/bin &&
+cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.2/bin &&
 
 ~/go/bin/cosmovisor start

@@ -1,0 +1,118 @@
+syntax = "proto3";
+package imversed.erc20.v1;
+
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/bank/v1beta1/bank.proto";
+
+option go_package = "github.com/imversed/imversed/x/erc20/types";
+
+// Msg defines the erc20 Msg service.
+service Msg {
+  // ConvertCoin mints a ERC20 representation of the SDK Coin denom that is
+  // registered on the token mapping.
+  rpc ConvertCoin(MsgConvertCoin) returns (MsgConvertCoinResponse) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/convert_coin";
+  };
+  // ConvertERC20 mints a Cosmos coin representation of the ERC20 token contract
+  // that is registered on the token mapping.
+  rpc ConvertERC20(MsgConvertERC20) returns (MsgConvertERC20Response) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/convert_erc20";
+  };
+
+  rpc RegisterCoin(MsgRegisterCoin) returns (MsgRegisterCoinResponse) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/register_coin";
+  }
+
+  // Register ERC20
+  rpc RegisterERC20(MsgRegisterERC20) returns (MsgRegisterERC20Response) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/register_erc20";
+  }
+
+  // Update token pair ERC@)
+  rpc UpdateTokenPairERC20(MsgUpdateTokenPairERC20) returns (MsgUpdateTokenPairERC20Response) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/update_token_pair_erc20";
+  };
+
+  // Toggle the internal relaying of a token pair
+  rpc ToggleTokenRelay(MsgToggleTokenRelay) returns (MsgToggleTokenRelayResponse) {
+    option (google.api.http).get = "/imversed/erc20/v1/tx/toggle_token_relay";
+  };
+}
+
+// MsgConvertCoin defines a Msg to convert a Cosmos Coin to a ERC20 token
+message MsgConvertCoin {
+  // Cosmos coin which denomination is registered on erc20 bridge.
+  // The coin amount defines the total ERC20 tokens to convert.
+  cosmos.base.v1beta1.Coin coin = 1 [ (gogoproto.nullable) = false ];
+  // recipient hex address to receive ERC20 token
+  string receiver = 2;
+  // cosmos bech32 address from the owner of the given ERC20 tokens
+  string sender = 3;
+}
+
+// MsgConvertCoinResponse returns no fields
+message MsgConvertCoinResponse {}
+
+// MsgConvertERC20 defines a Msg to convert an ERC20 token to a Cosmos SDK coin.
+message MsgConvertERC20 {
+  // ERC20 token contract address registered on erc20 bridge
+  string contract_address = 1;
+  // amount of ERC20 tokens to mint
+  string amount = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+  // bech32 address to receive SDK coins.
+  string receiver = 3;
+  // sender hex address from the owner of the given ERC20 tokens
+  string sender = 4;
+}
+
+// MsgConvertERC20Response returns no fields
+message MsgConvertERC20Response {}
+
+message MsgRegisterCoin {
+  // token pair of Cosmos native denom and ERC20 token address
+  cosmos.bank.v1beta1.Metadata metadata = 1 [ (gogoproto.nullable) = false ];
+
+  string sender = 2;
+}
+
+message MsgRegisterCoinResponse {}
+
+// Register Erc20
+message MsgRegisterERC20 {
+  string erc20address = 3;
+
+  string sender = 2;
+}
+
+message MsgRegisterERC20Response {}
+
+// MsgUpdateTokenPairERC20Response updates ERC20 contract address.
+message MsgUpdateTokenPairERC20 {
+  // contract address of ERC20 token
+  string erc20_address = 1;
+  // new address of ERC20 token contract
+  string new_erc20_address = 2;
+  // cosmos bech32 address from the owner of the given ERC20 tokens
+  string sender = 3;
+}
+
+// MsgUpdateTokenPairERC20Response returns no fields
+message MsgUpdateTokenPairERC20Response {}
+
+
+// MsgToggleTokenRelay toggles the internal relaying of a token pair
+message MsgToggleTokenRelay {
+  // token identifier can be either the hex contract address of the ERC20 or the
+  // Cosmos base denomination
+  string token = 1;
+  // cosmos bech32 address from the owner of the given ERC20 tokens
+  string sender = 2;
+}
+
+// MsgToggleTokenRelayResponse returns no fields
+message MsgToggleTokenRelayResponse {}

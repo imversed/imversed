@@ -24,7 +24,7 @@ rm -rf ~/go/bin/imversed
 #ignite chain build
 starport c build
 
-mv ~/go/bin/imversedd ~/go/bin/imversed
+#mv ~/go/bin/imversedd ~/go/bin/imversed
 
 #make install
 

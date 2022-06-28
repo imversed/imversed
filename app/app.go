@@ -7,11 +7,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
+
 	"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
-	nftkeeper "github.com/imversed/imversed/x/nft/keeper"
-	nfttypes "github.com/imversed/imversed/x/nft/types"
 	poolsmodule "github.com/imversed/imversed/x/pools"
 	poolsmodulekeeper "github.com/imversed/imversed/x/pools/keeper"
 	poolsmoduletypes "github.com/imversed/imversed/x/pools/types"
@@ -27,9 +27,13 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/imversed/imversed/x/erc20"
-	erc20client "github.com/imversed/imversed/x/erc20/client"
 	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
+
+	"github.com/imversed/imversed/x/infr"
+	infrclient "github.com/imversed/imversed/x/infr/client"
+	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
+	infrtypes "github.com/imversed/imversed/x/infr/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -126,7 +130,6 @@ import (
 	_ "github.com/ethereum/go-ethereum/eth/tracers/native"
 
 	currencymodule "github.com/imversed/imversed/x/currency"
-	"github.com/imversed/imversed/x/nft"
 
 	gravity "github.com/peggyjv/gravity-bridge/module/v2/x/gravity"
 	gravityclient "github.com/peggyjv/gravity-bridge/module/v2/x/gravity/client"
@@ -163,9 +166,8 @@ var (
 		gov.NewAppModuleBasic(
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
-			// erc20 proposals handlers
-			erc20client.RegisterCoinProposalHandler, erc20client.RegisterERC20ProposalHandler,
-			erc20client.ToggleTokenRelayProposalHandler, erc20client.UpdateTokenPairERC20ProposalHandler,
+			// infr proposals handlers
+			infrclient.ChangeMinGasPricesProposalHandler,
 			// gravity proposal handlers
 			gravityclient.ProposalHandler,
 		),
@@ -185,9 +187,9 @@ var (
 		// Evmos modules
 		erc20.AppModuleBasic{},
 		// custom modules
-		nft.AppModuleBasic{},
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
+		infr.AppModuleBasic{},
 		gravity.AppModuleBasic{},
 	)
 
@@ -268,9 +270,9 @@ type ImversedApp struct {
 	FeeMarketKeeper feemarketkeeper.Keeper
 
 	// Custom keepers
-	NFTKeeper      nftkeeper.Keeper
 	CurrencyKeeper currencymodulekeeper.Keeper
 	PoolsKeeper    poolsmodulekeeper.Keeper
+	InfrKeeper     infrkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -309,8 +311,10 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.1")
+	bApp.SetVersion("v3.4")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
+
+	minGasPriceHelper.SetBaseApp(bApp)
 
 	keys := sdk.NewKVStoreKeys(
 		// SDK keys
@@ -326,9 +330,9 @@ func NewImversedApp(
 		// erc20 keys
 		erc20types.StoreKey,
 		// custom modules keys
-		nfttypes.StoreKey,
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
+		infrtypes.StoreKey,
 		gravitytypes.StoreKey,
 	)
 
@@ -421,6 +425,10 @@ func NewImversedApp(
 		),
 	)
 
+	app.InfrKeeper = infrkeeper.NewKeeper(
+		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
+	)
+
 	// Create custom keepers
 	app.CurrencyKeeper = *currencymodulekeeper.NewKeeper(
 		appCodec,
@@ -441,8 +449,6 @@ func NewImversedApp(
 		app.DistrKeeper,
 	)
 	app.PoolsKeeper = *poolsKeeper.SetHooks(poolsmoduletypes.NewMultiPoolsHooks())
-
-	app.NFTKeeper = nftkeeper.NewKeeper(appCodec, keys[nfttypes.StoreKey])
 
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
@@ -470,8 +476,8 @@ func NewImversedApp(
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
 		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
-		// er20 router
-		AddRoute(erc20types.RouterKey, erc20.NewErc20ProposalHandler(&app.Erc20Keeper)).
+		// infr router
+		AddRoute(infrtypes.RouterKey, infr.NewInfrProposalHandler(&app.InfrKeeper)).
 		// gravity router
 		AddRoute(gravitytypes.RouterKey, gravity.NewCommunityPoolEthereumSpendProposalHandler(app.GravityKeeper))
 
@@ -546,9 +552,9 @@ func NewImversedApp(
 		// erc20 app modules
 		erc20.NewAppModule(app.Erc20Keeper, app.AccountKeeper),
 		// Custom modules
-		nft.NewAppModule(appCodec, app.NFTKeeper),
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
+		infr.NewAppModule(appCodec, app.InfrKeeper),
 		gravity.NewAppModule(app.GravityKeeper, app.BankKeeper),
 	)
 
@@ -572,7 +578,6 @@ func NewImversedApp(
 		// no-op modules
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		authtypes.ModuleName,
 		banktypes.ModuleName,
@@ -585,6 +590,7 @@ func NewImversedApp(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		infrtypes.ModuleName,
 		// gravity
 		gravitytypes.ModuleName,
 	)
@@ -617,7 +623,7 @@ func NewImversedApp(
 		vestingtypes.ModuleName,
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
+		infrtypes.ModuleName,
 		// gravity
 		gravitytypes.ModuleName,
 	)
@@ -640,7 +646,6 @@ func NewImversedApp(
 		ibchost.ModuleName,
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
-		nfttypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
@@ -656,6 +661,8 @@ func NewImversedApp(
 		erc20types.ModuleName,
 		// gravity
 		gravitytypes.ModuleName,
+
+		infrtypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -716,7 +723,6 @@ func NewImversedApp(
 		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 		SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		MaxTxGasWanted:  maxGasWanted,
-		NFTKeeper:       app.NFTKeeper,
 	}
 
 	if err := options.Validate(); err != nil {
@@ -933,9 +939,9 @@ func initParamsKeeper(
 	// erc20 subspaces
 	paramsKeeper.Subspace(erc20types.ModuleName)
 	// custom subspaces
-	paramsKeeper.Subspace(nfttypes.ModuleName)
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
+	paramsKeeper.Subspace(infrtypes.ModuleName)
 	// gravity
 	paramsKeeper.Subspace(gravitytypes.ModuleName)
 	return paramsKeeper
