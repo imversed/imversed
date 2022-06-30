@@ -2,10 +2,11 @@ package main
 
 import (
 	"errors"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -99,9 +100,9 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		ethermintclient.ValidateChainID(
 			genutilcli.InitCmd(app.ModuleBasics, app.DefaultNodeHome),
 		),
-		CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
+		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
 		genutilcli.MigrateGenesisCmd(), // TODO: shouldn't this include the local app version instead of the SDK?
-		GenTxCmd(app.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
+		genutilcli.GenTxCmd(app.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
 		genutilcli.ValidateGenesisCmd(app.ModuleBasics),
 		AddGenesisAccountCmd(app.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),

@@ -1,13 +1,13 @@
 #!/bin/bash
 
-KEY="validator"
-
 CHAINID="imversed_1234-1"
 MONIKER="localtestnet"
 
+KEY="validator"
+MNEMONIC="kangaroo buffalo margin access fiscal manage firm coral case tattoo salt stadium crystal kid poverty document confirm coach bronze use cram uphold bridge input"
+
 KEYRING="test"
 KEYALGO="eth_secp256k1"
-MNEMONIC="kangaroo buffalo margin access fiscal manage firm coral case tattoo salt stadium crystal kid poverty document confirm coach bronze use cram uphold bridge input"
 
 LOGLEVEL="debug"
 # to trace evm
@@ -88,7 +88,7 @@ fi
 ~/go/bin/imversed add-genesis-account $KEY 100000000000000000000000000aimv --keyring-backend $KEYRING
 
 # Sign genesis transaction
-~/go/bin/imversed gentx $KEY 1000000000000000000000aimv 0x4e34a7E46e4Ad9756D03E8Fc40b605C5b023555F imv1f0en8j95fwh7rpljh7pk3tw8442spl2wvlm5lr 0xbba7a8fbf5fff2763828d2b7da885cbb760a3cc064f4117bcf9822750b065a623d149c847ffe87e69c4be5d682604fd69a1c50e515bf5b53eeb750be1672be811b --keyring-backend $KEYRING --chain-id $CHAINID
+~/go/bin/imversed gentx $KEY 1000000000000000000000aimv --keyring-backend $KEYRING --chain-id $CHAINID
 
 # Collect genesis tx
 ~/go/bin/imversed collect-gentxs
