@@ -94,7 +94,7 @@ fi
 ~/go/bin/imversed collect-gentxs
 
 # Run this to ensure everything worked and that the genesis file is setup correctly
-# ~/go/bin/imversed validate-genesis //TODO check it, doesn't work correctly with new gentx command
+~/go/bin/imversed validate-genesis
 
 if [[ $1 == "pending" ]]; then
   echo "pending mode is on, please wait for the first block committed."
