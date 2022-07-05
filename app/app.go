@@ -406,14 +406,15 @@ func NewImversedApp(
 		app.AccountKeeper, app.BankKeeper, app.EvmKeeper,
 	)
 
-	app.EvmKeeper = app.EvmKeeper.SetHooks(
-		evmkeeper.NewMultiEvmHooks(
-			app.Erc20Keeper.Hooks(),
-		),
-	)
-
 	app.InfrKeeper = infrkeeper.NewKeeper(
 		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
+		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper,
+	)
+
+	app.EvmKeeper = app.EvmKeeper.SetHooks(
+		evmkeeper.NewMultiEvmHooks(
+			app.Erc20Keeper.Hooks(), app.InfrKeeper.Hooks(),
+		),
 	)
 
 	// Create custom keepers
