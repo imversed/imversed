@@ -36,6 +36,10 @@ import (
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
 
+	"github.com/imversed/imversed/x/verse"
+	versekeeper "github.com/imversed/imversed/x/verse/keeper"
+	versetypes "github.com/imversed/imversed/x/verse/types"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -186,6 +190,7 @@ var (
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
 		infr.AppModuleBasic{},
+		verse.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -265,6 +270,7 @@ type ImversedApp struct {
 	CurrencyKeeper currencymodulekeeper.Keeper
 	PoolsKeeper    poolsmodulekeeper.Keeper
 	InfrKeeper     infrkeeper.Keeper
+	VerseKeeper    versekeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -325,6 +331,7 @@ func NewImversedApp(
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
 		infrtypes.StoreKey,
+		versetypes.StoreKey,
 	)
 
 	// Add the EVM transient store key
@@ -415,6 +422,10 @@ func NewImversedApp(
 	app.InfrKeeper = infrkeeper.NewKeeper(
 		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
 		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper,
+	)
+
+	app.VerseKeeper = versekeeper.NewKeeper(
+		keys[versetypes.StoreKey], appCodec, app.GetSubspace(versetypes.ModuleName),
 	)
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(
@@ -537,6 +548,7 @@ func NewImversedApp(
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		infr.NewAppModule(appCodec, app.InfrKeeper),
+		verse.NewAppModule(app.VerseKeeper, app.AccountKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -572,6 +584,7 @@ func NewImversedApp(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 	)
 
 	// NOTE: fee market module must go last in order to retrieve the block gas used.
@@ -603,6 +616,7 @@ func NewImversedApp(
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -641,6 +655,7 @@ func NewImversedApp(
 		erc20types.ModuleName,
 
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -928,5 +943,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
 	paramsKeeper.Subspace(infrtypes.ModuleName)
+	paramsKeeper.Subspace(versetypes.ModuleName)
 	return paramsKeeper
 }
