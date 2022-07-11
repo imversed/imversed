@@ -13,7 +13,12 @@ service Msg {
 
 message MsgCreateVerse {
   string sender = 1;
+
   string name = 2;
+
+  string icon = 3;
+
+  string description = 4;
 }
 
 message MsgCreateVerseResponse {

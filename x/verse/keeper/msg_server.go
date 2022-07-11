@@ -15,7 +15,7 @@ func (k Keeper) CreateVerse(
 ) (*types.MsgCreateVerseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	verse := types.Verse{Owner: msg.Sender, Name: msg.Name}
+	verse := types.Verse{Owner: msg.Sender, Name: msg.Name, Icon: msg.Icon, Description: msg.Description}
 
 	err := k.SetVerse(ctx, verse)
 
