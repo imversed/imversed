@@ -35,7 +35,7 @@ func (AppModuleBasic) Name() string {
 	return types.ModuleName
 }
 
-// RegisterLegacyAminoCodec performs a no-op as the erc20 doesn't support Amino encoding
+// RegisterLegacyAminoCodec performs a no-op as the verse doesn't support Amino encoding
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
 
 // ConsensusVersion returns the consensus state-breaking version for the module.
@@ -43,12 +43,12 @@ func (AppModuleBasic) ConsensusVersion() uint64 {
 	return 1
 }
 
-// RegisterInterfaces registers interfaces and implementations of the erc20 module.
+// RegisterInterfaces registers interfaces and implementations of the verse module.
 func (AppModuleBasic) RegisterInterfaces(interfaceRegistry codectypes.InterfaceRegistry) {
 	types.RegisterInterfaces(interfaceRegistry)
 }
 
-// DefaultGenesis returns default genesis state as raw bytes for the erc20
+// DefaultGenesis returns default genesis state as raw bytes for the verse
 // module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.DefaultGenesisState())
@@ -63,7 +63,7 @@ func (b AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEnc
 	return genesisState.Validate()
 }
 
-// RegisterRESTRoutes performs a no-op as the erc20 module doesn't expose REST
+// RegisterRESTRoutes performs a no-op as the verse module doesn't expose REST
 // endpoints
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {}
 
@@ -73,12 +73,12 @@ func (b AppModuleBasic) RegisterGRPCGatewayRoutes(c client.Context, serveMux *ru
 	}
 }
 
-// GetTxCmd returns the root tx command for the erc20 module.
+// GetTxCmd returns the root tx command for the verse module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.NewTxCmd()
 }
 
-// GetQueryCmd returns no root query command for the erc20 module.
+// GetQueryCmd returns no root query command for the verse module.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }

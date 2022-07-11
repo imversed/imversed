@@ -9,14 +9,14 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 )
 
-// Keeper of this module maintains collections of erc20.
+// Keeper of this module maintains collections of verse.
 type Keeper struct {
 	storeKey   sdk.StoreKey
 	cdc        codec.BinaryCodec
 	paramstore paramtypes.Subspace
 }
 
-// NewKeeper creates new instances of the erc20 Keeper
+// NewKeeper creates new instances of the verse Keeper
 func NewKeeper(
 	storeKey sdk.StoreKey,
 	cdc codec.BinaryCodec,
