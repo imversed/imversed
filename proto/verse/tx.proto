@@ -1,0 +1,22 @@
+syntax = "proto3";
+package imversed.verse;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/imversed/imversed/x/verse/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc Create(MsgCreate) returns (MsgCreateResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreate {
+  string sender = 1;
+  string name = 2;
+}
+
+message MsgCreateResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message
