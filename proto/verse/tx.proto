@@ -7,16 +7,16 @@ option go_package = "github.com/imversed/imversed/x/verse/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc Create(MsgCreate) returns (MsgCreateResponse);
+  rpc CreateVerse(MsgCreateVerse) returns (MsgCreateVerseResponse);
   // this line is used by starport scaffolding # proto/tx/rpc
 }
 
-message MsgCreate {
+message MsgCreateVerse {
   string sender = 1;
   string name = 2;
 }
 
-message MsgCreateResponse {
+message MsgCreateVerseResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
