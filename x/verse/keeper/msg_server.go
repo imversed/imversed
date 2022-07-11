@@ -17,13 +17,11 @@ func (k Keeper) CreateVerse(
 
 	verse := types.Verse{Owner: msg.Sender, Name: msg.Name}
 
-	// check if the denomination already registered
-	if k.HasVerse(ctx, verse) {
-		return nil, sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse already registered: %s", verse.Name)
-	}
 	err := k.SetVerse(ctx, verse)
 
-	_ = err
+	if err != nil {
+		return nil, sdkerrors.Wrap(err, "failed to create verse")
+	}
 
 	return &types.MsgCreateVerseResponse{}, nil
 }

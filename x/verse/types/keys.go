@@ -17,12 +17,12 @@ const (
 
 // prefix bytes
 const (
-	prefixVerse = iota + 1
+	prefixVerse = "Verse/verse"
 )
 
 // KVStore key prefixes
 var (
-	KeyPrefixVerse = []byte{prefixVerse}
+	KeyPrefixVerse = []byte(prefixVerse)
 )
 
 // VerseKey returns the store key to retrieve a Verse from the index fields
