@@ -10,7 +10,7 @@ import (
 // ModuleCdc references the global verse module codec. Note, the codec should
 // ONLY be used in certain instances of tests and for JSON encoding.
 //
-// The actual codec used for serialization should be provided to modules/erc20 and
+// The actual codec used for serialization should be provided to modules/verse and
 // defined at the application level.
 var ModuleCdc = codec.NewProtoCodec(codectypes.NewInterfaceRegistry())
 

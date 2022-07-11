@@ -12,7 +12,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	k.SetParams(ctx, genState.Params)
 
-	// Set all the currency
+	// Set all the verse
 	for _, elem := range genState.VerseList {
 		_ = k.SetVerse(ctx, elem)
 	}
