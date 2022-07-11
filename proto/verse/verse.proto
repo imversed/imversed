@@ -9,4 +9,8 @@ message Verse {
   string owner = 1;
 
   string name = 2;
+
+  string icon = 3;
+
+  string description = 4;
 }

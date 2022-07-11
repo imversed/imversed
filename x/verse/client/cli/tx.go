@@ -27,9 +27,9 @@ func NewTxCmd() *cobra.Command {
 // NewCreateVerseCmd returns a CLI command handler for converting cosmos coins
 func NewCreateVerseCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-verse [name]",
+		Use:   "create-verse [name] [icon] [description]",
 		Short: "Create new verse",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -38,8 +38,10 @@ func NewCreateVerseCmd() *cobra.Command {
 			sender := cliCtx.GetFromAddress()
 
 			msg := &types.MsgCreateVerse{
-				Name:   args[0],
-				Sender: sender.String(),
+				Name:        args[0],
+				Icon:        args[1],
+				Description: args[2],
+				Sender:      sender.String(),
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
