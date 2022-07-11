@@ -13,6 +13,7 @@ import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/imversed/imversed/x/verse/client/cli"
 	"github.com/imversed/imversed/x/verse/keeper"
 	"github.com/imversed/imversed/x/verse/types"
 	"github.com/spf13/cobra"
