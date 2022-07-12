@@ -2,7 +2,7 @@ package types
 
 import "fmt"
 
-// DefaultGenesisState sets default evm genesis state with empty accounts and
+// DefaultGenesisState sets default genesis state and
 // default params and chain config values.
 func DefaultGenesisState() *GenesisState {
 	return NewGenesisState([]Verse{}, Params{})

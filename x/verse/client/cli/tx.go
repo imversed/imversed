@@ -24,7 +24,7 @@ func NewTxCmd() *cobra.Command {
 	return txCmd
 }
 
-// NewCreateVerseCmd returns a CLI command handler for converting cosmos coins
+// NewCreateVerseCmd returns a CLI command handler for creating verse
 func NewCreateVerseCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-verse [name] [icon] [description]",
