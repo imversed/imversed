@@ -26,7 +26,7 @@ func GetQueryCmd() *cobra.Command {
 	return cmd
 }
 
-// GetVersesCmd queries a token pairs registered
+// GetVersesCmd queries a verses registered
 func GetVersesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "verses",
@@ -63,7 +63,7 @@ func GetVersesCmd() *cobra.Command {
 	return cmd
 }
 
-// GetVerseCmd queries a token pairs registered
+// GetVerseCmd queries a verse registered
 func GetVerseCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "verse [name]",
@@ -95,7 +95,7 @@ func GetVerseCmd() *cobra.Command {
 	return cmd
 }
 
-// GetHubParamsCmd queries hub info
+// GetParamsCmd queries hub info
 func GetParamsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "params",
