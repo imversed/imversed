@@ -15,7 +15,7 @@ func (k Keeper) HasVerse(ctx sdk.Context, verse types.Verse) bool {
 // SetVerse set a specific verse in the store from its index
 func (k Keeper) SetVerse(ctx sdk.Context, verse types.Verse) error {
 	if k.HasVerse(ctx, verse) {
-		return sdkerrors.Wrapf(types.ErrInvalidVerse, "verse with name %s has already exists", verse.Name)
+		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s has already exists", verse.Name)
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)

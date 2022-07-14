@@ -17,11 +17,12 @@ service Query {
     option (google.api.http).get = "/imversed/imversed/verse/verse/{name}";
   }
 
-  // Queries a list of verse items.
+  // Queries all verses.
   rpc VerseAll(QueryAllVerseRequest) returns (QueryAllVerseResponse) {
     option (google.api.http).get = "/imversed/imversed/verse/verse";
   }
-  // Parameters queries the parameters of the module.
+
+  // Queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/imversed/imversed/verse/params";
   }
