@@ -19,17 +19,17 @@ func NewTxCmd() *cobra.Command {
 	}
 
 	txCmd.AddCommand(
-		NewCreateVerseCmd(),
+		CreateNewVerseCmd(),
 	)
 	return txCmd
 }
 
-// NewCreateVerseCmd returns a CLI command handler for creating verse
-func NewCreateVerseCmd() *cobra.Command {
+// CreateNewVerseCmd returns a CLI command handler for creating verse
+func CreateNewVerseCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-verse [name] [icon] [description]",
+		Use:   "create-verse [name] [description] [icon]",
 		Short: "Create new verse",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.RangeArgs(2, 3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -37,11 +37,18 @@ func NewCreateVerseCmd() *cobra.Command {
 			}
 			sender := cliCtx.GetFromAddress()
 
+			icon := ""
+
+			if len(args) == 3 {
+				icon = args[2]
+			}
+
 			msg := &types.MsgCreateVerse{
 				Name:        args[0],
-				Icon:        args[1],
-				Description: args[2],
-				Sender:      sender.String(),
+				Description: args[1],
+				Icon:        icon,
+
+				Sender: sender.String(),
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
