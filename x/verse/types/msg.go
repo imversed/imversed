@@ -44,7 +44,7 @@ func (msg MsgCreateVerse) ValidateBasic() error {
 
 	if len(msg.Name) > NameLength {
 		return fmt.Errorf("verse's name can't be more than 50 chars")
-	} else if re := regexp.MustCompile(NameRegex); re.FindString(msg.Icon) == "" {
+	} else if re := regexp.MustCompile(NameRegex); re.FindString(msg.Name) == "" {
 		return fmt.Errorf("characters in the verse's name should only [A-Z][a-z][0-9]")
 	}
 
