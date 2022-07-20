@@ -7,9 +7,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	tmcli "github.com/tendermint/tendermint/libs/cli"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
@@ -24,10 +22,17 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
-	currencyCli "github.com/imversed/imversed/x/currency/client/cli"
+
+	//currencyCli "github.com/imversed/imversed/x/currency/client/cli"
 	currencyTypes "github.com/imversed/imversed/x/currency/types"
 	"github.com/tharsis/ethermint/crypto/hd"
 	ethermint "github.com/tharsis/ethermint/types"
+
+	//"github.com/spf13/cast"
+
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	gov "github.com/cosmos/cosmos-sdk/x/gov/client/cli"
+	infrCli "github.com/imversed/imversed/x/infr/client/cli"
 )
 
 type GenesisTestSuite struct {
@@ -91,15 +96,6 @@ func (suite *GenesisTestSuite) SetupTest() {
 
 	_, err = suite.network.WaitForHeight(1)
 	suite.Require().NoError(err)
-
-	//val := suite.network.Validators[0]
-
-	// create a new pool
-	//_, err = poolstestutil.MsgCreatePool(suite.T(), val.ClientCtx, val.Address, "5stake,5node0token", "100stake,100node0token", "0.01", "0.01")
-	//suite.Require().NoError(err)
-
-	_, err = suite.network.WaitForHeight(1)
-	suite.Require().NoError(err)
 }
 
 func (suite *GenesisTestSuite) TearDownSuite() {
@@ -113,32 +109,56 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 
 	val := suite.network.Validators[0]
 
+	//minGasPriceHelper.Create(baseapp.SetMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom))
+
 	_, _, err := val.ClientCtx.Keyring.NewMnemonic("NewCreatePoolAddr",
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	suite.Require().NoError(err)
 
-	//newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	ctx := val.ClientCtx
 
-	ctx := suite.network.Validators[0].ClientCtx
-	request := func(next []byte, offset, limit uint64, total bool) []string {
-		args := []string{
-			fmt.Sprintf("--%s=json", tmcli.OutputFlag),
+	//Changing min gas price
+
+	{
+		priceCmd := gov.NewCmdSubmitProposal()
+		priceCmd.AddCommand(infrCli.NewChangeMinGasPricesProposalCmd())
+
+		priceCmdArgs := []string{
+			fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
+			fmt.Sprintf("--%s=%s", gov.FlagDescription, "Changing min gas price"),
+			fmt.Sprintf("--%s=%s", gov.FlagDeposit, fmt.Sprintf("10%s", sdk.DefaultBondDenom)),
+
+			fmt.Sprintf("--%s=%s", gov.FlagProposalType, "Text"),
+			fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+			fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(20))).String()),
 		}
-		if next == nil {
-			args = append(args, fmt.Sprintf("--%s=%d", flags.FlagOffset, offset))
-		} else {
-			args = append(args, fmt.Sprintf("--%s=%s", flags.FlagPageKey, next))
-		}
-		args = append(args, fmt.Sprintf("--%s=%d", flags.FlagLimit, limit))
-		if total {
-			args = append(args, fmt.Sprintf("--%s", flags.FlagCountTotal))
-		}
-		return args
+
+		out, err := clitestutil.ExecTestCLICmd(ctx, priceCmd, priceCmdArgs)
+
+		fmt.Println("---------")
+		fmt.Println(out)
+		fmt.Println("---------")
+
+		suite.Require().NoError(err)
+
+		var priceCmdResp currencyTypes.QueryAllCurrencyResponse
+		suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &priceCmdResp))
 	}
 
-	args := request(nil, uint64(0), uint64(2), false)
-	out, err := clitestutil.ExecTestCLICmd(ctx, currencyCli.CmdListCurrency(), args)
-	suite.Require().NoError(err)
-	var resp currencyTypes.QueryAllCurrencyResponse
-	suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	//Voting
+	/*{
+		voteCmd := gov.NewCmdVote()
+
+		voteCmdArgs := []string{}
+
+		out, err := clitestutil.ExecTestCLICmd(ctx, voteCmd, voteCmdArgs)
+		suite.Require().NoError(err)
+
+		time.Sleep(35 * time.Second)
+
+		var voteResp currencyTypes.QueryAllCurrencyResponse
+		suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &voteResp))
+	}*/
 }
