@@ -117,8 +117,34 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 
 	ctx := val.ClientCtx
 
-	//Changing min gas price
+	/*var clientAccaunt string = ""
 
+	{
+		clientCtx := val.ClientCtx
+		memberNumber := uuid.New().String()
+
+		info, _, err := clientCtx.Keyring.NewMnemonic(fmt.Sprintf("member%s", memberNumber), keyring.English, ethermint.BIP44HDPath,
+			keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
+		suite.Require().NoError(err)
+
+		pk := info.GetPubKey()
+
+		account := sdk.AccAddress(pk.Address())
+		clientAccaunt = account.String()
+		fmt.Printf("\n Client acc: %s \n\n", clientAccaunt)
+
+		_, err = banktestutil.MsgSendExec(
+			ctx,
+			val.Address,
+			account,
+			sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(2000))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(10))).String()),
+		)
+		suite.Require().NoError(err)
+	}*/
+
+	//Changing min gas price
 	{
 		priceCmd := gov.NewCmdSubmitProposal()
 		priceCmd.AddCommand(infrCli.NewChangeMinGasPricesProposalCmd())
