@@ -31,7 +31,9 @@ import (
 	//"github.com/spf13/cast"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
 	gov "github.com/cosmos/cosmos-sdk/x/gov/client/cli"
+	"github.com/google/uuid"
 	infrCli "github.com/imversed/imversed/x/infr/client/cli"
 )
 
@@ -52,7 +54,7 @@ func TestGenesisTestSuite(t *testing.T) {
 func (suite *GenesisTestSuite) SetupTest() {
 	// consensus key
 	consAddress := sdk.ConsAddress(tests.GenerateAddress().Bytes())
-
+	fmt.Printf("Address: %s", consAddress)
 	suite.app = app.Setup(false, nil)
 	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{
 		Height:          1,
@@ -87,8 +89,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 	suite.cfg.NumValidators = 1
 
 	// modification to pay fee with test bond denom "stake"
-	genesisState := app.ModuleBasics.DefaultGenesis(suite.cfg.Codec)
-	suite.cfg.GenesisState = genesisState
+	suite.cfg.GenesisState = app.ModuleBasics.DefaultGenesis(suite.cfg.Codec)
 
 	var err error
 	suite.network, err = network.New(suite.T(), suite.T().TempDir(), suite.cfg)
@@ -115,76 +116,78 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	suite.Require().NoError(err)
 
-	ctx := val.ClientCtx
+	suite.callCreateNewMember(val)
+	//suite.callChangeMinGasPrice(val)
+	//suite.callVote(val)
+}
 
-	/*var clientAccaunt string = ""
+//lint:ignore U1000 Ignore unused function temporarily for debugging
+func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) {
+	var clientAccaunt string = ""
+	clientCtx := val.ClientCtx
+	memberNumber := uuid.New().String()
 
-	{
-		clientCtx := val.ClientCtx
-		memberNumber := uuid.New().String()
+	info, _, err := clientCtx.Keyring.NewMnemonic(fmt.Sprintf("member%s", memberNumber), keyring.English, ethermint.BIP44HDPath,
+		keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
+	suite.Require().NoError(err)
 
-		info, _, err := clientCtx.Keyring.NewMnemonic(fmt.Sprintf("member%s", memberNumber), keyring.English, ethermint.BIP44HDPath,
-			keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
-		suite.Require().NoError(err)
+	pk := info.GetPubKey()
 
-		pk := info.GetPubKey()
+	account := sdk.AccAddress(pk.Address())
+	clientAccaunt = account.String()
+	fmt.Printf("\n Client acc: %s \n\n", clientAccaunt)
 
-		account := sdk.AccAddress(pk.Address())
-		clientAccaunt = account.String()
-		fmt.Printf("\n Client acc: %s \n\n", clientAccaunt)
+	_, err = banktestutil.MsgSendExec(
+		clientCtx,
+		val.Address,
+		account,
+		sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(2000))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(10))).String()),
+	)
+	suite.Require().NoError(err)
+}
 
-		_, err = banktestutil.MsgSendExec(
-			ctx,
-			val.Address,
-			account,
-			sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(2000))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(10))).String()),
-		)
-		suite.Require().NoError(err)
-	}*/
+//lint:ignore U1000 Ignore unused function temporarily for debugging
+func (suite *GenesisTestSuite) callChangeMinGasPrice(val *network.Validator) {
+	priceCmd := gov.NewCmdSubmitProposal()
+	priceCmd.AddCommand(infrCli.NewChangeMinGasPricesProposalCmd())
 
-	//Changing min gas price
-	{
-		priceCmd := gov.NewCmdSubmitProposal()
-		priceCmd.AddCommand(infrCli.NewChangeMinGasPricesProposalCmd())
+	priceCmdArgs := []string{
+		fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
+		fmt.Sprintf("--%s=%s", gov.FlagDescription, "Changing min gas price"),
+		fmt.Sprintf("--%s=%s", gov.FlagDeposit, fmt.Sprintf("10%s", sdk.DefaultBondDenom)),
 
-		priceCmdArgs := []string{
-			fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
-			fmt.Sprintf("--%s=%s", gov.FlagDescription, "Changing min gas price"),
-			fmt.Sprintf("--%s=%s", gov.FlagDeposit, fmt.Sprintf("10%s", sdk.DefaultBondDenom)),
-
-			fmt.Sprintf("--%s=%s", gov.FlagProposalType, "Text"),
-			fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-			fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(20))).String()),
-		}
-
-		out, err := clitestutil.ExecTestCLICmd(ctx, priceCmd, priceCmdArgs)
-
-		fmt.Println("---------")
-		fmt.Println(out)
-		fmt.Println("---------")
-
-		suite.Require().NoError(err)
-
-		var priceCmdResp currencyTypes.QueryAllCurrencyResponse
-		suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &priceCmdResp))
+		fmt.Sprintf("--%s=%s", gov.FlagProposalType, "Text"),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(20))).String()),
 	}
 
-	//Voting
-	/*{
-		voteCmd := gov.NewCmdVote()
+	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, priceCmd, priceCmdArgs)
 
-		voteCmdArgs := []string{}
+	fmt.Println("---------")
+	fmt.Println(out)
+	fmt.Println("---------")
 
-		out, err := clitestutil.ExecTestCLICmd(ctx, voteCmd, voteCmdArgs)
-		suite.Require().NoError(err)
+	suite.Require().NoError(err)
 
-		time.Sleep(35 * time.Second)
+	var priceCmdResp currencyTypes.QueryAllCurrencyResponse
+	suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &priceCmdResp))
+}
 
-		var voteResp currencyTypes.QueryAllCurrencyResponse
-		suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &voteResp))
-	}*/
+//lint:ignore U1000 Ignore unused function temporarily for debugging
+func (suite *GenesisTestSuite) callVote(val *network.Validator) {
+	voteCmd := gov.NewCmdVote()
+
+	voteCmdArgs := []string{}
+
+	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, voteCmd, voteCmdArgs)
+	suite.Require().NoError(err)
+
+	time.Sleep(35 * time.Second)
+
+	var voteResp currencyTypes.QueryAllCurrencyResponse
+	suite.Require().NoError(suite.network.Config.Codec.UnmarshalJSON(out.Bytes(), &voteResp))
 }
