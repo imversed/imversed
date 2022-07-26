@@ -2,6 +2,7 @@ package infr_test
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 	"time"
 
@@ -86,14 +87,15 @@ func (suite *GenesisTestSuite) SetupTest() {
 	// configurating pools and net
 
 	suite.cfg = testnet.DefaultConfig()
+	//suite.cfg.JSONRPCAddress = config.DefaultJSONRPCAddress
 	suite.cfg.NumValidators = 1
 
-	// modification to pay fee with test bond denom "stake"
 	suite.cfg.GenesisState = app.ModuleBasics.DefaultGenesis(suite.cfg.Codec)
 
 	var err error
 	suite.network, err = network.New(suite.T(), suite.T().TempDir(), suite.cfg)
 	suite.Require().NoError(err)
+	suite.Require().NotNil(suite.network)
 
 	_, err = suite.network.WaitForHeight(1)
 	suite.Require().NoError(err)
@@ -103,7 +105,7 @@ func (suite *GenesisTestSuite) TearDownSuite() {
 	suite.network.Cleanup()
 	suite.app = nil
 	suite.network = nil
-
+	runtime.GC()
 }
 
 func (suite *GenesisTestSuite) TestMinGasPrice() {
@@ -123,7 +125,6 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
 func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) {
-	var clientAccaunt string = ""
 	clientCtx := val.ClientCtx
 	memberNumber := uuid.New().String()
 
@@ -134,7 +135,7 @@ func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) {
 	pk := info.GetPubKey()
 
 	account := sdk.AccAddress(pk.Address())
-	clientAccaunt = account.String()
+	clientAccaunt := account.String()
 	fmt.Printf("\n Client acc: %s \n\n", clientAccaunt)
 
 	_, err = banktestutil.MsgSendExec(
@@ -144,6 +145,7 @@ func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) {
 		sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(2000))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(10))).String()),
+		//fmt.Sprintf("--%s=%s", flags.FlagKeyringBackend, keyring.BackendTest),
 	)
 	suite.Require().NoError(err)
 }
