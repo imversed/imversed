@@ -104,7 +104,10 @@ func (suite *GenesisTestSuite) SetupTest() {
 func (suite *GenesisTestSuite) TearDownSuite() {
 	suite.network.Cleanup()
 	suite.app = nil
+	suite.network.Logger = nil
 	suite.network = nil
+	suite.ctx.WithLogger(nil)
+	time.Sleep(2 * time.Second)
 	runtime.GC()
 }
 
