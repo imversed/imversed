@@ -45,12 +45,10 @@ func (AppModuleBasic) Name() string {
 }
 
 func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
-	fmt.Println("Calling unresolved function RegisterCodec")
 	//types.RegisterCodec(cdc)
 }
 
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	fmt.Println("Calling unresolved function RegisterLegacyAminoCodec")
 	//types.RegisterCodec(cdc)
 }
 

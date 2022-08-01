@@ -662,7 +662,7 @@ func NewImversedApp(
 		transferModule,
 		evm.NewAppModule(app.EvmKeeper, app.AccountKeeper),
 		feemarket.NewAppModule(app.FeeMarketKeeper),
-		infr.NewAppModule(appCodec, app.InfrKeeper),
+		//infr.NewAppModule(appCodec, app.InfrKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()
