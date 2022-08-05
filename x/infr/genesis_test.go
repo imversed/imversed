@@ -3,6 +3,7 @@ package infr_test
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"testing"
 	"time"
 
@@ -47,8 +48,9 @@ type GenesisTestSuite struct {
 	app     *app.ImversedApp
 	genesis types.GenesisState
 
-	cfg     network.Config
-	network *network.Network
+	cfg       network.Config
+	network   *network.Network
+	validator *network.Validator
 }
 
 func TestGenesisTestSuite(t *testing.T) {
@@ -60,7 +62,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 	consAddress := sdk.ConsAddress(tests.GenerateAddress().Bytes())
 	fmt.Printf("Address: %s", consAddress)
 
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, fmt.Sprintf("0.01%s", sdk.DefaultBondDenom))
+	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.money("0.00005%s"))
 
 	suite.app = app.Setup(false, nil)
 
@@ -108,35 +110,43 @@ func (suite *GenesisTestSuite) SetupTest() {
 
 	_, err = suite.network.WaitForHeight(1)
 	suite.Require().NoError(err)
+
+	suite.validator = suite.network.Validators[0]
+	_, _, err = suite.validator.ClientCtx.Keyring.NewMnemonic("NewCreatePoolAddr",
+		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
+	suite.Require().NoError(err)
+
+	fmt.Printf("First: %s\n", fmt.Sprintf("0.00005%s", sdk.DefaultBondDenom))
+	fmt.Printf("Second: %s\n", sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(10))).String())
+	fmt.Printf("Three: %s\n", suite.money("10"))
+
 }
 
 func (suite *GenesisTestSuite) TearDownSuite() {
-	/*suite.network.Cleanup()
+	suite.network.Cleanup()
 	suite.app = nil
 	suite.network.Logger = nil
 	suite.network = nil
 	suite.ctx.WithLogger(nil)
+	runtime.GC()
 	time.Sleep(2 * time.Second)
-	runtime.GC()*/
+}
+
+func (suite *GenesisTestSuite) CreateValidator() {
+
 }
 
 func (suite *GenesisTestSuite) TestMinGasPrice() {
-
-	val := suite.network.Validators[0]
-	_, _, err := val.ClientCtx.Keyring.NewMnemonic("NewCreatePoolAddr",
-		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
-	suite.Require().NoError(err)
-
-	accaunt := suite.callCreateNewMember(val)
-	suite.callChangeMinGasPrice(val)
-	suite.callVote(val)
-	suite.sendMoney(val, accaunt, 9, true)
-	suite.sendMoney(val, accaunt, 11, false)
+	accaunt := suite.callCreateNewMember()
+	suite.callChangeMinGasPrice()
+	suite.callVote()
+	suite.sendMoney(accaunt, 9, true)
+	suite.sendMoney(accaunt, 11, false)
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) sdk.AccAddress {
-	clientCtx := val.ClientCtx
+func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
+	clientCtx := suite.validator.ClientCtx
 	memberNumber := uuid.New().String()
 
 	info, _, err := clientCtx.Keyring.NewMnemonic(fmt.Sprintf("member%s", memberNumber), keyring.English, ethermint.BIP44HDPath,
@@ -151,7 +161,7 @@ func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) sdk.A
 
 	out, err2 := banktestutil.MsgSendExec(
 		clientCtx,
-		val.Address,
+		suite.validator.Address,
 		account,
 		sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(200))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -159,13 +169,15 @@ func (suite *GenesisTestSuite) callCreateNewMember(val *network.Validator) sdk.A
 	)
 	suite.Require().NoError(err2)
 	var txResp sdk.TxResponse
-	suite.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp))
+	suite.Require().NoError(suite.validator.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp))
+	suite.printIfError(txResp)
+	suite.Require().Equal(uint32(0), txResp.Code)
 
 	return account
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func (suite *GenesisTestSuite) callChangeMinGasPrice(val *network.Validator) {
+func (suite *GenesisTestSuite) callChangeMinGasPrice() {
 	priceCmd := gov.NewCmdSubmitProposal()
 	priceCmd.AddCommand(infrCli.NewChangeMinGasPricesProposalCmd())
 
@@ -175,64 +187,84 @@ func (suite *GenesisTestSuite) callChangeMinGasPrice(val *network.Validator) {
 		fmt.Sprintf("--%s=%s", gov.FlagDeposit, fmt.Sprintf("10%s", sdk.DefaultBondDenom)),
 
 		fmt.Sprintf("--%s=%s", gov.FlagProposalType, "Text"),
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, suite.validator.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(11))).String()),
 	}
 
-	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, priceCmd, priceCmdArgs)
+	out, err := clitestutil.ExecTestCLICmd(suite.validator.ClientCtx, priceCmd, priceCmdArgs)
 
 	suite.Require().NoError(err)
 
 	var txResp sdk.TxResponse
-	suite.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp), out.String())
+	suite.Require().NoError(suite.validator.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp), out.String())
+	suite.printIfError(txResp)
+	suite.Require().Equal(uint32(0), txResp.Code)
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func (suite *GenesisTestSuite) callVote(val *network.Validator) {
+func (suite *GenesisTestSuite) callVote() {
 	voteCmd := gov.NewCmdVote()
 
 	voteCmdArgs := []string{
 		"1",
 		"yes",
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, suite.validator.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(11))).String()),
 	}
 
-	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, voteCmd, voteCmdArgs)
+	out, err := clitestutil.ExecTestCLICmd(suite.validator.ClientCtx, voteCmd, voteCmdArgs)
 	suite.Require().NoError(err)
 
 	time.Sleep(35 * time.Second)
 
 	var txResp sdk.TxResponse
-	suite.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp), out.String())
+	suite.Require().NoError(suite.validator.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp), out.String())
+	suite.printIfError(txResp)
+	suite.Require().Equal(uint32(0), txResp.Code)
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func (suite *GenesisTestSuite) sendMoney(val *network.Validator, tergetAddress sdk.AccAddress, fee int64, expectError bool) {
+func (suite *GenesisTestSuite) sendMoney(tergetAddress sdk.AccAddress, fee int64, expectError bool) {
 	out, err := banktestutil.MsgSendExec(
-		val.ClientCtx,
-		val.Address,
+		suite.validator.ClientCtx,
+		suite.validator.Address,
 		tergetAddress,
 		sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(200))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(suite.cfg.BondDenom, sdk.NewInt(fee))).String()),
 	)
-	fmt.Println("\n-------")
+
 	fmt.Println(out)
-	fmt.Println("\n-------")
 
 	suite.Require().NoError(err)
 
 	var txResp sdk.TxResponse
+	suite.Require().NoError(suite.validator.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp))
 
 	if expectError {
-		suite.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp))
+
 	} else {
-		suite.Require().Error(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp))
-		suite.Require().Equal(uint32(13), txResp.Code, txResp)
+		suite.printIfError(txResp)
 	}
 
+	/*if expectError {
+		suite.Require().Equal(uint32(13), txResp.Code)
+	} else {
+		suite.Require().Equal(uint32(0), txResp.Code)
+	}*/
+
+}
+
+func (suite *GenesisTestSuite) printIfError(txResp sdk.TxResponse) {
+	if txResp.Code != 0 {
+		fmt.Println(txResp)
+	}
+}
+
+func (suite *GenesisTestSuite) money(coins string) string {
+	return fmt.Sprintf("%s%s", coins, sdk.DefaultBondDenom)
 }
