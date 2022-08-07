@@ -1,10 +1,6 @@
-<!--
-order: 1
--->
-
 # Concepts
 
-The concept of the `pools` module is designed to handle assets of a chain using the AMM and its concept of pool shares. 
+The concept of the `pools` module is designed to handle assets of a chain using the AMM and its concept of pool shares.
 
 ## Pool
 
@@ -18,7 +14,7 @@ When joining a pool, users provide maximum amount of tokens willing to deposit, 
 
 ### Exiting Pool
 
-When exiting the pool, the user also probides the minimum amount of tokens they are willing to receive as they are returning the share of the pool. However, unlike joining a pool, exiting a pool requires the user to pay the exit fee, which is set as the param of the pool. The share of the user gets burnt. Exiting the pool using a single asset is also possible. 
+When exiting the pool, the user also probides the minimum amount of tokens they are willing to receive as they are returning the share of the pool. However, unlike joining a pool, exiting a pool requires the user to pay the exit fee, which is set as the param of the pool. The share of the user gets burnt. Exiting the pool using a single asset is also possible.
 
 +++[https://github.com/imversed/imversed/blob/master/x/pools/keeper/pool_service.go](https://github.com/imversed/imversed/blob/master/x/pools/keeper/pool_service.go)
 
@@ -40,7 +36,7 @@ Meanwhile, calculation of the spot price with a swap fee is done using the follo
 
 - `spotPrice / (1-swapFee)`
 
-where spotPrice is 
+where spotPrice is
 
 - `(tokenBalanceIn / tokenWeightIn) / (tokenBalanceOut / tokenWeightOut)`
 

@@ -1,7 +1,3 @@
-<!--
-order: 3
--->
-
 # State Transitions
 
 The erc20 modules allows for two types of registration state transitions. Depending on how token pairs are registered, with `RegisterCoinProposal` or `RegisterERC20Proposal`, there are four possible conversion state transitions.
