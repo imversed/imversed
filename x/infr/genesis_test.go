@@ -82,7 +82,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.money(suite.baseMinGasPrice))
 
 	suite.cfg = network.DefaultConfig()
-	suite.cfg.NumValidators = 2
+	suite.cfg.NumValidators = 1
 
 	suite.app = app.Setup(false, suite.patchGenesis)
 
@@ -142,7 +142,7 @@ func (suite *GenesisTestSuite) TearDownSuite() {
 }
 
 func (suite *GenesisTestSuite) TestMinGasPrice() {
-	suite.createAccountForValidator()
+	//suite.createAccountForValidator()
 	account := suite.callCreateNewMember()
 
 	suite.sendMoney(account, suite.money("0.9"), true)
@@ -179,7 +179,7 @@ func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
 		sdk.NewCoins(sdk.NewCoin(network.DefaultBondDenom, sdk.NewInt(300))),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("1")),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("2")),
 	)
 	suite.Require().NoError(err2)
 	var txResp sdk.TxResponse
@@ -237,9 +237,6 @@ func ExecTestCLICmd(clientCtx client.Context, cmd *cobra.Command) (testutil.Buff
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
 func (suite *GenesisTestSuite) callChangeMinGasPrice() {
-	key, err := suite.validator.ClientCtx.Keyring.KeyByAddress(suite.validator.Address)
-	suite.Require().NoError(err)
-
 	propCmd := gov.NewCmdSubmitProposal()
 
 	priceCmd := infrCli.NewChangeMinGasPricesProposalCmd()
@@ -253,7 +250,7 @@ func (suite *GenesisTestSuite) callChangeMinGasPrice() {
 	propCmd.AddCommand(priceCmd)
 	propCmd.SetArgs([]string{
 		//fmt.Sprintf("--%s=%s", gov.FlagDeposit, suite.money("10000000")),
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, key.GetName()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, suite.validator.Address),
 		//fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("1")),
 	})
 
@@ -268,8 +265,7 @@ func (suite *GenesisTestSuite) callChangeMinGasPrice() {
 	}
 
 	priceCmd.SetArgs(cmdArgs)*/
-	var out testutil.BufferWriter
-	out, err = ExecTestCLICmd(suite.validator.ClientCtx, priceCmd)
+	out, err := ExecTestCLICmd(suite.validator.ClientCtx, priceCmd)
 
 	suite.Require().NoError(err)
 
