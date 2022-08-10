@@ -21,6 +21,8 @@ func NewChangeMinGasPricesProposalCmd() *cobra.Command {
 		Long:    "Change mingasprice long",
 		Example: fmt.Sprintf("$ %s tx gov submit-proposal change-min-gas-prices <dime> --from=<key_or_address>", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			fmt.Println("->>>>>>>>>> Calling mingasprice proposal")
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err

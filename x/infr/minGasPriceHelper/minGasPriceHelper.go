@@ -1,6 +1,7 @@
 package minGasPriceHelper
 
 import (
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 )
 
@@ -11,6 +12,7 @@ type minGasPriceHelper struct {
 }
 
 func (g minGasPriceHelper) Set(minGasPrices string) {
+	fmt.Printf("\nsetting mingas %s", minGasPrices)
 	bAppSetter := g.setter(minGasPrices)
 	bAppSetter(g.bApp)
 	g.GasPrice = minGasPrices
