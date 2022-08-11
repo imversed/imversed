@@ -1,14 +1,9 @@
 package infr_test
 
 import (
-	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	bankCli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
-	"github.com/spf13/cobra"
 	"os"
 	"runtime"
 	"testing"
@@ -77,7 +72,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 
 	suite.baseMinGasPrice = "0.000005"
 	consAddress := sdk.ConsAddress(tests.GenerateAddress().Bytes())
-	fmt.Printf("\nAddress: %s\n", consAddress)
+
 	baseapp.SetMinGasPrices(suite.money(suite.baseMinGasPrice))
 	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.money(suite.baseMinGasPrice))
 
@@ -128,7 +123,6 @@ func (suite *GenesisTestSuite) SetupTest() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 
 	suite.Require().NoError(err)
-	fmt.Printf("\nValidator: %s\n", suite.validator.Address)
 }
 
 func (suite *GenesisTestSuite) TearDownSuite() {
@@ -137,20 +131,19 @@ func (suite *GenesisTestSuite) TearDownSuite() {
 	suite.network.Logger = nil
 	suite.network = nil
 	suite.ctx.WithLogger(nil)
+	time.Sleep(1 * time.Second)
 	runtime.GC()
-	time.Sleep(2 * time.Second)
+	time.Sleep(1 * time.Second)
 }
 
 func (suite *GenesisTestSuite) TestMinGasPrice() {
-	//suite.createAccountForValidator()
 	account := suite.callCreateNewMember()
-
 	suite.sendMoney(account, suite.money("0.9"), true)
 	suite.sendMoney(account, suite.money("1.1"), false)
 	suite.callChangeMinGasPrice()
 	time.Sleep(10 * time.Second)
 	suite.callVote()
-	time.Sleep(65 * time.Second)
+	time.Sleep(45 * time.Second)
 	suite.showCurrentProposals()
 	suite.sendMoney(account, suite.money("19"), true)
 	suite.sendMoney(account, suite.money("21"), false)
@@ -169,8 +162,6 @@ func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
 	pk := info.GetPubKey()
 
 	account := sdk.AccAddress(pk.Address())
-	clientAccaunt := account.String()
-	fmt.Printf("\n Client acc: %s \n\n", clientAccaunt)
 
 	out, err2 := banktestutil.MsgSendExec(
 		clientCtx,
@@ -191,81 +182,21 @@ func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func (suite *GenesisTestSuite) createAccountForValidator() {
-	val1 := suite.validator
-	val2 := suite.network.Validators[1]
-
-	k, err := val1.ClientCtx.Keyring.KeyByAddress(val1.Address)
-	suite.Require().NoError(err)
-	keyName := k.GetName()
-	suite.Require().NotNil(keyName)
-	addr := k.GetAddress()
-	suite.Require().NotNil(addr)
-
-	account, err := val1.ClientCtx.AccountRetriever.GetAccount(val1.ClientCtx, addr)
-	suite.Require().NoError(err)
-	suite.Require().NotNil(account)
-
-	sendTokens := sdk.NewCoins(sdk.NewCoin(network.DefaultBondDenom, sdk.NewInt(1000)))
-	args := []string{
-		keyName,
-		val2.Address.String(),
-		sendTokens.String(),
-		//fmt.Sprintf("--%s=true", flags.FlagGenerateOnly),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastSync),
-	}
-	generatedStd, err := clitestutil.ExecTestCLICmd(val1.ClientCtx, bankCli.NewSendTxCmd(), args)
-	suite.Require().NoError(err)
-	suite.Require().NotNil(generatedStd)
-
-}
-
-func ExecTestCLICmd(clientCtx client.Context, cmd *cobra.Command) (testutil.BufferWriter, error) {
-	_, out := testutil.ApplyMockIO(cmd)
-	clientCtx = clientCtx.WithOutput(out)
-
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, client.ClientContextKey, &clientCtx)
-
-	if err := cmd.ExecuteContext(ctx); err != nil {
-		return out, err
-	}
-
-	return out, nil
-}
-
-//lint:ignore U1000 Ignore unused function temporarily for debugging
 func (suite *GenesisTestSuite) callChangeMinGasPrice() {
-	propCmd := gov.NewCmdSubmitProposal()
-
 	priceCmd := infrCli.NewChangeMinGasPricesProposalCmd()
-	priceCmd.SetArgs([]string{
+	propCmdArgs := []string{
 		suite.money("0.0001"),
 		fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
 		fmt.Sprintf("--%s=%s", gov.FlagDescription, "Changing min gas price"),
 		fmt.Sprintf("--%s=%s", gov.FlagDeposit, suite.money("10000000")),
-	})
-
-	propCmd.AddCommand(priceCmd)
-	propCmd.SetArgs([]string{
-		//fmt.Sprintf("--%s=%s", gov.FlagDeposit, suite.money("10000000")),
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, suite.validator.Address),
-		//fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("1")),
-	})
-
-	/*cmdArgs := []string{
-		suite.money("0.0001"),
-		fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
-		fmt.Sprintf("--%s=%s", gov.FlagDescription, "Changing min gas price"),
-		fmt.Sprintf("--%s=%s", gov.FlagDeposit, suite.money("10000000")),
-
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, suite.validator.Address.String()),
+
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("1")),
 	}
 
-	priceCmd.SetArgs(cmdArgs)*/
-	out, err := ExecTestCLICmd(suite.validator.ClientCtx, priceCmd)
+	out, err := clitestutil.ExecTestCLICmd(suite.validator.ClientCtx, priceCmd, propCmdArgs)
 
 	suite.Require().NoError(err)
 
@@ -273,7 +204,6 @@ func (suite *GenesisTestSuite) callChangeMinGasPrice() {
 	suite.Require().NoError(suite.validator.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txResp), out.String())
 	suite.printIfError(txResp)
 	suite.Require().Equal(uint32(0), txResp.Code)
-
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
