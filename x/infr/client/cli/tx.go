@@ -3,7 +3,6 @@ package cli
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -76,6 +75,6 @@ func NewChangeMinGasPricesProposalCmd() *cobra.Command {
 	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
 		panic(err)
 	}
-	flags.AddTxFlagsToCmd(cmd)
+
 	return cmd
 }

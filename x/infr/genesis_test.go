@@ -183,6 +183,7 @@ func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
 //lint:ignore U1000 Ignore unused function temporarily for debugging
 func (suite *GenesisTestSuite) callChangeMinGasPrice() {
 	priceCmd := infrCli.NewChangeMinGasPricesProposalCmd()
+	flags.AddTxFlagsToCmd(priceCmd)
 	propCmdArgs := []string{
 		suite.money("0.0001"),
 		fmt.Sprintf("--%s=%s", gov.FlagTitle, "test_change_min_gas_price"),
