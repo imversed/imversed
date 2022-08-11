@@ -123,8 +123,8 @@ func DefaultConfig() Config {
 		TimeoutCommit:     2 * time.Second,
 		ChainID:           fmt.Sprintf("imversed_%d-1", tmrand.Int63n(9999999999999)+1),
 		NumValidators:     4,
-		BondDenom:         DefaultBondDenom,
-		MinGasPrices:      fmt.Sprintf("0.000006%s", DefaultBondDenom),
+		BondDenom:         sdk.DefaultBondDenom,
+		MinGasPrices:      fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		AccountTokens:     sdk.TokensFromConsensusPower(1000, ethermint.PowerReduction),
 		StakingTokens:     sdk.TokensFromConsensusPower(500, ethermint.PowerReduction),
 		BondedTokens:      sdk.TokensFromConsensusPower(100, ethermint.PowerReduction),
@@ -134,6 +134,12 @@ func DefaultConfig() Config {
 		KeyringOptions:    []keyring.Option{hd.EthSecp256k1Option()},
 		PrintMnemonic:     false,
 	}
+}
+
+func (conf Config) WithDenom(bondDenom string, minGas string) Config {
+	conf.BondDenom = bondDenom
+	conf.MinGasPrices = fmt.Sprintf("%s%s", minGas, bondDenom)
+	return conf
 }
 
 type (

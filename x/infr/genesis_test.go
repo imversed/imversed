@@ -47,10 +47,9 @@ type GenesisTestSuite struct {
 	ctx sdk.Context
 	app *app.ImversedApp
 
-	cfg             network.Config
-	network         *network.Network
-	validator       *network.Validator
-	baseMinGasPrice string
+	cfg       network.Config
+	network   *network.Network
+	validator *network.Validator
 }
 
 func TestGenesisTestSuite(t *testing.T) {
@@ -68,17 +67,16 @@ func (suite *GenesisTestSuite) patchGenesis(app *app.ImversedApp, sapp simapp.Ge
 }
 
 func (suite *GenesisTestSuite) SetupTest() {
-	network.InitTestConfig()
 
-	suite.baseMinGasPrice = "0.000005"
+	network.InitTestConfig()
+	suite.cfg = network.DefaultConfig().WithDenom(network.DefaultBondDenom, "0.000005")
+
 	consAddress := sdk.ConsAddress(tests.GenerateAddress().Bytes())
 
-	baseapp.SetMinGasPrices(suite.money(suite.baseMinGasPrice))
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.money(suite.baseMinGasPrice))
+	baseapp.SetMinGasPrices(suite.cfg.MinGasPrices)
+	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.cfg.MinGasPrices)
 
-	suite.cfg = network.DefaultConfig()
 	suite.cfg.NumValidators = 1
-
 	suite.app = app.Setup(false, suite.patchGenesis)
 
 	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{
@@ -104,7 +102,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 		NextValidatorsHash: tmhash.Sum([]byte("next_validators")),
 		ConsensusHash:      tmhash.Sum([]byte("consensus")),
 		LastResultsHash:    tmhash.Sum([]byte("last_result")),
-	}) //.WithMinGasPrices(sdk.NewDecCoins(sdk.NewDecCoin(sdk.DefaultBondDenom, sdk.NewInt(1))))
+	})
 
 	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	suite.ctx.WithLogger(logger)
@@ -147,6 +145,7 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 	suite.showCurrentProposals()
 	suite.sendMoney(account, suite.money("19"), true)
 	suite.sendMoney(account, suite.money("21"), false)
+	fmt.Println("Done!")
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
@@ -170,7 +169,7 @@ func (suite *GenesisTestSuite) callCreateNewMember() sdk.AccAddress {
 		sdk.NewCoins(sdk.NewCoin(network.DefaultBondDenom, sdk.NewInt(300))),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("2")),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, suite.money("1")),
 	)
 	suite.Require().NoError(err2)
 	var txResp sdk.TxResponse
@@ -263,6 +262,7 @@ func (suite *GenesisTestSuite) sendMoney(tergetAddress sdk.AccAddress, fee strin
 
 func (suite *GenesisTestSuite) printIfError(txResp sdk.TxResponse) {
 	if txResp.Code != 0 {
+		fmt.Println("Unexpected error in tx response:")
 		fmt.Println(txResp)
 	}
 }

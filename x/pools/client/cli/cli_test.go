@@ -2,6 +2,8 @@ package cli_test
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	ethermint "github.com/tharsis/ethermint/types"
 	"testing"
 
@@ -38,6 +40,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 
 	var err error
 	s.cfg = testnet.DefaultConfig()
+	minGasPriceHelper.Create(baseapp.SetMinGasPrices, s.cfg.MinGasPrices)
 	s.cfg.NumValidators = 1
 
 	// modification to pay fee with test bond denom "stake"
