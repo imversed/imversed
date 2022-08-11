@@ -2,6 +2,8 @@ package testutil
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"strings"
 	"testing"
 
@@ -37,6 +39,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 
 	var err error
 	s.cfg = evmosnetwork.DefaultConfig()
+	minGasPriceHelper.Create(baseapp.SetMinGasPrices, s.cfg.MinGasPrices)
 	s.cfg.NumValidators = 1
 
 	s.network, err = network.New(s.T(), s.T().TempDir(), s.cfg)
