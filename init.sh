@@ -79,6 +79,8 @@ if [[ $1 == "pending" ]]; then
   fi
 fi
 
+sed -i -e 's/127.0.0.1:26657/0.0.0.0:26657/g' $HOME/.imversed/config/config.toml
+
 # Allocate genesis accounts (cosmos formatted addresses)
 ~/go/bin/imversed add-genesis-account $KEY 100000000000000000000000000aimv --keyring-backend $KEYRING
 
