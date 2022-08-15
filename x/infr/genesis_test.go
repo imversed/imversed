@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
-	"os"
 	"runtime"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/suite"
-	"github.com/tendermint/tendermint/libs/log"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/suite"
 
 	"github.com/imversed/imversed/app"
 	"github.com/imversed/imversed/tests"
@@ -104,9 +101,6 @@ func (suite *GenesisTestSuite) SetupTest() {
 		LastResultsHash:    tmhash.Sum([]byte("last_result")),
 	})
 
-	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
-	suite.ctx.WithLogger(logger)
-
 	var err error
 	suite.network, err = network.New(suite.T(), suite.T().TempDir(), suite.cfg)
 
@@ -142,10 +136,10 @@ func (suite *GenesisTestSuite) TestMinGasPrice() {
 	time.Sleep(10 * time.Second)
 	suite.callVote()
 	time.Sleep(45 * time.Second)
-	suite.showCurrentProposals()
+	//suite.showCurrentProposals()
 	suite.sendMoney(account, suite.money("19"), true)
 	suite.sendMoney(account, suite.money("21"), false)
-	fmt.Println("Done!")
+	//fmt.Println("Done!")
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
