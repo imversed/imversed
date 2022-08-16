@@ -136,6 +136,12 @@ func DefaultConfig() Config {
 	}
 }
 
+func (conf Config) WithDenom(bondDenom string, minGas string) Config {
+	conf.BondDenom = bondDenom
+	conf.MinGasPrices = fmt.Sprintf("%s%s", minGas, bondDenom)
+	return conf
+}
+
 type (
 	// Network defines a local in-process testing network using SimApp. It can be
 	// configured to start any number of validators, each with its own RPC and API

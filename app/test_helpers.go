@@ -36,7 +36,8 @@ var DefaultConsensusParams = &abci.ConsensusParams{
 // Setup initializes a new ImversedApp. A Nop logger is set in ImversedApp.
 func Setup(isCheckTx bool, patchGenesis func(*ImversedApp, simapp.GenesisState) simapp.GenesisState) *ImversedApp {
 	db := dbm.NewMemDB()
-	app := NewImversedApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5, encoding.MakeConfig(ModuleBasics), simapp.EmptyAppOptions{})
+	app := NewImversedApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5,
+		encoding.MakeConfig(ModuleBasics), simapp.EmptyAppOptions{})
 	if !isCheckTx {
 		// init chain must be called to stop deliverState from being nil
 		genesisState := NewDefaultGenesisState()

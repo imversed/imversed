@@ -2,11 +2,12 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 
 	"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
@@ -662,6 +663,7 @@ func NewImversedApp(
 		transferModule,
 		evm.NewAppModule(app.EvmKeeper, app.AccountKeeper),
 		feemarket.NewAppModule(app.FeeMarketKeeper),
+		//infr.NewAppModule(appCodec, app.InfrKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()

@@ -3,6 +3,7 @@ package network
 import (
 	"encoding/json"
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"path/filepath"
 	"time"
 
@@ -28,6 +29,7 @@ import (
 	mintypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
+	config "github.com/imversed/imversed/cmd/config"
 	"github.com/tharsis/ethermint/server"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
@@ -261,4 +263,28 @@ func WriteFile(name string, dir string, contents []byte) error {
 	}
 
 	return tmos.WriteFile(file, contents, 0o644)
+}
+
+func InitTestConfig() {
+	/*Bech32MainPrefix := "imversed"
+	var Purpose uint32 = 44
+	var CoinType uint32 = 118
+	PrefixValidator := "val"
+	PrefixConsensus := "cons"
+	PrefixPublic := "pub"
+	PrefixOperator := "oper"
+	Bech32PrefixAccAddr := Bech32MainPrefix
+	Bech32PrefixAccPub := Bech32MainPrefix + PrefixPublic
+	Bech32PrefixValAddr := Bech32MainPrefix + PrefixValidator + PrefixOperator
+	Bech32PrefixValPub := Bech32MainPrefix + PrefixValidator + PrefixOperator + PrefixPublic
+	Bech32PrefixConsAddr := Bech32MainPrefix + PrefixValidator + PrefixConsensus
+	Bech32PrefixConsPub := Bech32MainPrefix + PrefixValidator + PrefixConsensus + PrefixPublic
+
+	config := sdk.GetConfig()
+	config.SetPurpose(Purpose)
+	config.SetCoinType(CoinType)
+	config.SetBech32PrefixForAccount(Bech32PrefixAccAddr, Bech32PrefixAccPub)
+	config.SetBech32PrefixForValidator(Bech32PrefixValAddr, Bech32PrefixValPub)
+	config.SetBech32PrefixForConsensusNode(Bech32PrefixConsAddr, Bech32PrefixConsPub)*/
+	config.SetBech32Prefixes(sdk.GetConfig())
 }

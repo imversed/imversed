@@ -3,11 +3,15 @@ package infr
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/x/distribution/simulation"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/imversed/imversed/x/infr/keeper"
@@ -86,14 +90,15 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command { return nil }
 // AppModule implements the AppModule interface for the capability module.
 type AppModule struct {
 	AppModuleBasic
-
-	keeper keeper.Keeper
+	keeper      keeper.Keeper
+	originalCdc codec.Codec
 }
 
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+		originalCdc:    cdc,
 	}
 }
 
@@ -152,4 +157,32 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	v := am.keeper.GetParams(ctx)
 	minGasPriceHelper.Helper.Set(v.MinGasPrices)
 	return []abci.ValidatorUpdate{}
+}
+
+// Simulation part
+// GenerateGenesisState creates a randomized GenState of the fee market module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	fmt.Println("Unresolved simulation function GenerateGenesisState")
+}
+
+// ProposalContents doesn't return any content functions for governance proposals.
+func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	fmt.Println("Unresolved simulation function ProposalContents")
+	return nil
+}
+
+// RandomizedParams creates randomized feegrant param changes for the simulator.
+func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	fmt.Println("Unresolved simulation function RandomizedParams")
+	return nil
+}
+
+func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.originalCdc)
+}
+
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	fmt.Println("Unresolved simulation function WeightedOperations")
+	operations := make([]simtypes.WeightedOperation, 0)
+	return operations
 }

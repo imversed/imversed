@@ -75,5 +75,6 @@ func NewChangeMinGasPricesProposalCmd() *cobra.Command {
 	if err := cmd.MarkFlagRequired(cli.FlagDeposit); err != nil {
 		panic(err)
 	}
+
 	return cmd
 }
