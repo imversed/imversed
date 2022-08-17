@@ -2,6 +2,7 @@ package dev_tests
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/ethereum/go-ethereum"
@@ -13,6 +14,7 @@ import (
 	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"github.com/tharsis/ethermint/server/config"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
+	"io/ioutil"
 	"math/big"
 	"runtime"
 	"testing"
@@ -52,6 +54,7 @@ type IntegrationTestSuite struct {
 	gethClient *gethclient.Client
 	ethSigner  ethtypes.Signer
 	rpcClient  *rpc.Client
+	contract   evmtypes.CompiledContract
 }
 
 func TestGenesisTestSuite(t *testing.T) {
@@ -129,6 +132,11 @@ func (s *IntegrationTestSuite) SetupTest() {
 	chainId, err := ethermint.ParseChainID(s.cfg.ChainID)
 	s.Require().NoError(err)
 	s.ethSigner = ethtypes.LatestSignerForChainID(chainId)
+
+	content, err := ioutil.ReadFile("erc20_test_contract.json")
+	s.Require().NoError(err)
+	err = json.Unmarshal(content, &s.contract)
+	s.Require().NoError(err)
 
 }
 
@@ -215,10 +223,6 @@ func (s *IntegrationTestSuite) transferERC20Transaction(contractAddr, to common.
 
 }
 
-func (suite *IntegrationTestSuite) showName() {
-
-}
-
 func (suite *IntegrationTestSuite) showCurrentContracts() {
 	queryCmd := ercCli.GetTokenPairsCmd()
 	queryOut, queryErr := clitestutil.ExecTestCLICmd(suite.validator.ClientCtx, queryCmd, []string{})
@@ -232,10 +236,17 @@ func (s *IntegrationTestSuite) deployERC20Contract() (transaction common.Hash, c
 
 	ctorArgs, err := evmtypes.ERC20Contract.ABI.Pack("", owner, supply)
 	s.Require().NoError(err)
-	//fmt.Println(hex.EncodeToString(evmtypes.ERC20Contract.Bin))
-	//fmt.Println(ctorArgs)
 	data := append(evmtypes.ERC20Contract.Bin, ctorArgs...)
-	//fmt.Println(hex.EncodeToString(data))
+	return s.deployContract(data)
+}
+
+func (s *IntegrationTestSuite) deployCustomERC20Contract() (transaction common.Hash, contractAddr common.Address) {
+	//owner := common.BytesToAddress(s.network.Validators[0].Address)
+	supply := sdk.NewIntWithDecimal(1000, 18).BigInt()
+
+	ctorArgs, err := s.contract.ABI.Pack("", "somecontract", "BLA", uint8(18), supply)
+	s.Require().NoError(err)
+	data := append(s.contract.Bin, ctorArgs...)
 	return s.deployContract(data)
 }
 
