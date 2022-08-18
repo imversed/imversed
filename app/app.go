@@ -9,7 +9,7 @@ import (
 
 	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 
-	"github.com/imversed/imversed/docs"
+	//"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	poolsmodule "github.com/imversed/imversed/x/pools"
@@ -840,7 +840,7 @@ func (app *ImversedApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 	}
 
 	// register app's OpenAPI routes.
-	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
+	// apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
 	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(appName, "/static/openapi.yml"))
 }
 
