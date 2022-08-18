@@ -1,7 +1,3 @@
-<!--
-order: 7
--->
-
 # Parameters
 
 The erc20 module contains the following parameters:

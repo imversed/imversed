@@ -1,7 +1,3 @@
-<!--
-order: 6
--->
-
 # Events
 
 The `x/erc20` module emits the following events:
