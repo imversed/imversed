@@ -81,6 +81,11 @@ module.exports = {
           children: ["introduction/", "introduction/resources", "modules/"],
         },
         {
+          title: "For Developers",
+          collapsable: true,
+          children: ["developers/" ],
+        },
+        {
           title: "ERC20",
           collapsable: false,
           children: [
