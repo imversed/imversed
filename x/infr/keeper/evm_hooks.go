@@ -54,17 +54,20 @@ func (h Hooks) PostTxProcessing(
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "name")
 	if err != nil {
-		return nil
+		//OPTIONAL - This method can be used to improve usability,
+		//but interfaces and other contracts MUST NOT expect these values to be present.
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "symbol")
 	if err != nil {
-		return nil
+		//OPTIONAL - This method can be used to improve usability,
+		//but interfaces and other contracts MUST NOT expect these values to be present.
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "decimals")
 	if err != nil {
-		return nil
+		//OPTIONAL - This method can be used to improve usability,
+		//but interfaces and other contracts MUST NOT expect these values to be present.
 	}
 
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "totalSupply")
