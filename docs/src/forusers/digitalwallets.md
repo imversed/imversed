@@ -150,6 +150,7 @@ The [Keplr](https://www.keplr.app/) browser extension is a wallet for accessing 
 ## Backup
 
 ```List
+SYNOPSIS
 Learn how to backup your wallet's mnemonic and private key.
 
 ```
@@ -187,7 +188,7 @@ Coming soon
 
 ```
 
-## Ethereum-Formatted Private Keys
+### Ethereum-Formatted Private Keys
 
 ::: tip 
 
