@@ -4,6 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"math/big"
+	"runtime"
+	"testing"
+	"time"
+
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -14,11 +20,6 @@ import (
 	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"github.com/tharsis/ethermint/server/config"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
-	"io/ioutil"
-	"math/big"
-	"runtime"
-	"testing"
-	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
@@ -150,34 +151,8 @@ func (s *IntegrationTestSuite) TestEvmHook() {
 	fmt.Println("ContractHash: " + contractHash.String())
 	fmt.Println("ContractAddress: " + contractAddress.String())
 
-	//s.sendTransaction(contractAddress)
-
-	s.showCurrentContracts()
+	s.showTokenPairs()
 	fmt.Println("Done!")
-}
-
-//lint:ignore U1000 Ignore unused function temporarily for debugging
-func (s *IntegrationTestSuite) sendTransaction(contractAddress common.Address) {
-	blockNum, err := s.network.Validators[0].JSONRPCClient.BlockNumber(s.ctx)
-	s.Require().NoError(err)
-
-	s.transferERC20Transaction(contractAddress, common.HexToAddress("0x378c50D9264C63F3F92B806d4ee56E9D86FfB3Ec"), big.NewInt(10))
-	filterQuery := ethereum.FilterQuery{
-		FromBlock: big.NewInt(int64(blockNum)),
-	}
-
-	logs, err := s.network.Validators[0].JSONRPCClient.FilterLogs(s.ctx, filterQuery)
-	s.Require().NoError(err)
-	s.Require().NotNil(logs)
-	s.Require().Equal(1, len(logs))
-
-	expectedTopics := []common.Hash{
-		common.HexToHash("0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"),
-		common.HexToHash("0x000000000000000000000000" + fmt.Sprintf("%x", common.BytesToAddress(s.network.Validators[0].Address))),
-		common.HexToHash("0x000000000000000000000000378c50d9264c63f3f92b806d4ee56e9d86ffb3ec"),
-	}
-
-	s.Require().Equal(expectedTopics, logs[0].Topics)
 }
 
 func (s *IntegrationTestSuite) transferERC20Transaction(contractAddr, to common.Address, amount *big.Int) common.Hash {
@@ -223,13 +198,14 @@ func (s *IntegrationTestSuite) transferERC20Transaction(contractAddr, to common.
 
 }
 
-func (suite *IntegrationTestSuite) showCurrentContracts() {
+func (suite *IntegrationTestSuite) showTokenPairs() {
 	queryCmd := ercCli.GetTokenPairsCmd()
 	queryOut, queryErr := clitestutil.ExecTestCLICmd(suite.validator.ClientCtx, queryCmd, []string{})
 	suite.Require().NoError(queryErr)
 	fmt.Println(queryOut)
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func (s *IntegrationTestSuite) deployERC20Contract() (transaction common.Hash, contractAddr common.Address) {
 	owner := common.BytesToAddress(s.network.Validators[0].Address)
 	supply := sdk.NewIntWithDecimal(1000, 18).BigInt()
@@ -240,6 +216,7 @@ func (s *IntegrationTestSuite) deployERC20Contract() (transaction common.Hash, c
 	return s.deployContract(data)
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func (s *IntegrationTestSuite) deployCustomERC20Contract() (transaction common.Hash, contractAddr common.Address) {
 	//owner := common.BytesToAddress(s.network.Validators[0].Address)
 	supply := sdk.NewIntWithDecimal(1000, 18).BigInt()
@@ -295,7 +272,8 @@ func (s *IntegrationTestSuite) deployContract(data []byte) (transaction common.H
 	contractDeployTx := evmtypes.NewTxContract(chainID, nonce, nil, // amount
 		gas,      // gasLimit
 		gasPrice, // gasPrice
-		nil, nil,
+		nil,
+		nil,
 		data, // input
 		nil,  // accesses
 	)

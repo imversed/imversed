@@ -52,24 +52,6 @@ func (h Hooks) PostTxProcessing(
 
 	account := common.BytesToAddress(msg.From().Bytes())
 
-	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "name")
-	if err != nil {
-		//OPTIONAL - This method can be used to improve usability,
-		//but interfaces and other contracts MUST NOT expect these values to be present.
-	}
-
-	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "symbol")
-	if err != nil {
-		//OPTIONAL - This method can be used to improve usability,
-		//but interfaces and other contracts MUST NOT expect these values to be present.
-	}
-
-	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "decimals")
-	if err != nil {
-		//OPTIONAL - This method can be used to improve usability,
-		//but interfaces and other contracts MUST NOT expect these values to be present.
-	}
-
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "totalSupply")
 	if err != nil {
 		return nil
