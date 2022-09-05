@@ -206,5 +206,3 @@ replace (
 	github.com/tharsis/ethermint => /Users/Fulldive/GolandProjects/ethermintglobal
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
-
-replace github.com/cosmos/cosmos-sdk => github.com/crypto-org-chain/cosmos-sdk v0.44.4-0.20220518050709-bd4ca739c699
