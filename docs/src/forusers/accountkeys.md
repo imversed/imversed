@@ -53,13 +53,12 @@ Note: The Ethereum address associated with a public key can be derived by taking
 
 
 
-<!-- ::: tip  
+::: warning HEY IIS FANS 
 
-NOTE: Cosmos `secp256k1` keys are not supported on Imversed due to compatibility issues with Ethereum transactions.
+**Note**: Cosmos `secp256k1` keys are not supported on Imversed due to compatibility issues with Ethereum transactions.
 
 :::
 
--->
 
 ## Keyring Backends
 
@@ -130,7 +129,7 @@ The `kwallet` backend uses `KDE Wallet Manager`, which comes installed by defaul
 The `test` backend is a password-less variation of the `file` backend. Keys are stored **unencrypted** on disk. This keyring is provided for testing purposes only. Use at your own risk!
 
 
-::: tip
+::: warning
 
 🚨 DANGER: **Never** create your mainnet validator keys using a `test` keying backend. Doing so might result in a loss of funds by making your funds remotely accessible via the `eth_sendTransaction` JSON-RPC endpoint.
 

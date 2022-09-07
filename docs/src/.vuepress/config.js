@@ -88,7 +88,7 @@ module.exports = {
         {
           title: "For Developers",
           collapsable: false,
-          children: ["fordevelopers/", "fordevelopers/quickconnect"],
+          children: ["fordevelopers/", "fordevelopers/quickconnect", "fordevelopers/clients", "fordevelopers/guides"],
         },
         {
           title: "ERC20",

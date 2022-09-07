@@ -10,7 +10,7 @@ helpfulVotes: false
 ```List
 
 SYNOPSIS
-Connect your Metamask wallet with Imversed.`
+Connect your Metamask wallet with Imversed.
 
 ```
 
@@ -38,15 +38,17 @@ Here is the list of fields that you can use to paste on Metamask:
 
 :::: tabs ::: tab Mainnet
 
-- Network Name: `Imversed Mainnet`
+- Network Name: `Imversed Canary`
 
-- New RPC URL: 
+- New RPC URL: `https://jsonrpc-endpoint-canary.imversed.com:443`
 
-- Chain ID: 
+- Chain ID: `5555555`
 
-- Currency Symbol (optional): `AIMV`
+- Currency Symbol (optional): `IMV`
 
-- Block Explorer URL (optional): `n/a` ::: ::: tab Testnet
+- Block Explorer URL (optional): `https://txe-canary.imversed.com` 
+
+:::: ::: tab Testnet
 
 - Network Name: `Imversed Testnet`
 
@@ -54,19 +56,24 @@ Here is the list of fields that you can use to paste on Metamask:
 
 - Chain ID: `5555558`
 
-- Currency Symbol (optional): `AIMV`
+- Currency Symbol (optional): `IMV`
 
-- Block Explorer URL (optional):  ::: ::: tab Local Node
+- Block Explorer URL (optional):  
 
-- Network Name: Imversed Local
+::: ::: tab Local Node
+
+- Network Name: `Imversed Local`
 
 - New RPC URL: `https://jsonrpc-endpoint-test.imversed.com:443/`
 
 - Chain ID: `5555558`
 
-- Currency Symbol (optional): `AIMV`
+- Currency Symbol (optional): `IMV`
 
-- Block Explorer URL (optional): `https://txe-test.imversed.com/` ::: ::::
+- Block Explorer URL (optional): `https://txe-test.imversed.com/` 
+
+
+::: ::::
 
 ## Import Account to Metamask
 
@@ -87,17 +94,13 @@ Here will be picture chainlist.org
 
 Close the Settings, go to My Accounts (top right circle) and select Import Account. You should see an image like the following one:
 
-``` List
-
-Here will be picture from metamask extension
-
-```
+![Install Screen 2](../images/Screenshot_4.png)
 
 Now you can export your private key from the terminal using the following command. Again, make sure to replace `mykey` with the name of the key that you want to export and use the correct `keyring-backend`:
 
 ``` List
 
-Here will be picture command like `evmosd keys unsafe-export-eth-key mykey`
+imversed keys unsafe-export-eth-key mykey
 
 ```
 
