@@ -76,7 +76,7 @@ func (suite *AnteTestSuite) SetupTest() {
 			genesis[feemarkettypes.ModuleName] = app.AppCodec().MustMarshalJSON(feemarketGenesis)
 		}
 		evmGenesis := evmtypes.DefaultGenesisState()
-		evmGenesis.Params.RejectUnprotectedTx = true
+		evmGenesis.Params.AllowUnprotectedTxs = false
 		if !suite.enableLondonHF {
 			evmGenesis := evmtypes.DefaultGenesisState()
 			maxInt := sdk.NewInt(math.MaxInt64)
