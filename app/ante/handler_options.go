@@ -67,7 +67,8 @@ func newCosmosAnteHandler(options HandlerOptions) sdk.AnteHandler {
 		RejectMessagesDecorator{}, // reject MsgEthereumTxs
 		ante.NewSetUpContextDecorator(),
 		ante.NewRejectExtensionOptionsDecorator(),
-		ante.NewMempoolFeeDecorator(),
+		// deactivate decorator due to feemarket module existence
+		// ante.NewMempoolFeeDecorator(),
 		NewMinGasPriceDecorator(options.FeeMarketKeeper, options.EvmKeeper),
 		ante.NewValidateBasicDecorator(),
 		ante.NewTxTimeoutHeightDecorator(),
@@ -90,7 +91,8 @@ func newCosmosAnteHandlerEip712(options HandlerOptions) sdk.AnteHandler {
 		ante.NewSetUpContextDecorator(),
 		// NOTE: extensions option decorator removed
 		// ante.NewRejectExtensionOptionsDecorator(),
-		ante.NewMempoolFeeDecorator(),
+		// deactivate decorator due to feemarket module existence
+		// ante.NewMempoolFeeDecorator(),
 		NewMinGasPriceDecorator(options.FeeMarketKeeper, options.EvmKeeper),
 		ante.NewValidateBasicDecorator(),
 		ante.NewTxTimeoutHeightDecorator(),
