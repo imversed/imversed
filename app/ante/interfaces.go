@@ -1,6 +1,7 @@
 package ante
 
 import (
+	feemarkettypes "github.com/tharsis/ethermint/x/feemarket/types"
 	"math/big"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -31,4 +32,9 @@ type EVMKeeper interface {
 
 type protoTxProvider interface {
 	GetProtoTx() *tx.Tx
+}
+
+// FeeMarketKeeper defines the expected keeper interface used on the AnteHandler
+type FeeMarketKeeper interface {
+	GetParams(ctx sdk.Context) (params feemarkettypes.Params)
 }
