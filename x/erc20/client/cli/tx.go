@@ -13,7 +13,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
-	imversed "github.com/tharsis/ethermint/types"
+	imversed "github.com/evmos/ethermint/types"
 
 	"github.com/imversed/imversed/x/erc20/types"
 )

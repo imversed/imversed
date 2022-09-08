@@ -2,8 +2,8 @@ package app
 
 import (
 	"encoding/json"
+	"github.com/evmos/ethermint/encoding"
 	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tharsis/ethermint/encoding"
 	"os"
 
 	dbm "github.com/tendermint/tm-db"

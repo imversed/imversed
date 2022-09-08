@@ -7,10 +7,10 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
+	evmtypes "github.com/evmos/ethermint/x/evm/types"
 	"github.com/imversed/imversed/contracts"
 	"github.com/imversed/imversed/x/erc20/types"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
-	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 	"math/big"
 )
 

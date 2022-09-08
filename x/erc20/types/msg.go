@@ -6,7 +6,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/ethereum/go-ethereum/common"
-	imversed "github.com/tharsis/ethermint/types"
+	imversed "github.com/evmos/ethermint/types"
 	"strings"
 )
 
