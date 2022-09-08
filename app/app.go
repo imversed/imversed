@@ -31,7 +31,6 @@ import (
 	erc20types "github.com/imversed/imversed/x/erc20/types"
 
 	"github.com/imversed/imversed/x/infr"
-	infrclient "github.com/imversed/imversed/x/infr/client"
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
 
@@ -161,8 +160,8 @@ var (
 		gov.NewAppModuleBasic(
 			paramsclient.ProposalHandler, distrclient.ProposalHandler, upgradeclient.ProposalHandler, upgradeclient.CancelProposalHandler,
 			ibcclientclient.UpdateClientProposalHandler, ibcclientclient.UpgradeProposalHandler,
-			// infr proposals handlers
-			infrclient.ChangeMinGasPricesProposalHandler,
+			// infr proposals handlers deactivated due to feemarket module
+			//infrclient.ChangeMinGasPricesProposalHandler,
 		),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},

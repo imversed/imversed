@@ -15,7 +15,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/imversed/imversed/x/infr/keeper"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"github.com/imversed/imversed/x/infr/types"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -154,8 +153,10 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	v := am.keeper.GetParams(ctx)
-	minGasPriceHelper.Helper.Set(v.MinGasPrices)
+	//deactivated due to feemarket module
+
+	//v := am.keeper.GetParams(ctx)
+	//minGasPriceHelper.Helper.Set(v.MinGasPrices)
 	return []abci.ValidatorUpdate{}
 }
 
