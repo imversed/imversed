@@ -1,20 +1,21 @@
 package ante_test
 
 import (
-	sdkmath "cosmossdk.io/math"
 	"errors"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"math/big"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
+
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/ethereum/go-ethereum/core/types"
 	ethparams "github.com/ethereum/go-ethereum/params"
+	"github.com/evmos/ethermint/tests"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
-	"github.com/imversed/imversed/tests"
 )
 
 func (suite AnteTestSuite) TestAnteHandler() {
@@ -304,8 +305,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"success - DeliverTx EIP712 signed Cosmos Tx with MsgSend",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9000-1", gas, amount)
 				return txBuilder.GetTx()
 			}, false, false, true,
@@ -314,9 +315,9 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"success - DeliverTx EIP712 signed Cosmos Tx with DelegateMsg",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				coinAmount := sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20))
-				amount := sdk.NewCoins(coinAmount)
 				gas := uint64(200000)
+				coinAmount := sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas)))
+				amount := sdk.NewCoins(coinAmount)
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgDelegate(from, privKey, "ethermint_9000-1", gas, amount)
 				return txBuilder.GetTx()
 			}, false, false, true,
@@ -325,8 +326,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"fails - DeliverTx EIP712 signed Cosmos Tx with wrong Chain ID",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9002-1", gas, amount)
 				return txBuilder.GetTx()
 			}, false, false, false,
@@ -335,8 +336,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"fails - DeliverTx EIP712 signed Cosmos Tx with different gas fees",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9001-1", gas, amount)
 				txBuilder.SetGasLimit(uint64(300000))
 				txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(30))))
@@ -347,8 +348,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"fails - DeliverTx EIP712 signed Cosmos Tx with empty signature",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9001-1", gas, amount)
 				sigsV2 := signing.SignatureV2{}
 				txBuilder.SetSignatures(sigsV2)
@@ -359,8 +360,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"fails - DeliverTx EIP712 signed Cosmos Tx with invalid sequence",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9001-1", gas, amount)
 				nonce, err := suite.app.AccountKeeper.GetSequence(suite.ctx, acc.GetAddress())
 				suite.Require().NoError(err)
@@ -379,8 +380,8 @@ func (suite AnteTestSuite) TestAnteHandler() {
 			"fails - DeliverTx EIP712 signed Cosmos Tx with invalid signMode",
 			func() sdk.Tx {
 				from := acc.GetAddress()
-				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(20)))
 				gas := uint64(200000)
+				amount := sdk.NewCoins(sdk.NewCoin(evmtypes.DefaultEVMDenom, sdkmath.NewInt(100*int64(gas))))
 				txBuilder := suite.CreateTestEIP712TxBuilderMsgSend(from, privKey, "ethermint_9001-1", gas, amount)
 				nonce, err := suite.app.AccountKeeper.GetSequence(suite.ctx, acc.GetAddress())
 				suite.Require().NoError(err)
@@ -421,6 +422,7 @@ func (suite AnteTestSuite) TestAnteHandler() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			setup()
+
 			suite.ctx = suite.ctx.WithIsCheckTx(tc.checkTx).WithIsReCheckTx(tc.reCheckTx)
 
 			// expConsumed := params.TxGasContractCreation + params.TxGas
@@ -453,18 +455,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - DeliverTx (contract)",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -476,18 +477,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - CheckTx (contract)",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -499,18 +499,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - ReCheckTx (contract)",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -522,19 +521,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - DeliverTx",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
@@ -546,19 +544,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - CheckTx",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
@@ -570,19 +567,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - ReCheckTx",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
@@ -594,19 +590,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"success - CheckTx (cosmos tx not signed)",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
@@ -618,19 +613,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"fail - CheckTx (cosmos tx is not valid)",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				txBuilder := suite.CreateTestTxBuilder(signedTx, privKey, 1, false)
@@ -644,19 +638,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"fail - CheckTx (memo too long)",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				txBuilder := suite.CreateTestTxBuilder(signedTx, privKey, 1, false)
@@ -669,18 +662,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithDynamicTxFee() {
 		{
 			"fail - DynamicFeeTx without london hark fork",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -729,18 +721,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithParams() {
 		{
 			"fail - Contract Creation Disabled",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -752,18 +743,17 @@ func (suite AnteTestSuite) TestAnteHandlerWithParams() {
 		{
 			"success - Contract Creation Enabled",
 			func() sdk.Tx {
-				signedContractTx :=
-					evmtypes.NewTxContract(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedContractTx := evmtypes.NewTxContract(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedContractTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedContractTx, privKey, 1, false)
@@ -775,19 +765,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithParams() {
 		{
 			"fail - EVM Call Disabled",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
@@ -799,19 +788,18 @@ func (suite AnteTestSuite) TestAnteHandlerWithParams() {
 		{
 			"success - EVM Call Enabled",
 			func() sdk.Tx {
-				signedTx :=
-					evmtypes.NewTx(
-						suite.app.EvmKeeper.ChainID(),
-						1,
-						&to,
-						big.NewInt(10),
-						100000,
-						nil,
-						big.NewInt(ethparams.InitialBaseFee+1),
-						big.NewInt(1),
-						nil,
-						&types.AccessList{},
-					)
+				signedTx := evmtypes.NewTx(
+					suite.app.EvmKeeper.ChainID(),
+					1,
+					&to,
+					big.NewInt(10),
+					100000,
+					nil,
+					big.NewInt(ethparams.InitialBaseFee+1),
+					big.NewInt(1),
+					nil,
+					&types.AccessList{},
+				)
 				signedTx.From = addr.Hex()
 
 				tx := suite.CreateTestTx(signedTx, privKey, 1, false)
