@@ -4,8 +4,8 @@ go 1.18
 
 require (
 	cosmossdk.io/math v1.0.0-beta.3
-	github.com/cosmos/cosmos-sdk v0.46.0
-	github.com/cosmos/ibc-go/v5 v5.0.0-beta1
+	github.com/cosmos/cosmos-sdk v0.46.1
+	github.com/cosmos/ibc-go/v5 v5.0.0-rc0
 	github.com/ethereum/go-ethereum v1.10.19
 	github.com/evmos/ethermint v0.19.2
 	github.com/gogo/protobuf v1.3.3
@@ -97,6 +97,7 @@ require (
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	go.opencensus.io v0.23.0 // indirect
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df // indirect
 	google.golang.org/api v0.81.0 // indirect
