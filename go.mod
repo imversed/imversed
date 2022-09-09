@@ -5,7 +5,7 @@ go 1.18
 require (
 	cosmossdk.io/math v1.0.0-beta.3
 	github.com/cosmos/cosmos-sdk v0.46.0
-	github.com/cosmos/ibc-go/v5 v5.0.0
+	github.com/cosmos/ibc-go/v5 v5.0.0-beta1
 	github.com/ethereum/go-ethereum v1.10.19
 	github.com/evmos/ethermint v0.19.2
 	github.com/gogo/protobuf v1.3.3
@@ -230,7 +230,6 @@ require (
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
 
-	github.com/cosmos/ibc-go/v5 => github.com/notional-labs/ibc-go/v5 v5.0.0-20220728121949-040aca93dda5
 	github.com/evmos/ethermint => /Users/Fulldive/GolandProjects/ethermintglobal
 
 	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
