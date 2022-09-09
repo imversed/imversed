@@ -35,11 +35,11 @@ func (k Keeper) SwapExactAmountIn(
 	// with the global swap fee and the pool swap fee
 
 	tokenOutAmount = calcOutGivenIn(
-		inPoolAsset.Token.Amount.ToDec(),
-		inPoolAsset.Weight.ToDec(),
-		outPoolAsset.Token.Amount.ToDec(),
-		outPoolAsset.Weight.ToDec(),
-		tokenIn.Amount.ToDec(),
+		sdk.NewDecFromInt(inPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(inPoolAsset.Weight),
+		sdk.NewDecFromInt(outPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(outPoolAsset.Weight),
+		sdk.NewDecFromInt(tokenIn.Amount),
 		pool.GetPoolParams().SwapFee,
 	).TruncateInt()
 	if tokenOutAmount.LTE(sdk.ZeroInt()) {
@@ -92,11 +92,11 @@ func (k Keeper) SwapExactAmountOut(
 	}
 
 	tokenInAmount = calcInGivenOut(
-		inPoolAsset.Token.Amount.ToDec(),
-		inPoolAsset.Weight.ToDec(),
-		outPoolAsset.Token.Amount.ToDec(),
-		outPoolAsset.Weight.ToDec(),
-		tokenOut.Amount.ToDec(),
+		sdk.NewDecFromInt(inPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(inPoolAsset.Weight),
+		sdk.NewDecFromInt(outPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(outPoolAsset.Weight),
+		sdk.NewDecFromInt(tokenOut.Amount),
 		pool.GetPoolParams().SwapFee,
 	).TruncateInt()
 	if tokenInAmount.LTE(sdk.ZeroInt()) {
@@ -175,10 +175,10 @@ func (k Keeper) CalculateSpotPriceWithSwapFee(ctx sdk.Context, poolId uint64, to
 	}
 
 	return calcSpotPriceWithSwapFee(
-		inPoolAsset.Token.Amount.ToDec(),
-		inPoolAsset.Weight.ToDec(),
-		outPoolAsset.Token.Amount.ToDec(),
-		outPoolAsset.Weight.ToDec(),
+		sdk.NewDecFromInt(inPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(inPoolAsset.Weight),
+		sdk.NewDecFromInt(outPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(outPoolAsset.Weight),
 		pool.GetPoolParams().SwapFee,
 	), nil
 }
@@ -192,10 +192,10 @@ func (k Keeper) CalculateSpotPrice(ctx sdk.Context, poolId uint64, tokenInDenom,
 
 	// calcSpotPriceWithSwapFee, but with fee = 0
 	return calcSpotPriceWithSwapFee(
-		inPoolAsset.Token.Amount.ToDec(),
-		inPoolAsset.Weight.ToDec(),
-		outPoolAsset.Token.Amount.ToDec(),
-		outPoolAsset.Weight.ToDec(),
+		sdk.NewDecFromInt(inPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(inPoolAsset.Weight),
+		sdk.NewDecFromInt(outPoolAsset.Token.Amount),
+		sdk.NewDecFromInt(outPoolAsset.Weight),
 		sdk.ZeroDec(),
 	), nil
 }

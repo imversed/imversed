@@ -3,7 +3,7 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 )
 
 // ModuleCdc references the global erc20 module codec. Note, the codec should
@@ -16,7 +16,7 @@ var ModuleCdc = codec.NewProtoCodec(codectypes.NewInterfaceRegistry())
 // RegisterInterfaces register implementations
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
-		(*govtypes.Content)(nil),
+		(*govv1.Content)(nil),
 		&ChangeMinGasPricesProposal{},
 	)
 

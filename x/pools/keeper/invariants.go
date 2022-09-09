@@ -106,8 +106,8 @@ func constantChange(p1, p2 types.PoolI) sdk.Dec {
 		if err != nil {
 			panic(err)
 		}
-		w := asset1.Weight.ToDec().Quo(totalWeight.ToDec())
-		ratio := asset1.Token.Amount.ToDec().Quo(asset2.Token.Amount.ToDec())
+		w := sdk.NewDecFromInt(asset1.Weight).Quo(sdk.NewDecFromInt(totalWeight))
+		ratio := sdk.NewDecFromInt(asset1.Token.Amount).Quo(sdk.NewDecFromInt(asset2.Token.Amount))
 		power := genericPow(ratio, w)
 		product = product.Mul(power)
 	}
