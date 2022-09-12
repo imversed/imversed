@@ -102,9 +102,9 @@ ignite c build --release &&
 tar -zxvf release/imversed_darwin_arm64.tar.gz  &&
 #mv imversedd imversed &&
 
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.4/bin &&
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.5/bin &&
 # copy binary with upgrade
 
-cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.4/bin &&
+cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.5/bin &&
 
 ~/go/bin/cosmovisor start

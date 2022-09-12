@@ -303,7 +303,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.3")
+	bApp.SetVersion("v3.5")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	minGasPriceHelper.SetBaseApp(bApp)
@@ -704,6 +704,8 @@ func NewImversedApp(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
+
+	app.setUpgradeHandler(app.configurator)
 
 	return app
 }
