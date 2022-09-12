@@ -24,8 +24,8 @@ import (
 
 	//currencyCli "github.com/imversed/imversed/x/currency/client/cli"
 
-	"github.com/tharsis/ethermint/crypto/hd"
-	ethermint "github.com/tharsis/ethermint/types"
+	"github.com/evmos/ethermint/crypto/hd"
+	ethermint "github.com/evmos/ethermint/types"
 
 	//"github.com/spf13/cast"
 

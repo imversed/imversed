@@ -111,7 +111,7 @@ func (k Keeper) JoinPool(
 	// shareRatio is the desired number of shares, divided by the total number of
 	// shares currently in the pool. It is intended to be used in scenarios where you want
 	// (tokens per share) * number of shares out = # tokens * (# shares out / cur total shares)
-	shareRatio := shareOutAmount.ToDec().QuoInt(totalSharesAmount)
+	shareRatio := sdk.NewDecFromInt(shareOutAmount).QuoInt(totalSharesAmount)
 	if shareRatio.LTE(sdk.ZeroDec()) {
 		return sdkerrors.Wrapf(types.ErrInvalidMathApprox, "share ratio is zero or negative")
 	}
@@ -190,11 +190,11 @@ func (k Keeper) JoinSwapExternAmountIn(
 	}
 
 	shareOutAmount = calcPoolOutGivenSingleIn(
-		PoolAsset.Token.Amount.ToDec(),
-		PoolAsset.Weight.ToDec(),
-		pool.GetTotalShares().Amount.ToDec(),
-		pool.GetTotalWeight().ToDec(),
-		tokenIn.Amount.ToDec(),
+		sdk.NewDecFromInt(PoolAsset.Token.Amount),
+		sdk.NewDecFromInt(PoolAsset.Weight),
+		sdk.NewDecFromInt(pool.GetTotalShares().Amount),
+		sdk.NewDecFromInt(pool.GetTotalWeight()),
+		sdk.NewDecFromInt(tokenIn.Amount),
 		pool.GetPoolParams().SwapFee,
 	).TruncateInt()
 
@@ -258,11 +258,11 @@ func (k Keeper) JoinSwapShareAmountOut(
 	}
 
 	tokenInAmount = calcSingleInGivenPoolOut(
-		PoolAsset.Token.Amount.ToDec(),
-		PoolAsset.Weight.ToDec(),
-		pool.GetTotalShares().Amount.ToDec(),
-		pool.GetTotalWeight().ToDec(),
-		shareOutAmount.ToDec(),
+		sdk.NewDecFromInt(PoolAsset.Token.Amount),
+		sdk.NewDecFromInt(PoolAsset.Weight),
+		sdk.NewDecFromInt(pool.GetTotalShares().Amount),
+		sdk.NewDecFromInt(pool.GetTotalWeight()),
+		sdk.NewDecFromInt(shareOutAmount),
 		pool.GetPoolParams().SwapFee,
 	).TruncateInt()
 
@@ -318,7 +318,7 @@ func (k Keeper) ExitPool(
 	totalSharesAmount := pool.GetTotalShares().Amount
 	exitFee := pool.GetPoolParams().ExitFee.MulInt(shareInAmount).TruncateInt()
 	shareInAmountAfterExitFee := shareInAmount.Sub(exitFee)
-	shareRatio := shareInAmountAfterExitFee.ToDec().QuoInt(totalSharesAmount)
+	shareRatio := sdk.NewDecFromInt(shareInAmountAfterExitFee).QuoInt(totalSharesAmount)
 
 	if shareRatio.LTE(sdk.ZeroDec()) {
 		return sdkerrors.Wrapf(types.ErrInvalidMathApprox, "share ratio is zero or negative")
@@ -410,11 +410,11 @@ func (k Keeper) ExitSwapShareAmountIn(
 	}
 
 	tokenOutAmount = calcSingleOutGivenPoolIn(
-		PoolAsset.Token.Amount.ToDec(),
-		PoolAsset.Weight.ToDec(),
-		pool.GetTotalShares().Amount.ToDec(),
-		pool.GetTotalWeight().ToDec(),
-		shareInAmount.ToDec(),
+		sdk.NewDecFromInt(PoolAsset.Token.Amount),
+		sdk.NewDecFromInt(PoolAsset.Weight),
+		sdk.NewDecFromInt(pool.GetTotalShares().Amount),
+		sdk.NewDecFromInt(pool.GetTotalWeight()),
+		sdk.NewDecFromInt(shareInAmount),
 		pool.GetPoolParams().SwapFee,
 		pool.GetPoolParams().ExitFee,
 	).TruncateInt()
@@ -495,11 +495,11 @@ func (k Keeper) ExitSwapExternAmountOut(
 	}
 
 	shareInAmount = calcPoolInGivenSingleOut(
-		PoolAsset.Token.Amount.ToDec(),
-		PoolAsset.Weight.ToDec(),
-		pool.GetTotalShares().Amount.ToDec(),
-		pool.GetTotalWeight().ToDec(),
-		tokenOut.Amount.ToDec(),
+		sdk.NewDecFromInt(PoolAsset.Token.Amount),
+		sdk.NewDecFromInt(PoolAsset.Weight),
+		sdk.NewDecFromInt(pool.GetTotalShares().Amount),
+		sdk.NewDecFromInt(pool.GetTotalWeight()),
+		sdk.NewDecFromInt(tokenOut.Amount),
 		pool.GetPoolParams().SwapFee,
 		pool.GetPoolParams().ExitFee,
 	).TruncateInt()
