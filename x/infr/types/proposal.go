@@ -1,22 +1,23 @@
 package types
 
-import govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+import (
+	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+)
 
 const (
 	ProposalTypeChangeMinGasPrices string = "ChangeMinGasPrices"
 )
 
 var (
-	_ govtypes.Content = &ChangeMinGasPricesProposal{}
+	_ govv1.Content = &ChangeMinGasPricesProposal{}
 )
 
 func init() {
-	govtypes.RegisterProposalType(ProposalTypeChangeMinGasPrices)
-	govtypes.RegisterProposalTypeCodec(&ChangeMinGasPricesProposal{}, "infr/ChangeMinGasPricesProposal")
+	govv1.RegisterProposalType(ProposalTypeChangeMinGasPrices)
 }
 
 // NewChangeMinGasPricesProposal returns new instance of ChangeMinGasPricesProposal
-func NewChangeMinGasPricesProposal(title, description string, minGasPrices string) govtypes.Content {
+func NewChangeMinGasPricesProposal(title, description string, minGasPrices string) govv1.Content {
 	return &ChangeMinGasPricesProposal{
 		Title:        title,
 		Description:  description,
@@ -35,5 +36,5 @@ func (*ChangeMinGasPricesProposal) ProposalType() string {
 // ValidateBasic performs a stateless check of the proposal fields
 func (etrp *ChangeMinGasPricesProposal) ValidateBasic() error {
 	//TODO: add validate
-	return govtypes.ValidateAbstract(etrp)
+	return govv1.ValidateAbstract(etrp)
 }

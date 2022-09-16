@@ -1,9 +1,6 @@
-<!--
-order: 0
-title: "ERC20 Overview"
-parent:
-  title: "erc20"
--->
+---
+title: Overview
+---
 
 # `erc20`
 

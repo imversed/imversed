@@ -2,7 +2,9 @@ package cli_test
 
 import (
 	"fmt"
-	ethermint "github.com/tharsis/ethermint/types"
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	ethermint "github.com/evmos/ethermint/types"
+	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
@@ -14,6 +16,7 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
+	"github.com/evmos/ethermint/crypto/hd"
 	"github.com/imversed/imversed/app"
 	//"github.com/cosmos/cosmos-sdk/testutil/network"
 	"github.com/imversed/imversed/testutil/network"
@@ -21,7 +24,6 @@ import (
 	poolstestutil "github.com/imversed/imversed/x/pools/client/testutil"
 	"github.com/imversed/imversed/x/pools/types"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
-	"github.com/tharsis/ethermint/crypto/hd"
 
 	testnet "github.com/imversed/imversed/testutil/network"
 )
@@ -38,6 +40,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 
 	var err error
 	s.cfg = testnet.DefaultConfig()
+	minGasPriceHelper.Create(baseapp.SetMinGasPrices, s.cfg.MinGasPrices)
 	s.cfg.NumValidators = 1
 
 	// modification to pay fee with test bond denom "stake"

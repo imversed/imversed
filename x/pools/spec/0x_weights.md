@@ -1,7 +1,3 @@
-<!--
-order: 2
--->
-
 # Weights
 
 Weights refer to the how we weight the reserves of assets within a pool.

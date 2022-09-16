@@ -1,7 +1,3 @@
-<!--
-order: 3
--->
-
 # Messages
 
 This details the types of messages supported by the x/pools module.

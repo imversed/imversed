@@ -1,7 +1,3 @@
-<!--
-order: 5
--->
-
 # Hooks
 
 The erc20 module implements two transaction hooks from the EVM and Governance modules

@@ -1,6 +1,11 @@
 package types
 
-import paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+import (
+	"fmt"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+)
 
 var (
 	ParamStoreKeyMinGasPrices = []byte("MinGasPrices")
@@ -13,7 +18,7 @@ func ParamKeyTable() paramtypes.KeyTable {
 
 func DefaultParams() Params {
 	return Params{
-		MinGasPrices: "",
+		MinGasPrices: fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 	}
 }
 

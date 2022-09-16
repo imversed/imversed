@@ -13,7 +13,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/tharsis/ethermint/server/config"
+	"github.com/evmos/ethermint/server/config"
 
 	"github.com/imversed/imversed/testutil/network"
 	"github.com/imversed/imversed/x/erc20/types"
