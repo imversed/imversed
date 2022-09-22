@@ -59,7 +59,7 @@ func (h Hooks) PostTxProcessing(
 		Creator:     account.Hex(),
 		BlockNumber: ctx.BlockHeight(),
 	}
-	h.k.SetSmartContractMetadata(ctx, sc)
+	h.k.SetSmartContractMetadata(gctx, sc)
 
 	// check erc20-compatibility
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "name")

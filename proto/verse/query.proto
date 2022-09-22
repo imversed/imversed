@@ -32,7 +32,6 @@ service Query {
 
 message QueryGetVerseRequest {
   string name = 1;
-
 }
 
 message QueryGetVerseResponse {
