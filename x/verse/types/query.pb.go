@@ -356,9 +356,9 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Queries a verse by index.
 	Verse(ctx context.Context, in *QueryGetVerseRequest, opts ...grpc.CallOption) (*QueryGetVerseResponse, error)
-	// Queries a list of verse items.
+	// Queries all verses.
 	VerseAll(ctx context.Context, in *QueryAllVerseRequest, opts ...grpc.CallOption) (*QueryAllVerseResponse, error)
-	// Parameters queries the parameters of the module.
+	// Queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
 
@@ -401,9 +401,9 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 type QueryServer interface {
 	// Queries a verse by index.
 	Verse(context.Context, *QueryGetVerseRequest) (*QueryGetVerseResponse, error)
-	// Queries a list of verse items.
+	// Queries all verses.
 	VerseAll(context.Context, *QueryAllVerseRequest) (*QueryAllVerseResponse, error)
-	// Parameters queries the parameters of the module.
+	// Queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 }
 

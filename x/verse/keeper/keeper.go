@@ -3,6 +3,7 @@ package keeper
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/imversed/imversed/x/verse/types"
@@ -11,14 +12,14 @@ import (
 
 // Keeper of this module maintains collections of verse.
 type Keeper struct {
-	storeKey   sdk.StoreKey
+	storeKey   storetypes.StoreKey
 	cdc        codec.BinaryCodec
 	paramstore paramtypes.Subspace
 }
 
 // NewKeeper creates new instances of the verse Keeper
 func NewKeeper(
-	storeKey sdk.StoreKey,
+	storeKey storetypes.StoreKey,
 	cdc codec.BinaryCodec,
 	ps paramtypes.Subspace,
 ) Keeper {

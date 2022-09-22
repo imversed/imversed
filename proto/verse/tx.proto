@@ -14,8 +14,6 @@ service Msg {
 message MsgCreateVerse {
   string sender = 1;
 
-  string name = 2;
-
   string icon = 3;
 
   string description = 4;
@@ -24,4 +22,16 @@ message MsgCreateVerse {
 message MsgCreateVerseResponse {
 }
 
+message MsgAddAssetToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string asset_type = 3;
+
+  string asset_id = 4;
+}
+
+message MsgAddAssetToVerseResponse {
+}
 // this line is used by starport scaffolding # proto/tx/message
