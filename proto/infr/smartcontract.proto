@@ -1,0 +1,13 @@
+syntax = "proto3";
+package imversed.infr;
+
+option go_package = "github.com/imversed/imversed/x/infr/types";
+
+
+message smart_contract {
+  string address = 1;
+
+  string creator = 2;
+
+  int64 block_number = 3;
+}

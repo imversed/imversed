@@ -52,9 +52,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 }
 
 // RegisterInterfaces registers the module's interface types
-func (AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
-	types.RegisterInterfaces(reg)
-}
+func (AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {}
 
 // DefaultGenesis returns the capability module's default genesis state.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
@@ -156,7 +154,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	//deactivated due to feemarket module
 
 	//v := am.keeper.GetParams(ctx)
-	//minGasPriceHelper.Helper.Set(v.MinGasPrices)
+	//baseAppHelper.Helper.Set(v.MinGasPrices)
 	return []abci.ValidatorUpdate{}
 }
 

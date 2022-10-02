@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
+	"github.com/imversed/imversed/x/infr/baseAppHelper"
 
 	//"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
@@ -306,7 +306,7 @@ func NewImversedApp(
 	bApp.SetVersion("v3.5")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
-	minGasPriceHelper.SetBaseApp(bApp)
+	baseAppHelper.Create(bApp)
 
 	keys := sdk.NewKVStoreKeys(
 		// SDK keys
@@ -455,9 +455,7 @@ func NewImversedApp(
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
-		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
-		// infr router
-		AddRoute(infrtypes.RouterKey, infr.NewInfrProposalHandler(&app.InfrKeeper))
+		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 	govConfig := govtypes.DefaultConfig()
 	/*
 		Example of setting gov params:
