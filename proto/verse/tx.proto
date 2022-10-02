@@ -9,6 +9,7 @@ option go_package = "github.com/imversed/imversed/x/verse/types";
 service Msg {
   rpc CreateVerse(MsgCreateVerse) returns (MsgCreateVerseResponse);
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc AddAssetToVerse(MsgAddAssetToVerse) returns (MsgAddAssetToVerseResponse);
 }
 
 message MsgCreateVerse {
@@ -30,6 +31,10 @@ message MsgAddAssetToVerse {
   string asset_type = 3;
 
   string asset_id = 4;
+
+  string asset_creator = 5;
+
+  string verse_creator = 6;
 }
 
 message MsgAddAssetToVerseResponse {

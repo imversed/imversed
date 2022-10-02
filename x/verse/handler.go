@@ -15,6 +15,9 @@ func NewHandler(server types.MsgServer) sdk.Handler {
 		case *types.MsgCreateVerse:
 			res, err := server.CreateVerse(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgAddAssetToVerse:
+			res, err := server.AddAssetToVerse(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 		default:
 			err := sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", types.ModuleName, msg)
 			return nil, err

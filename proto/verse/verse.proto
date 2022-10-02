@@ -14,5 +14,5 @@ message Verse {
 
   string description = 4;
 
-
+  repeated string smart_contracts = 5;
 }
