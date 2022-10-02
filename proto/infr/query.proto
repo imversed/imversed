@@ -1,0 +1,21 @@
+syntax = "proto3";
+package imversed.infr;
+
+option go_package = "github.com/imversed/imversed/x/infr/types";
+
+import "infr/smartcontract.proto";
+import "google/api/annotations.proto";
+
+service Query {
+  rpc SmartContract(QuerySmartContractRequest) returns (QuerySmartContractResponse){
+    option (google.api.http).get = "/imversed/infr/smart_contract/{address}";
+  }
+}
+
+message QuerySmartContractRequest {
+  string address = 1;
+}
+
+message QuerySmartContractResponse {
+  smart_contract sc = 1;
+}
