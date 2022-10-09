@@ -5,8 +5,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	infrtypes "github.com/imversed/imversed/x/infr/types"
 	"github.com/imversed/imversed/x/verse/types"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 // NewTxCmd returns a root CLI command handler for certain modules/verse transaction commands.
@@ -22,6 +25,8 @@ func NewTxCmd() *cobra.Command {
 	txCmd.AddCommand(
 		CreateNewVerseCmd(),
 		AddAssetToVerseCmd(),
+		RenameVerseCmd(),
+		RemoveAssetFromVerseCmd(),
 	)
 	return txCmd
 }
@@ -77,18 +82,133 @@ func AddAssetToVerseCmd() *cobra.Command {
 				return err
 			}
 			sender := cliCtx.GetFromAddress()
-			node, _ := cliCtx.GetNode()
 
-			h := int64(16)
-			res, _ := node.Block(context.Background(), &h)
+			splitted := strings.Split(args[0], "/")
+			if len(splitted) != 2 {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "invalid asset '%s'. use [type/id] expression", args[0])
+			}
 
-			_ = res
+			queryClient := types.NewQueryClient(cliCtx)
 
-			msg := &types.MsgCreateVerse{
-				//Name:        args[0],
-				Description: args[1],
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[1],
+			}
 
-				Sender: sender.String(),
+			verseResp, err := queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			assetParams := &infrtypes.QuerySmartContractRequest{
+				Address: splitted[1],
+			}
+			infrQueryClient := infrtypes.NewQueryClient(cliCtx)
+
+			assetResponse, err := infrQueryClient.SmartContract(context.Background(), assetParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgAddAssetToVerse{
+				Sender:       sender.String(),
+				VerseName:    args[1],
+				AssetType:    splitted[0],
+				AssetId:      splitted[1],
+				AssetCreator: assetResponse.Sc.Creator,
+				VerseCreator: verseResp.Verse.Owner,
+			}
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// RenameVerseCmd rename existing verse
+func RenameVerseCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "rename-verse [verse_old_name] [verse_new_name]",
+		Short: "Rename verse, new name must be unique",
+		Long:  "Rename verse, new name must be unique. CONTRACT: tx must be signed by verse creator",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			queryClient := types.NewQueryClient(cliCtx)
+
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[0],
+			}
+
+			verseResp, err := queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgRenameVerse{
+				Sender:       sender.String(),
+				VerseCreator: verseResp.Verse.Owner,
+				VerseOldName: args[0],
+				VerseNewName: args[1],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// RemoveAssetFromVerseCmd remove existing asset from verse
+func RemoveAssetFromVerseCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "remove-asset [prefix/asset_id] [verse_name]",
+		Short: "Remove asset from verse",
+		Long:  "Remove asset from verse. CONTRACT: tx must be signed by verse creator",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			splitted := strings.Split(args[0], "/")
+			if len(splitted) != 2 {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "invalid asset '%s'. use [type/id] expression", args[0])
+			}
+
+			queryClient := types.NewQueryClient(cliCtx)
+
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[1],
+			}
+
+			verseResp, err := queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgRemoveAssetFromVerse{
+				Sender:       sender.String(),
+				VerseName:    args[1],
+				AssetType:    splitted[0],
+				AssetId:      splitted[1],
+				VerseCreator: verseResp.Verse.Owner,
 			}
 
 			if err := msg.ValidateBasic(); err != nil {

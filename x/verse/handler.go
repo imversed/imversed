@@ -18,6 +18,12 @@ func NewHandler(server types.MsgServer) sdk.Handler {
 		case *types.MsgAddAssetToVerse:
 			res, err := server.AddAssetToVerse(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgRenameVerse:
+			res, err := server.RenameVerse(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgRemoveAssetFromVerse:
+			res, err := server.RemoveAssetFromVerse(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 		default:
 			err := sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", types.ModuleName, msg)
 			return nil, err
