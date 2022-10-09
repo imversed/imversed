@@ -15,5 +15,5 @@ message GenesisState {
 }
 
 message Params {
-
+  uint64 tx_rename_verse_cost = 1;
 }
