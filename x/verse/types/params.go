@@ -1,13 +1,16 @@
 package types
 
 import (
+	"fmt"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
-// Parameter store key
-var ()
-
 var _ paramtypes.ParamSet = &Params{}
+
+var (
+	KeyTxRenameVerseCost            = []byte("TxRenameVerseCost")
+	DefaultTxRenameVerseCost uint64 = 100 * 1000000
+)
 
 // ParamKeyTable returns the parameter key table.
 func ParamKeyTable() paramtypes.KeyTable {
@@ -15,17 +18,39 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params object
-func NewParams() Params {
-	return Params{}
+func NewParams(
+	txRenameVerseCost uint64,
+) Params {
+	return Params{
+		TxRenameVerseCost: txRenameVerseCost,
+	}
 }
 
 func DefaultParams() Params {
-	return Params{}
+	return NewParams(
+		DefaultTxRenameVerseCost,
+	)
 }
 
 // ParamSetPairs returns the parameter set pairs.
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{}
+	return paramtypes.ParamSetPairs{
+		paramtypes.NewParamSetPair(KeyTxRenameVerseCost, &p.TxRenameVerseCost, validateTxRenameVerseCost),
+	}
 }
 
-func (p Params) Validate() error { return nil }
+func (p Params) Validate() error {
+	if err := validateTxRenameVerseCost(p.TxRenameVerseCost); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateTxRenameVerseCost(v interface{}) error {
+	_, ok := v.(uint64)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", v)
+	}
+
+	return nil
+}
