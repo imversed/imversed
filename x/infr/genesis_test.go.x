@@ -3,7 +3,7 @@ package infr_test
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
+	"github.com/imversed/imversed/x/infr/baseAppHelper"
 	"runtime"
 	"testing"
 	"time"
@@ -71,7 +71,7 @@ func (suite *GenesisTestSuite) SetupTest() {
 	consAddress := sdk.ConsAddress(tests.GenerateAddress().Bytes())
 
 	baseapp.SetMinGasPrices(suite.cfg.MinGasPrices)
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, suite.cfg.MinGasPrices)
+	baseAppHelper.Create(baseapp.SetMinGasPrices, suite.cfg.MinGasPrices)
 
 	suite.cfg.NumValidators = 1
 	suite.app = app.Setup(false, suite.patchGenesis)
