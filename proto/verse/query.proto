@@ -14,7 +14,7 @@ option go_package = "github.com/imversed/imversed/x/verse/types";
 service Query {
   // Queries a verse by index.
   rpc Verse(QueryGetVerseRequest) returns (QueryGetVerseResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/verse/{name}";
+    option (google.api.http).get = "/imversed/imversed/verse/verse/{verse_name}";
   }
 
   // Queries all verses.
@@ -27,11 +27,19 @@ service Query {
     option (google.api.http).get = "/imversed/imversed/verse/params";
   }
 
+  rpc HasAsset(QueryHasAssetRequest) returns (QueryHasAssetResponse) {
+    option (google.api.http).get = "/imversed/imversed/verse/verse/{verse_name}/{asset_type}/{asset_id}";
+  }
+
+  rpc GetAssets(QueryGetVerseAssetsRequest) returns (QueryGetVerseAssetsResponse) {
+    option (google.api.http).get = "/imversed/imversed/verse/verse_assets/{verse_name}";
+  }
+
   // this line is used by starport scaffolding # 2
 }
 
 message QueryGetVerseRequest {
-  string name = 1;
+  string verse_name = 1;
 }
 
 message QueryGetVerseResponse {
@@ -56,4 +64,23 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
+message QueryHasAssetRequest {
+  string verse_name = 1;
+
+  string asset_type = 2;
+
+  string asset_id = 3;
+}
+
+message QueryHasAssetResponse {
+  bool has_asset = 1;
+}
+
+message QueryGetVerseAssetsRequest {
+  string verse_name = 1;
+}
+
+message QueryGetVerseAssetsResponse {
+  repeated string assets = 1;
+}
 // this line is used by starport scaffolding # 3

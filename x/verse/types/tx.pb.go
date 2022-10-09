@@ -243,39 +243,267 @@ func (m *MsgAddAssetToVerseResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAddAssetToVerseResponse proto.InternalMessageInfo
 
+type MsgRenameVerse struct {
+	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	VerseCreator string `protobuf:"bytes,2,opt,name=verse_creator,json=verseCreator,proto3" json:"verse_creator,omitempty"`
+	VerseOldName string `protobuf:"bytes,3,opt,name=verse_old_name,json=verseOldName,proto3" json:"verse_old_name,omitempty"`
+	VerseNewName string `protobuf:"bytes,4,opt,name=verse_new_name,json=verseNewName,proto3" json:"verse_new_name,omitempty"`
+}
+
+func (m *MsgRenameVerse) Reset()         { *m = MsgRenameVerse{} }
+func (m *MsgRenameVerse) String() string { return proto.CompactTextString(m) }
+func (*MsgRenameVerse) ProtoMessage()    {}
+func (*MsgRenameVerse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_28b1ed414ec89264, []int{4}
+}
+func (m *MsgRenameVerse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRenameVerse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRenameVerse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRenameVerse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRenameVerse.Merge(m, src)
+}
+func (m *MsgRenameVerse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRenameVerse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRenameVerse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRenameVerse proto.InternalMessageInfo
+
+func (m *MsgRenameVerse) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgRenameVerse) GetVerseCreator() string {
+	if m != nil {
+		return m.VerseCreator
+	}
+	return ""
+}
+
+func (m *MsgRenameVerse) GetVerseOldName() string {
+	if m != nil {
+		return m.VerseOldName
+	}
+	return ""
+}
+
+func (m *MsgRenameVerse) GetVerseNewName() string {
+	if m != nil {
+		return m.VerseNewName
+	}
+	return ""
+}
+
+type MsgRenameVerseResponse struct {
+}
+
+func (m *MsgRenameVerseResponse) Reset()         { *m = MsgRenameVerseResponse{} }
+func (m *MsgRenameVerseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRenameVerseResponse) ProtoMessage()    {}
+func (*MsgRenameVerseResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_28b1ed414ec89264, []int{5}
+}
+func (m *MsgRenameVerseResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRenameVerseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRenameVerseResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRenameVerseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRenameVerseResponse.Merge(m, src)
+}
+func (m *MsgRenameVerseResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRenameVerseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRenameVerseResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRenameVerseResponse proto.InternalMessageInfo
+
+type MsgRemoveAssetFromVerse struct {
+	Sender       string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	VerseName    string `protobuf:"bytes,2,opt,name=verse_name,json=verseName,proto3" json:"verse_name,omitempty"`
+	AssetType    string `protobuf:"bytes,3,opt,name=asset_type,json=assetType,proto3" json:"asset_type,omitempty"`
+	AssetId      string `protobuf:"bytes,4,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	VerseCreator string `protobuf:"bytes,5,opt,name=verse_creator,json=verseCreator,proto3" json:"verse_creator,omitempty"`
+}
+
+func (m *MsgRemoveAssetFromVerse) Reset()         { *m = MsgRemoveAssetFromVerse{} }
+func (m *MsgRemoveAssetFromVerse) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveAssetFromVerse) ProtoMessage()    {}
+func (*MsgRemoveAssetFromVerse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_28b1ed414ec89264, []int{6}
+}
+func (m *MsgRemoveAssetFromVerse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveAssetFromVerse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveAssetFromVerse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveAssetFromVerse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveAssetFromVerse.Merge(m, src)
+}
+func (m *MsgRemoveAssetFromVerse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveAssetFromVerse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveAssetFromVerse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveAssetFromVerse proto.InternalMessageInfo
+
+func (m *MsgRemoveAssetFromVerse) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgRemoveAssetFromVerse) GetVerseName() string {
+	if m != nil {
+		return m.VerseName
+	}
+	return ""
+}
+
+func (m *MsgRemoveAssetFromVerse) GetAssetType() string {
+	if m != nil {
+		return m.AssetType
+	}
+	return ""
+}
+
+func (m *MsgRemoveAssetFromVerse) GetAssetId() string {
+	if m != nil {
+		return m.AssetId
+	}
+	return ""
+}
+
+func (m *MsgRemoveAssetFromVerse) GetVerseCreator() string {
+	if m != nil {
+		return m.VerseCreator
+	}
+	return ""
+}
+
+type MsgRemoveAssetFromVerseResponse struct {
+}
+
+func (m *MsgRemoveAssetFromVerseResponse) Reset()         { *m = MsgRemoveAssetFromVerseResponse{} }
+func (m *MsgRemoveAssetFromVerseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveAssetFromVerseResponse) ProtoMessage()    {}
+func (*MsgRemoveAssetFromVerseResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_28b1ed414ec89264, []int{7}
+}
+func (m *MsgRemoveAssetFromVerseResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveAssetFromVerseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveAssetFromVerseResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveAssetFromVerseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveAssetFromVerseResponse.Merge(m, src)
+}
+func (m *MsgRemoveAssetFromVerseResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveAssetFromVerseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveAssetFromVerseResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveAssetFromVerseResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgCreateVerse)(nil), "imversed.verse.MsgCreateVerse")
 	proto.RegisterType((*MsgCreateVerseResponse)(nil), "imversed.verse.MsgCreateVerseResponse")
 	proto.RegisterType((*MsgAddAssetToVerse)(nil), "imversed.verse.MsgAddAssetToVerse")
 	proto.RegisterType((*MsgAddAssetToVerseResponse)(nil), "imversed.verse.MsgAddAssetToVerseResponse")
+	proto.RegisterType((*MsgRenameVerse)(nil), "imversed.verse.MsgRenameVerse")
+	proto.RegisterType((*MsgRenameVerseResponse)(nil), "imversed.verse.MsgRenameVerseResponse")
+	proto.RegisterType((*MsgRemoveAssetFromVerse)(nil), "imversed.verse.MsgRemoveAssetFromVerse")
+	proto.RegisterType((*MsgRemoveAssetFromVerseResponse)(nil), "imversed.verse.MsgRemoveAssetFromVerseResponse")
 }
 
 func init() { proto.RegisterFile("verse/tx.proto", fileDescriptor_28b1ed414ec89264) }
 
 var fileDescriptor_28b1ed414ec89264 = []byte{
-	// 350 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0xc1, 0x4e, 0xfa, 0x40,
-	0x10, 0xc6, 0xd9, 0x3f, 0xfc, 0x51, 0x06, 0xc5, 0x64, 0x0f, 0xa4, 0x12, 0xdd, 0x90, 0x9a, 0x18,
-	0xc3, 0xa1, 0x24, 0xfa, 0x04, 0x88, 0x17, 0x0f, 0x78, 0x20, 0xe8, 0xc1, 0x83, 0xa4, 0x74, 0x27,
-	0xb5, 0x87, 0x76, 0x9b, 0xee, 0x6a, 0xe0, 0x2d, 0x7c, 0x23, 0xaf, 0xde, 0xe4, 0xe8, 0xd1, 0xc0,
-	0x8b, 0x98, 0x4e, 0xdb, 0x08, 0x68, 0xf0, 0xd4, 0xdd, 0xdf, 0xf7, 0x75, 0xe6, 0xdb, 0xd9, 0x85,
-	0xc6, 0x33, 0x26, 0x1a, 0xbb, 0x66, 0xea, 0xc4, 0x89, 0x32, 0x8a, 0x37, 0x82, 0x90, 0x88, 0x74,
-	0xe8, 0x63, 0x3f, 0x40, 0x63, 0xa0, 0xfd, 0x7e, 0x82, 0xae, 0xc1, 0xbb, 0x94, 0xf0, 0x26, 0x54,
-	0x35, 0x46, 0x12, 0x13, 0x8b, 0xb5, 0xd9, 0x59, 0x6d, 0x98, 0xef, 0x38, 0x87, 0x4a, 0xe0, 0xa9,
-	0xc8, 0x2a, 0x13, 0xa5, 0x35, 0x6f, 0x43, 0x5d, 0xa2, 0xf6, 0x92, 0x20, 0x36, 0x81, 0x8a, 0xac,
-	0x0a, 0x49, 0xab, 0xc8, 0xb6, 0xa0, 0xb9, 0x5e, 0x7f, 0x88, 0x3a, 0x56, 0x91, 0x46, 0xfb, 0x9d,
-	0x01, 0x1f, 0x68, 0xbf, 0x27, 0x65, 0x4f, 0x6b, 0x34, 0x23, 0xb5, 0xbd, 0xfd, 0x31, 0x00, 0x25,
-	0x1e, 0x47, 0x6e, 0x88, 0xd6, 0x3f, 0xd2, 0x6a, 0x44, 0x6e, 0xdc, 0x10, 0x53, 0xd9, 0x4d, 0xcb,
-	0x8c, 0xcd, 0x2c, 0xc6, 0x3c, 0x63, 0x8d, 0xc8, 0x68, 0x16, 0x23, 0x3f, 0x84, 0xdd, 0x4c, 0x0e,
-	0x64, 0x9e, 0x72, 0x87, 0xf6, 0xd7, 0x92, 0x9f, 0xc0, 0x7e, 0x26, 0x79, 0x69, 0x48, 0x95, 0x58,
-	0xff, 0x49, 0xdf, 0x23, 0xd8, 0xcf, 0x58, 0x6a, 0xca, 0xba, 0x17, 0xa6, 0x6a, 0x66, 0x22, 0x98,
-	0x9b, 0xec, 0x23, 0x68, 0xfd, 0x3c, 0x50, 0x71, 0xde, 0xf3, 0x57, 0x06, 0xe5, 0x81, 0xf6, 0xf9,
-	0x2d, 0xd4, 0x57, 0xc7, 0x2d, 0x9c, 0xf5, 0x1b, 0x71, 0xd6, 0xc7, 0xd5, 0x3a, 0xdd, 0xae, 0x17,
-	0xe5, 0xb9, 0x0b, 0x07, 0x9b, 0xa3, 0xb4, 0x7f, 0xf9, 0x75, 0xc3, 0xd3, 0xea, 0xfc, 0xed, 0x29,
-	0x5a, 0x5c, 0x5e, 0xbd, 0x2d, 0x04, 0x9b, 0x2f, 0x04, 0xfb, 0x5c, 0x08, 0xf6, 0xb2, 0x14, 0xa5,
-	0xf9, 0x52, 0x94, 0x3e, 0x96, 0xa2, 0x74, 0xdf, 0xf1, 0x03, 0xf3, 0xf8, 0x34, 0x71, 0x3c, 0x15,
-	0x76, 0x8b, 0x7a, 0xdf, 0x8b, 0x69, 0x37, 0x7f, 0x84, 0xb3, 0x18, 0xf5, 0xa4, 0x4a, 0x0f, 0xf1,
-	0xe2, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x9b, 0x6e, 0x79, 0xba, 0x9a, 0x02, 0x00, 0x00,
+	// 471 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xce, 0x36, 0x69, 0x20, 0x13, 0x08, 0xd2, 0x0a, 0x15, 0x13, 0xc1, 0x52, 0x0c, 0x02, 0xd4,
+	0x83, 0x2d, 0xc1, 0x13, 0x94, 0x22, 0x24, 0x0e, 0x29, 0x52, 0xd4, 0x72, 0xe0, 0x40, 0xe4, 0x7a,
+	0x47, 0xc6, 0x52, 0xed, 0xb5, 0xbc, 0xa6, 0x6d, 0xde, 0x80, 0x23, 0x57, 0x9e, 0x82, 0xd7, 0xe0,
+	0x46, 0x8f, 0x1c, 0x51, 0xf2, 0x22, 0xc8, 0xe3, 0x1f, 0xec, 0x64, 0x09, 0xdc, 0x7a, 0x8a, 0xf7,
+	0xfb, 0xbe, 0x9d, 0xf9, 0xe6, 0x27, 0x0b, 0xa3, 0x33, 0x4c, 0x35, 0xba, 0xd9, 0x85, 0x93, 0xa4,
+	0x2a, 0x53, 0x7c, 0x14, 0x46, 0x84, 0x48, 0x87, 0x7e, 0xec, 0x0f, 0x30, 0x9a, 0xe8, 0xe0, 0x20,
+	0x45, 0x2f, 0xc3, 0x77, 0x39, 0xc2, 0x77, 0xa0, 0xaf, 0x31, 0x96, 0x98, 0x5a, 0x6c, 0x97, 0x3d,
+	0x1b, 0x4c, 0xcb, 0x13, 0xe7, 0xd0, 0x0b, 0x7d, 0x15, 0x5b, 0x5d, 0x42, 0xe9, 0x9b, 0xef, 0xc2,
+	0x50, 0xa2, 0xf6, 0xd3, 0x30, 0xc9, 0x42, 0x15, 0x5b, 0x3d, 0xa2, 0x9a, 0x90, 0x6d, 0xc1, 0x4e,
+	0x3b, 0xfe, 0x14, 0x75, 0xa2, 0x62, 0x8d, 0xf6, 0x0f, 0x06, 0x7c, 0xa2, 0x83, 0x7d, 0x29, 0xf7,
+	0xb5, 0xc6, 0xec, 0x48, 0x6d, 0x4e, 0x7f, 0x1f, 0x80, 0x1c, 0xcf, 0x62, 0x2f, 0x42, 0x6b, 0x8b,
+	0xb8, 0x01, 0x21, 0x87, 0x5e, 0x84, 0x39, 0xed, 0xe5, 0x61, 0x66, 0xd9, 0x3c, 0xc1, 0xd2, 0xe3,
+	0x80, 0x90, 0xa3, 0x79, 0x82, 0xfc, 0x2e, 0x5c, 0x2f, 0xe8, 0x50, 0x96, 0x2e, 0xaf, 0xd1, 0xf9,
+	0x8d, 0xe4, 0x8f, 0xe0, 0x66, 0x41, 0xf9, 0xb9, 0x49, 0x95, 0x5a, 0xdb, 0xc4, 0xdf, 0x20, 0xf0,
+	0xa0, 0xc0, 0x72, 0x51, 0x91, 0xbd, 0x12, 0xf5, 0x0b, 0x11, 0x81, 0xa5, 0xc8, 0xbe, 0x07, 0xe3,
+	0xf5, 0x82, 0xea, 0x7a, 0xbf, 0x32, 0x6a, 0xf5, 0x14, 0xf3, 0x02, 0x36, 0xd7, 0xba, 0x96, 0x6d,
+	0x6b, 0x3d, 0x1b, 0x7f, 0x5c, 0xce, 0x76, 0xa6, 0x4e, 0x65, 0xd1, 0x94, 0x6e, 0x43, 0xf5, 0xf6,
+	0x54, 0x52, 0x5f, 0x6a, 0x55, 0x8c, 0xe7, 0x85, 0xaa, 0xd7, 0x50, 0x1d, 0xe2, 0x79, 0xae, 0x2a,
+	0xa7, 0xd4, 0xb0, 0x56, 0xbb, 0xfe, 0xc6, 0xe0, 0x0e, 0x51, 0x91, 0x3a, 0x43, 0xaa, 0xeb, 0x75,
+	0xaa, 0xa2, 0xab, 0x1b, 0x55, 0xbb, 0x2f, 0xdb, 0x86, 0x29, 0x3c, 0x84, 0x07, 0x7f, 0x31, 0x5c,
+	0x15, 0xf5, 0xfc, 0x73, 0x17, 0xba, 0x13, 0x1d, 0xf0, 0x63, 0x18, 0x36, 0x37, 0x5f, 0x38, 0xed,
+	0x3f, 0x87, 0xd3, 0xde, 0xdc, 0xf1, 0x93, 0xcd, 0x7c, 0x15, 0x9e, 0x7b, 0x70, 0x6b, 0x75, 0xab,
+	0x6d, 0xc3, 0xd5, 0x15, 0xcd, 0x78, 0xef, 0xdf, 0x9a, 0x3a, 0x45, 0x02, 0xb7, 0x8d, 0x23, 0x79,
+	0x6a, 0x88, 0x61, 0x12, 0x8e, 0xdd, 0xff, 0x14, 0xd6, 0x19, 0x8f, 0x61, 0xd8, 0x5c, 0x5d, 0x61,
+	0xbc, 0x5f, 0xf3, 0xc6, 0x5e, 0x19, 0xf6, 0xeb, 0xe5, 0xab, 0xef, 0x0b, 0xc1, 0x2e, 0x17, 0x82,
+	0xfd, 0x5a, 0x08, 0xf6, 0x65, 0x29, 0x3a, 0x97, 0x4b, 0xd1, 0xf9, 0xb9, 0x14, 0x9d, 0xf7, 0x7b,
+	0x41, 0x98, 0x7d, 0xfc, 0x74, 0xe2, 0xf8, 0x2a, 0x72, 0xab, 0x58, 0x7f, 0x3e, 0x2e, 0xdc, 0xf2,
+	0x61, 0x9b, 0x27, 0xa8, 0x4f, 0xfa, 0xf4, 0xb8, 0xbd, 0xf8, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xdd,
+	0x4b, 0x5a, 0x88, 0xee, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -293,6 +521,8 @@ type MsgClient interface {
 	CreateVerse(ctx context.Context, in *MsgCreateVerse, opts ...grpc.CallOption) (*MsgCreateVerseResponse, error)
 	// this line is used by starport scaffolding # proto/tx/rpc
 	AddAssetToVerse(ctx context.Context, in *MsgAddAssetToVerse, opts ...grpc.CallOption) (*MsgAddAssetToVerseResponse, error)
+	RemoveAssetFromVerse(ctx context.Context, in *MsgRemoveAssetFromVerse, opts ...grpc.CallOption) (*MsgRemoveAssetFromVerseResponse, error)
+	RenameVerse(ctx context.Context, in *MsgRenameVerse, opts ...grpc.CallOption) (*MsgRenameVerseResponse, error)
 }
 
 type msgClient struct {
@@ -321,11 +551,31 @@ func (c *msgClient) AddAssetToVerse(ctx context.Context, in *MsgAddAssetToVerse,
 	return out, nil
 }
 
+func (c *msgClient) RemoveAssetFromVerse(ctx context.Context, in *MsgRemoveAssetFromVerse, opts ...grpc.CallOption) (*MsgRemoveAssetFromVerseResponse, error) {
+	out := new(MsgRemoveAssetFromVerseResponse)
+	err := c.cc.Invoke(ctx, "/imversed.verse.Msg/RemoveAssetFromVerse", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RenameVerse(ctx context.Context, in *MsgRenameVerse, opts ...grpc.CallOption) (*MsgRenameVerseResponse, error) {
+	out := new(MsgRenameVerseResponse)
+	err := c.cc.Invoke(ctx, "/imversed.verse.Msg/RenameVerse", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreateVerse(context.Context, *MsgCreateVerse) (*MsgCreateVerseResponse, error)
 	// this line is used by starport scaffolding # proto/tx/rpc
 	AddAssetToVerse(context.Context, *MsgAddAssetToVerse) (*MsgAddAssetToVerseResponse, error)
+	RemoveAssetFromVerse(context.Context, *MsgRemoveAssetFromVerse) (*MsgRemoveAssetFromVerseResponse, error)
+	RenameVerse(context.Context, *MsgRenameVerse) (*MsgRenameVerseResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -337,6 +587,12 @@ func (*UnimplementedMsgServer) CreateVerse(ctx context.Context, req *MsgCreateVe
 }
 func (*UnimplementedMsgServer) AddAssetToVerse(ctx context.Context, req *MsgAddAssetToVerse) (*MsgAddAssetToVerseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddAssetToVerse not implemented")
+}
+func (*UnimplementedMsgServer) RemoveAssetFromVerse(ctx context.Context, req *MsgRemoveAssetFromVerse) (*MsgRemoveAssetFromVerseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveAssetFromVerse not implemented")
+}
+func (*UnimplementedMsgServer) RenameVerse(ctx context.Context, req *MsgRenameVerse) (*MsgRenameVerseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenameVerse not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -379,6 +635,42 @@ func _Msg_AddAssetToVerse_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RemoveAssetFromVerse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveAssetFromVerse)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveAssetFromVerse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/imversed.verse.Msg/RemoveAssetFromVerse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveAssetFromVerse(ctx, req.(*MsgRemoveAssetFromVerse))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RenameVerse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRenameVerse)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RenameVerse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/imversed.verse.Msg/RenameVerse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RenameVerse(ctx, req.(*MsgRenameVerse))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "imversed.verse.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -390,6 +682,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddAssetToVerse",
 			Handler:    _Msg_AddAssetToVerse_Handler,
+		},
+		{
+			MethodName: "RemoveAssetFromVerse",
+			Handler:    _Msg_RemoveAssetFromVerse_Handler,
+		},
+		{
+			MethodName: "RenameVerse",
+			Handler:    _Msg_RenameVerse_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -551,6 +851,161 @@ func (m *MsgAddAssetToVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgRenameVerse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRenameVerse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRenameVerse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.VerseNewName) > 0 {
+		i -= len(m.VerseNewName)
+		copy(dAtA[i:], m.VerseNewName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseNewName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.VerseOldName) > 0 {
+		i -= len(m.VerseOldName)
+		copy(dAtA[i:], m.VerseOldName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseOldName)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VerseCreator) > 0 {
+		i -= len(m.VerseCreator)
+		copy(dAtA[i:], m.VerseCreator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseCreator)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRenameVerseResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRenameVerseResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRenameVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveAssetFromVerse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveAssetFromVerse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveAssetFromVerse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.VerseCreator) > 0 {
+		i -= len(m.VerseCreator)
+		copy(dAtA[i:], m.VerseCreator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseCreator)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.AssetId) > 0 {
+		i -= len(m.AssetId)
+		copy(dAtA[i:], m.AssetId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssetId)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.AssetType) > 0 {
+		i -= len(m.AssetType)
+		copy(dAtA[i:], m.AssetType)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AssetType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VerseName) > 0 {
+		i -= len(m.VerseName)
+		copy(dAtA[i:], m.VerseName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveAssetFromVerseResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveAssetFromVerseResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveAssetFromVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -626,6 +1081,78 @@ func (m *MsgAddAssetToVerse) Size() (n int) {
 }
 
 func (m *MsgAddAssetToVerseResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRenameVerse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseCreator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseOldName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseNewName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgRenameVerseResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRemoveAssetFromVerse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.AssetType)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.AssetId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseCreator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgRemoveAssetFromVerseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1105,6 +1632,494 @@ func (m *MsgAddAssetToVerseResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgAddAssetToVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRenameVerse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRenameVerse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRenameVerse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseCreator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseCreator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseOldName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseOldName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseNewName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseNewName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRenameVerseResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRenameVerseResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRenameVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveAssetFromVerse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveAssetFromVerse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveAssetFromVerse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssetType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssetType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssetId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseCreator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseCreator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveAssetFromVerseResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveAssetFromVerseResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveAssetFromVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
