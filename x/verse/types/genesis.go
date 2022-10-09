@@ -5,7 +5,7 @@ import "fmt"
 // DefaultGenesisState sets default genesis state and
 // default params and chain config values.
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState([]Verse{}, Params{})
+	return NewGenesisState([]Verse{}, DefaultParams())
 }
 
 // NewGenesisState creates a new genesis state.
