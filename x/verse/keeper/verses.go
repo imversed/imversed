@@ -25,6 +25,43 @@ func (k Keeper) SetVerse(ctx sdk.Context, verse types.Verse) error {
 	return nil
 }
 
+// UpdateVerse set a specific verse in the store from its index
+func (k Keeper) UpdateVerse(ctx sdk.Context, verse types.Verse) error {
+	if !k.HasVerse(ctx, verse) {
+		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", verse.Name)
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)
+	b := k.cdc.MustMarshal(&verse)
+	store.Set(types.VerseKey(verse.Name), b)
+
+	return nil
+}
+
+// UpdateVerseName set a specific verse in the store from its index
+func (k Keeper) UpdateVerseName(ctx sdk.Context, oldName string, newName string) error {
+	verse, found := k.GetVerse(ctx, newName)
+	if found {
+		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name \"%s\" already exists", newName)
+	}
+	verse, found = k.GetVerse(ctx, oldName)
+	if !found {
+		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", oldName)
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)
+	store.Delete(types.VerseKey(verse.Name))
+
+	verse.Name = newName
+	b := k.cdc.MustMarshal(&verse)
+	store.Set(types.VerseKey(verse.Name), b)
+
+	renameCost := k.GetParams(ctx).TxRenameVerseCost
+	ctx.GasMeter().ConsumeGas(renameCost, "txRenameVerse")
+
+	return nil
+}
+
 // GetVerse returns a verse from its index
 func (k Keeper) GetVerse(
 	ctx sdk.Context,
