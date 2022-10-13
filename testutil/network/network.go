@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	feemarkettypes "github.com/evmos/ethermint/x/feemarket/types"
 	"net/http"
 	"net/url"
 	"os"
@@ -113,6 +114,12 @@ type Config struct {
 func DefaultConfig() Config {
 	encCfg := encoding.MakeConfig(app.ModuleBasics)
 
+	genData := app.ModuleBasics.DefaultGenesis(encCfg.Codec)
+
+	feeMarketGen := feemarkettypes.DefaultGenesisState()
+	feeMarketGen.Params.NoBaseFee = true
+
+	genData[feemarkettypes.ModuleName] = encCfg.Codec.MustMarshalJSON(feeMarketGen)
 	return Config{
 		Codec:             encCfg.Codec,
 		TxConfig:          encCfg.TxConfig,
@@ -120,7 +127,7 @@ func DefaultConfig() Config {
 		InterfaceRegistry: encCfg.InterfaceRegistry,
 		AccountRetriever:  authtypes.AccountRetriever{},
 		AppConstructor:    NewAppConstructor(encCfg),
-		GenesisState:      app.ModuleBasics.DefaultGenesis(encCfg.Codec),
+		GenesisState:      genData,
 		TimeoutCommit:     2 * time.Second,
 		ChainID:           fmt.Sprintf("imversed_%d-1", tmrand.Int63n(9999999999999)+1),
 		NumValidators:     4,
