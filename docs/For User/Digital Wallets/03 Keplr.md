@@ -61,12 +61,3 @@ There are several ways to import an existing account:
 ## Connect Keplr to Mainnet
 
 Once you are signed in to the Keplr extension, you can connect the wallet with the Evmos network. The Evmos mainnet network is already built into Keplr; look for the `Imversed (beta)` network.
-
-Evmos documentation link: https://docs.evmos.org/users/wallets/keplr.html
-
-Steps to create a new account :
-import an existing account :
-mnemonic/seed phrase :
-one-click login :
-mnemonic/seed phrase/private key :
-ledger : 
