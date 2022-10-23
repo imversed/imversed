@@ -1,12 +1,12 @@
 # Tokens
 
 ## Introduction
-Evmos is a Cosmos-based chain with full Ethereum Virtual Machine (EVM) support. Because of this [architecture](https://docs.evmos.org/users/technical_concepts/architecture.html), tokens and assets in the network may come from different independent sources.
+IMV is a Cosmos-based chain with full Ethereum Virtual Machine (EVM) support. Because of this architecture, tokens and assets in the network may come from different independent sources.
 
-## The EVMOS Token
-The denomination used for staking, governance and gas consumption on the EVM is the EVMOS. The EVMOS provides the utility of: securing the Proof-of-Stake chain, token used for governance proposals, distribution of fees to validator and users, and as a mean of gas for running smart contracts on the EVM.
+## The IMV Token
+The denomination used for staking, governance and gas consumption on the EVM is the IMV. The IMV provides the utility of: securing the Proof-of-Stake chain, token used for governance proposals, distribution of fees to validator and users, and as a mean of gas for running smart contracts on the EVM.
 
-Evmos uses [Atto](https://en.wikipedia.org/wiki/Atto-)EVMOS as the base denomination to maintain parity with Ethereum.
+IVM uses [Atto](https://en.wikipedia.org/wiki/Atto-) IVM as the base denomination to maintain parity with Ethereum.
 
 * 1 imv = 1018 aivm
 
