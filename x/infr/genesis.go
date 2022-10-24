@@ -3,7 +3,6 @@ package infr
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/imversed/imversed/x/infr/keeper"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"github.com/imversed/imversed/x/infr/types"
 )
 
@@ -14,14 +13,16 @@ func InitGenesis(
 	data types.GenesisState,
 ) {
 	k.SetParams(ctx, data.Params)
-	ndata := k.GetParams(ctx)
-	ndata.MinGasPrices = minGasPriceHelper.Helper.Get()
-	k.SetParams(ctx, ndata)
+
+	for _, sc := range data.SmartContracts {
+		k.SetSmartContractMetadata(ctx, sc)
+	}
 }
 
 // ExportGenesis export module status
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	return &types.GenesisState{
-		Params: k.GetParams(ctx),
+		Params:         k.GetParams(ctx),
+		SmartContracts: k.GetAllSmartContractsMetadata(ctx),
 	}
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package imversed.verse;
+
+option go_package = "github.com/imversed/imversed/x/verse/types";
+
+import "gogoproto/gogo.proto";
+import "verse/verse.proto";
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+  // module parameters
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  repeated Verse verseList = 2 [(gogoproto.nullable) = false];
+}
+
+message Params {
+  uint64 tx_rename_verse_cost = 1;
+}

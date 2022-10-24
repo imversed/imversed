@@ -1,0 +1,18 @@
+syntax = "proto3";
+package imversed.verse;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/imversed/imversed/x/verse/types";
+
+message Verse {
+  string owner = 1;
+
+  string name = 2;
+
+  string icon = 3;
+
+  string description = 4;
+
+  repeated string smart_contracts = 5;
+}

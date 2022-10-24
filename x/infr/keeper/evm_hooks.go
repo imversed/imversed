@@ -11,6 +11,7 @@ import (
 	"github.com/imversed/imversed/contracts"
 	"github.com/imversed/imversed/x/erc20/types"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
+	infrtypes "github.com/imversed/imversed/x/infr/types"
 	"math/big"
 )
 
@@ -52,6 +53,15 @@ func (h Hooks) PostTxProcessing(
 
 	account := common.BytesToAddress(msg.From().Bytes())
 
+	// add metadata to new contract
+	sc := infrtypes.SmartContract{
+		Address:     contractAddr.Hex(),
+		Creator:     account.Hex(),
+		BlockNumber: ctx.BlockHeight(),
+	}
+	h.k.SetSmartContractMetadata(gctx, sc)
+
+	// check erc20-compatibility
 	res, err = h.k.CallEVM(ctx, erc20, types.ModuleAddress, contractAddr, false, "name")
 	if err != nil {
 		return nil

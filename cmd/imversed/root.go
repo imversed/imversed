@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"io"
 	"os"
 	"path/filepath"
@@ -223,8 +222,6 @@ func (a appCreator) newApp(logger tmlog.Logger, db dbm.DB, traceStore io.Writer,
 	if err != nil {
 		panic(err)
 	}
-
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, cast.ToString(appOpts.Get(sdkserver.FlagMinGasPrices)))
 
 	snapshotOptions := snapshottypes.NewSnapshotOptions(
 		cast.ToUint64(appOpts.Get(sdkserver.FlagStateSyncSnapshotInterval)),

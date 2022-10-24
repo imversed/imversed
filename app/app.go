@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
+	"github.com/imversed/imversed/x/infr/baseAppHelper"
 
 	//"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
@@ -35,6 +35,10 @@ import (
 	"github.com/imversed/imversed/x/infr"
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
+
+	"github.com/imversed/imversed/x/verse"
+	versekeeper "github.com/imversed/imversed/x/verse/keeper"
+	versetypes "github.com/imversed/imversed/x/verse/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -186,6 +190,7 @@ var (
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
 		infr.AppModuleBasic{},
+		verse.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -265,6 +270,7 @@ type ImversedApp struct {
 	CurrencyKeeper currencymodulekeeper.Keeper
 	PoolsKeeper    poolsmodulekeeper.Keeper
 	InfrKeeper     infrkeeper.Keeper
+	VerseKeeper    versekeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -306,7 +312,7 @@ func NewImversedApp(
 	bApp.SetVersion("v3.5")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
-	minGasPriceHelper.SetBaseApp(bApp)
+	baseAppHelper.Create(bApp)
 
 	keys := sdk.NewKVStoreKeys(
 		// SDK keys
@@ -325,6 +331,7 @@ func NewImversedApp(
 		currencymoduletypes.StoreKey,
 		poolsmoduletypes.StoreKey,
 		infrtypes.StoreKey,
+		versetypes.StoreKey,
 	)
 
 	// Add the EVM transient store key
@@ -392,7 +399,7 @@ func NewImversedApp(
 		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	)
 
-	app.AuthzKeeper = authzkeeper.NewKeeper(keys[authzkeeper.StoreKey], appCodec, app.MsgServiceRouter(), app.AccountKeeper)
+	app.AuthzKeeper = authzkeeper.NewKeeper(keys[authzkeeper.StoreKey], appCodec, app.BaseApp.MsgServiceRouter(), app.AccountKeeper)
 
 	tracer := cast.ToString(appOpts.Get(srvflags.EVMTracer))
 
@@ -415,6 +422,10 @@ func NewImversedApp(
 	app.InfrKeeper = infrkeeper.NewKeeper(
 		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
 		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper,
+	)
+
+	app.VerseKeeper = versekeeper.NewKeeper(
+		keys[versetypes.StoreKey], appCodec, app.GetSubspace(versetypes.ModuleName),
 	)
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(
@@ -455,9 +466,7 @@ func NewImversedApp(
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
 		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
-		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
-		// infr router
-		AddRoute(infrtypes.RouterKey, infr.NewInfrProposalHandler(&app.InfrKeeper))
+		AddRoute(ibchost.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
 	govConfig := govtypes.DefaultConfig()
 	/*
 		Example of setting gov params:
@@ -514,7 +523,6 @@ func NewImversedApp(
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
-		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
@@ -523,6 +531,7 @@ func NewImversedApp(
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		params.NewAppModule(app.ParamsKeeper),
+		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 
 		// ibc modules
@@ -537,13 +546,14 @@ func NewImversedApp(
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		infr.NewAppModule(appCodec, app.InfrKeeper),
+		verse.NewAppModule(app.VerseKeeper, app.AccountKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
 	// there is nothing left over in the validator fee pool, so as to keep the
 	// CanWithdrawInvariant invariant.
 	// NOTE: upgrade module must go first to handle software upgrades.
-	// NOTE: staking module is required if HistoricalEntries param > 0
+	// NOTE: staking module is required if HistoricalEntries param > 0.
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	app.mm.SetOrderBeginBlockers(
 		upgradetypes.ModuleName,
@@ -572,6 +582,7 @@ func NewImversedApp(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 	)
 
 	// NOTE: fee market module must go last in order to retrieve the block gas used.
@@ -581,7 +592,6 @@ func NewImversedApp(
 		stakingtypes.ModuleName,
 		evmtypes.ModuleName,
 		feemarkettypes.ModuleName,
-
 		// no-op modules
 		ibchost.ModuleName,
 		ibctransfertypes.ModuleName,
@@ -603,6 +613,7 @@ func NewImversedApp(
 		currencymoduletypes.ModuleName,
 		poolsmoduletypes.ModuleName,
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -637,10 +648,14 @@ func NewImversedApp(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		// Ethermint modules
+		evmtypes.ModuleName,
+		feemarkettypes.ModuleName,
 		// erc20
 		erc20types.ModuleName,
 
 		infrtypes.ModuleName,
+		versetypes.ModuleName,
 
 		// NOTE: crisis module must go at the end to check for invariants on each module
 		crisistypes.ModuleName,
@@ -928,5 +943,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(currencymoduletypes.ModuleName)
 	paramsKeeper.Subspace(poolsmoduletypes.ModuleName)
 	paramsKeeper.Subspace(infrtypes.ModuleName)
+	paramsKeeper.Subspace(versetypes.ModuleName)
 	return paramsKeeper
 }

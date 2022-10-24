@@ -1,0 +1,74 @@
+syntax = "proto3";
+package imversed.verse;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/imversed/imversed/x/verse/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc CreateVerse(MsgCreateVerse) returns (MsgCreateVerseResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
+  rpc AddAssetToVerse(MsgAddAssetToVerse) returns (MsgAddAssetToVerseResponse);
+
+  rpc RemoveAssetFromVerse(MsgRemoveAssetFromVerse) returns (MsgRemoveAssetFromVerseResponse);
+
+  rpc RenameVerse(MsgRenameVerse) returns (MsgRenameVerseResponse);
+}
+
+message MsgCreateVerse {
+  string sender = 1;
+
+  string icon = 3;
+
+  string description = 4;
+}
+
+message MsgCreateVerseResponse {
+}
+
+message MsgAddAssetToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string asset_type = 3;
+
+  string asset_id = 4;
+
+  string asset_creator = 5;
+
+  string verse_creator = 6;
+}
+
+message MsgAddAssetToVerseResponse {
+}
+
+message MsgRenameVerse {
+  string sender = 1;
+
+  string verse_creator = 2;
+
+  string verse_old_name = 3;
+
+  string verse_new_name = 4;
+}
+
+message MsgRenameVerseResponse {
+}
+
+message MsgRemoveAssetFromVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string asset_type = 3;
+
+  string asset_id = 4;
+
+  string verse_creator = 5;
+}
+
+message MsgRemoveAssetFromVerseResponse {
+}
+// this line is used by starport scaffolding # proto/tx/message

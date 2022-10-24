@@ -2,9 +2,7 @@ package cli_test
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	ethermint "github.com/evmos/ethermint/types"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
@@ -17,15 +15,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
 	"github.com/evmos/ethermint/crypto/hd"
-	"github.com/imversed/imversed/app"
 	//"github.com/cosmos/cosmos-sdk/testutil/network"
 	"github.com/imversed/imversed/testutil/network"
 	"github.com/imversed/imversed/x/pools/client/cli"
 	poolstestutil "github.com/imversed/imversed/x/pools/client/testutil"
 	"github.com/imversed/imversed/x/pools/types"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
-
-	testnet "github.com/imversed/imversed/testutil/network"
 )
 
 type IntegrationTestSuite struct {
@@ -39,12 +34,11 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
 
 	var err error
-	s.cfg = testnet.DefaultConfig()
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, s.cfg.MinGasPrices)
+	s.cfg = network.DefaultConfig()
 	s.cfg.NumValidators = 1
 
 	// modification to pay fee with test bond denom "stake"
-	genesisState := app.ModuleBasics.DefaultGenesis(s.cfg.Codec)
+	genesisState := s.cfg.GenesisState
 	poolsGen := types.DefaultGenesis()
 	poolsGen.Params.PoolCreationFee = sdk.Coins{sdk.NewInt64Coin(s.cfg.BondDenom, 1000000)}
 	poolsGenJson := s.cfg.Codec.MustMarshalJSON(poolsGen)
@@ -80,7 +74,10 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
+
+	newAddr := sdk.AccAddress(key.Address())
 
 	var buf testutil.BufferWriter
 	buf, err = banktestutil.MsgSendExec(
@@ -293,7 +290,7 @@ func (s *IntegrationTestSuite) TestNewCreatePoolCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				err = clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType)
+				err = clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType)
 				s.Require().NoError(err, out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
@@ -310,9 +307,12 @@ func (s IntegrationTestSuite) TestNewJoinPoolCmd() {
 	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewJoinPoolAddr", keyring.English, ethermint.BIP44HDPath, "", hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
 
-	_, err = banktestutil.MsgSendExec(
+	newAddr := sdk.AccAddress(key.Address())
+
+	buf, err := banktestutil.MsgSendExec(
 		val.ClientCtx,
 		val.Address,
 		newAddr,
@@ -320,6 +320,7 @@ func (s IntegrationTestSuite) TestNewJoinPoolCmd() {
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
 	)
+	_ = buf
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -371,7 +372,7 @@ func (s IntegrationTestSuite) TestNewJoinPoolCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -415,6 +416,7 @@ func (s IntegrationTestSuite) TestNewExitPoolCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=%d", flags.FlagGas, 300000),
 			},
 			false, &sdk.TxResponse{}, 0,
 		},
@@ -432,7 +434,7 @@ func (s IntegrationTestSuite) TestNewExitPoolCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -449,7 +451,10 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountOutCmd() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
+
+	newAddr := sdk.AccAddress(key.Address())
 
 	_, err = banktestutil.MsgSendExec(
 		val.ClientCtx,
@@ -497,7 +502,7 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountOutCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -514,7 +519,10 @@ func (s IntegrationTestSuite) TestNewJoinSwapExternAmountInCmd() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
+
+	newAddr := sdk.AccAddress(key.Address())
 
 	_, err = banktestutil.MsgSendExec(
 		val.ClientCtx,
@@ -560,7 +568,7 @@ func (s IntegrationTestSuite) TestNewJoinSwapExternAmountInCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -606,7 +614,7 @@ func (s IntegrationTestSuite) TestNewExitSwapExternAmountOutCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -623,7 +631,10 @@ func (s IntegrationTestSuite) TestNewJoinSwapShareAmountOutCmd() {
 		ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
+
+	newAddr := sdk.AccAddress(key.Address())
 
 	_, err = banktestutil.MsgSendExec(
 		val.ClientCtx,
@@ -669,7 +680,7 @@ func (s IntegrationTestSuite) TestNewJoinSwapShareAmountOutCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -715,7 +726,7 @@ func (s IntegrationTestSuite) TestNewExitSwapShareAmountInCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())
@@ -754,7 +765,7 @@ func (s *IntegrationTestSuite) TestGetCmdPools() {
 			} else {
 				resp := types.QueryPoolsResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 
 				s.Require().Greater(len(resp.Pools), 0, out.String())
 			}
@@ -792,7 +803,7 @@ func (s *IntegrationTestSuite) TestGetCmdNumPools() {
 			} else {
 				resp := types.QueryNumPoolsResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 
 				s.Require().Greater(resp.NumPools, uint64(0), out.String())
 			}
@@ -832,7 +843,7 @@ func (s *IntegrationTestSuite) TestGetCmdPool() {
 				s.Require().NoError(err, out.String())
 
 				resp := types.QueryPoolResponse{}
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -869,7 +880,7 @@ func (s *IntegrationTestSuite) TestGetCmdPoolParams() {
 			} else {
 				resp := types.QueryPoolParamsResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -906,7 +917,7 @@ func (s *IntegrationTestSuite) TestGetCmdPoolAssets() {
 			} else {
 				resp := types.QueryPoolAssetsResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -943,7 +954,7 @@ func (s *IntegrationTestSuite) TestGetCmdTotalShares() {
 			} else {
 				resp := types.QueryTotalSharesResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -979,7 +990,7 @@ func (s *IntegrationTestSuite) TestGetCmdTotalLiquidity() {
 			} else {
 				resp := types.QueryTotalLiquidityResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -1016,7 +1027,7 @@ func (s *IntegrationTestSuite) TestGetCmdSpotPrice() {
 			} else {
 				resp := types.QuerySpotPriceResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -1057,7 +1068,7 @@ func (s *IntegrationTestSuite) TestGetCmdSpotPrice() {
 //			} else {
 //				resp := types.QuerySwapExactAmountInResponse{}
 //				s.Require().NoError(err, out.String())
-//				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+//				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 //			}
 //		})
 //	}
@@ -1098,7 +1109,7 @@ func (s *IntegrationTestSuite) TestGetCmdEstimateSwapExactAmountOut() {
 			} else {
 				resp := types.QuerySwapExactAmountOutResponse{}
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &resp), out.String())
 			}
 		})
 	}
@@ -1112,7 +1123,10 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountInCmd() {
 		keyring.English, ethermint.BIP44HDPath, keyring.DefaultBIP39Passphrase, hd.EthSecp256k1)
 	s.Require().NoError(err)
 
-	newAddr := sdk.AccAddress(info.GetPubKey().Address())
+	key, err := info.GetPubKey()
+	s.Require().NoError(err)
+
+	newAddr := sdk.AccAddress(key.Address())
 
 	_, err = banktestutil.MsgSendExec(
 		val.ClientCtx,
@@ -1160,7 +1174,7 @@ func (s IntegrationTestSuite) TestNewSwapExactAmountInCmd() {
 				s.Require().Error(err)
 			} else {
 				s.Require().NoError(err, out.String())
-				s.Require().NoError(clientCtx.JSONCodec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
+				s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), tc.respType), out.String())
 
 				txResp := tc.respType.(*sdk.TxResponse)
 				s.Require().Equal(tc.expectedCode, txResp.Code, out.String())

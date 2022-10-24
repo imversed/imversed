@@ -2,8 +2,6 @@ package cli_test
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/imversed/imversed/x/infr/minGasPriceHelper"
 	"strconv"
 	"testing"
 
@@ -25,7 +23,6 @@ var _ = strconv.IntSize
 func networkWithCurrencyObjects(t *testing.T, n int) (*network.Network, []types.Currency) {
 	t.Helper()
 	cfg := network.DefaultConfig()
-	minGasPriceHelper.Create(baseapp.SetMinGasPrices, cfg.MinGasPrices)
 	cfg.NumValidators = 1
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
@@ -43,7 +40,6 @@ func networkWithCurrencyObjects(t *testing.T, n int) (*network.Network, []types.
 }
 
 func TestShowCurrency(t *testing.T) {
-	t.Skip()
 	net, objs := networkWithCurrencyObjects(t, 2)
 
 	ctx := net.Validators[0].ClientCtx
@@ -93,6 +89,7 @@ func TestShowCurrency(t *testing.T) {
 			}
 		})
 	}
+	net.Cleanup()
 }
 
 func TestListCurrency(t *testing.T) {
