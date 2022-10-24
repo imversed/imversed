@@ -9,7 +9,7 @@
     "build": "vuepress build src",
     "prebuild": "./prebuild.sh",
     "postbuild": "./postbuild.sh",
-    "deploy": "rm -rf ./src/.vuepress/dist && yarn build && ./scripts/deploy.sh"
+    "publish-doc": "rm -rf ./src/.vuepress/dist && yarn && yarn build && ./scripts/deploy.sh"
   },
   "devDependencies": {
     "vuepress": "^1.9.7"
