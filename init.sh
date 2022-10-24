@@ -17,8 +17,7 @@ TRACE="--trace"
 rm -rf ~/.imversed
 rm -rf ~/go/bin/imversed
 #
-#ignite chain build
-starport c build
+ignite chain build
 
 #mv ~/go/bin/imversedd ~/go/bin/imversed
 
