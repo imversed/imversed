@@ -15,13 +15,7 @@ TRACE="--trace"
 
 # remove existing daemon and client
 rm -rf ~/.imversed
-#rm -fr ~/go/bin/imversed
-#
-#starport chain build
-#
-#mv ~/go/bin/imversedd ~/go/bin/imversed
 
-#make install
 
 ~/go/bin/imversed config keyring-backend $KEYRING
 ~/go/bin/imversed config chain-id $CHAINID
@@ -102,9 +96,9 @@ ignite c build --release &&
 tar -zxvf release/imversed_darwin_arm64.tar.gz  &&
 #mv imversedd imversed &&
 
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.5/bin &&
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.6/bin &&
 # copy binary with upgrade
 
-cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.5/bin &&
+cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.6/bin &&
 
 ~/go/bin/cosmovisor start
