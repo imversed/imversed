@@ -92,8 +92,8 @@ mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin &&
 # copy current binary
 cp ~/go/bin/imversed $DAEMON_HOME/cosmovisor/genesis/bin &&
 
-ignite c build --release &&
-tar -zxvf release/imversed_darwin_arm64.tar.gz  &&
+#ignite c build --release &&
+#tar -zxvf release/imversed_darwin_arm64.tar.gz  &&
 #mv imversedd imversed &&
 
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.6/bin &&
