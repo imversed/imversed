@@ -310,6 +310,7 @@ func NewImversedApp(
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
 	bApp.SetVersion("v3.8")
+
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	baseAppHelper.Create(bApp)
@@ -348,6 +349,21 @@ func NewImversedApp(
 		tkeys:             tkeys,
 		memKeys:           memKeys,
 	}
+
+	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+	//	println("******* StoreUpgrades ********")
+	//	storeUpgrades := storetypes.StoreUpgrades{
+	//		Added: []string{versetypes.ModuleName},
+	//	}
+	//
+	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
+	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	//}
 
 	// init params keeper and subspaces
 	app.ParamsKeeper = initParamsKeeper(appCodec, cdc, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
@@ -709,7 +725,23 @@ func NewImversedApp(
 	// Please note that changing any of the anteHandler or postHandler chain is
 	// likely to be a state-machine breaking change, which needs a coordinated
 	// upgrade.
+
 	app.setPostHandler()
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(err)
+	}
+
+	if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		println("******* StoreUpgrades ********")
+		storeUpgrades := storetypes.StoreUpgrades{
+			Added: []string{versetypes.ModuleName},
+		}
+
+		// configure store loader that checks if version == upgradeHeight and applies store upgrades
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	}
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {

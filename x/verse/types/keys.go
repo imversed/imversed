@@ -6,7 +6,7 @@ var _ binary.ByteOrder
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "verse"
+	ModuleName = "verses"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
