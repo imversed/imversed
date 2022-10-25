@@ -350,21 +350,6 @@ func NewImversedApp(
 		memKeys:           memKeys,
 	}
 
-	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-	//	println("******* StoreUpgrades ********")
-	//	storeUpgrades := storetypes.StoreUpgrades{
-	//		Added: []string{versetypes.ModuleName},
-	//	}
-	//
-	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
-	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	//}
-
 	// init params keeper and subspaces
 	app.ParamsKeeper = initParamsKeeper(appCodec, cdc, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
 	// set the BaseApp's parameter store
@@ -728,20 +713,7 @@ func NewImversedApp(
 
 	app.setPostHandler()
 
-	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	if err != nil {
-		panic(err)
-	}
-
-	if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		println("******* StoreUpgrades ********")
-		storeUpgrades := storetypes.StoreUpgrades{
-			Added: []string{versetypes.ModuleName},
-		}
-
-		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	}
+	app.setUpgradeHandler(app.configurator)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -752,36 +724,6 @@ func NewImversedApp(
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
 
-	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-	//	println("******* StoreUpgrades ********")
-	//	storeUpgrades := storetypes.StoreUpgrades{
-	//		Added: []string{versetypes.ModuleName},
-	//	}
-	//
-	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
-	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	//}
-
-	app.setUpgradeHandler(app.configurator)
-	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-	//	println("******* StoreUpgrades ********")
-	//	storeUpgrades := storetypes.StoreUpgrades{
-	//		Added: []string{versetypes.ModuleName},
-	//	}
-	//
-	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
-	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	//}
 	return app
 }
 
