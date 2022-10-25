@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	versetypes "github.com/imversed/imversed/x/verse/types"
+	versetypes "github.com/imversed/imversed/x/verses/types"
 )
 
 func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
