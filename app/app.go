@@ -309,7 +309,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.6")
+	bApp.SetVersion("v3.8")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	baseAppHelper.Create(bApp)
@@ -720,8 +720,36 @@ func NewImversedApp(
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
 
-	app.setUpgradeHandler(app.configurator)
+	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+	//	println("******* StoreUpgrades ********")
+	//	storeUpgrades := storetypes.StoreUpgrades{
+	//		Added: []string{versetypes.ModuleName},
+	//	}
+	//
+	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
+	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	//}
 
+	app.setUpgradeHandler(app.configurator)
+	//upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//
+	//if upgradeInfo.Name == "v3.8" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+	//	println("******* StoreUpgrades ********")
+	//	storeUpgrades := storetypes.StoreUpgrades{
+	//		Added: []string{versetypes.ModuleName},
+	//	}
+	//
+	//	// configure store loader that checks if version == upgradeHeight and applies store upgrades
+	//	app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	//}
 	return app
 }
 

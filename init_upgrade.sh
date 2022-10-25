@@ -40,6 +40,7 @@ cat $HOME/.imversed/config/genesis.json | jq '.consensus_params["block"]["max_ga
 sed -i -e 's/minimum-gas-prices = ""/minimum-gas-prices = "0.001aimv"/g' ~/.imversed/config/app.toml &&
 cat <<< $(jq '.app_state.gov.voting_params.voting_period = "30s"' $HOME/.imversed/config/genesis.json) > $HOME/.imversed/config/genesis.json &&
 sed -i -e 's/api = "eth,net,web3"/api = "eth,txpool,personal,net,debug,web3,miner"/g' ~/.imversed/config/app.toml &&
+sed -i -e 's/pruning = "default"/pruning = "everything"/g' ~/.imversed/config/app.toml &&
 
 # disable produce empty block
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -96,9 +97,9 @@ cp ~/go/bin/imversed $DAEMON_HOME/cosmovisor/genesis/bin &&
 #tar -zxvf release/imversed_darwin_arm64.tar.gz  &&
 #mv imversedd imversed &&
 
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.6/bin &&
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/v3.8/bin &&
 # copy binary with upgrade
 
-cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.6/bin &&
+cp ~/projects/imversed/imversed $DAEMON_HOME/cosmovisor/upgrades/v3.8/bin &&
 
 ~/go/bin/cosmovisor start
