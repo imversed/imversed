@@ -1,6 +1,8 @@
 package ante_test
 
 import (
+	"encoding/json"
+	"fmt"
 	"math"
 	"math/big"
 	"testing"
@@ -27,18 +29,24 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	cryptocodec "github.com/evmos/ethermint/crypto/codec"
 
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	evtypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	"github.com/cosmos/cosmos-sdk/x/feegrant"
+	types5 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/evmos/ethermint/app"
+	ante "github.com/evmos/ethermint/app/ante"
 	"github.com/evmos/ethermint/encoding"
+	"github.com/evmos/ethermint/tests"
 	"github.com/evmos/ethermint/x/evm/statedb"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 	feemarkettypes "github.com/evmos/ethermint/x/feemarket/types"
-	"github.com/imversed/imversed/app"
-	ante "github.com/imversed/imversed/app/ante"
-	"github.com/imversed/imversed/tests"
 
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
@@ -47,7 +55,7 @@ type AnteTestSuite struct {
 	suite.Suite
 
 	ctx             sdk.Context
-	app             *app.ImversedApp
+	app             *app.EthermintApp
 	clientCtx       client.Context
 	anteHandler     sdk.AnteHandler
 	ethSigner       ethtypes.Signer
@@ -65,7 +73,7 @@ func (suite *AnteTestSuite) StateDB() *statedb.StateDB {
 func (suite *AnteTestSuite) SetupTest() {
 	checkTx := false
 
-	suite.app = app.Setup(checkTx, func(app *app.ImversedApp, genesis simapp.GenesisState) simapp.GenesisState {
+	suite.app = app.Setup(checkTx, func(app *app.EthermintApp, genesis simapp.GenesisState) simapp.GenesisState {
 		if suite.enableFeemarket {
 			// setup feemarketGenesis params
 			feemarketGenesis := feemarkettypes.DefaultGenesisState()
@@ -79,7 +87,6 @@ func (suite *AnteTestSuite) SetupTest() {
 		evmGenesis := evmtypes.DefaultGenesisState()
 		evmGenesis.Params.AllowUnprotectedTxs = false
 		if !suite.enableLondonHF {
-			evmGenesis := evmtypes.DefaultGenesisState()
 			maxInt := sdkmath.NewInt(math.MaxInt64)
 			evmGenesis.Params.ChainConfig.LondonBlock = &maxInt
 			evmGenesis.Params.ChainConfig.ArrowGlacierBlock = &maxInt
@@ -96,6 +103,7 @@ func (suite *AnteTestSuite) SetupTest() {
 	suite.ctx = suite.app.BaseApp.NewContext(checkTx, tmproto.Header{Height: 2, ChainID: "ethermint_9000-1", Time: time.Now().UTC()})
 	suite.ctx = suite.ctx.WithMinGasPrices(sdk.NewDecCoins(sdk.NewDecCoin(evmtypes.DefaultEVMDenom, sdk.OneInt())))
 	suite.ctx = suite.ctx.WithBlockGasMeter(sdk.NewGasMeter(1000000000000000000))
+	suite.app.EvmKeeper.WithChainID(suite.ctx)
 
 	infCtx := suite.ctx.WithGasMeter(sdk.NewInfiniteGasMeter())
 	suite.app.AccountKeeper.SetParams(infCtx, authtypes.DefaultParams())
@@ -116,8 +124,6 @@ func (suite *AnteTestSuite) SetupTest() {
 		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 		SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 	})
-	suite.Require().NoError(err)
-
 	suite.Require().NoError(err)
 
 	suite.anteHandler = anteHandler
@@ -269,6 +275,107 @@ func (suite *AnteTestSuite) CreateTestEIP712TxBuilderMsgDelegate(from sdk.AccAdd
 	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgSend)
 }
 
+func (suite *AnteTestSuite) CreateTestEIP712MsgCreateValidator(from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins) client.TxBuilder {
+	// Build MsgCreateValidator
+	valAddr := sdk.ValAddress(from.Bytes())
+	privEd := ed25519.GenPrivKey()
+	msgCreate, err := types3.NewMsgCreateValidator(
+		valAddr,
+		privEd.PubKey(),
+		sdk.NewCoin(evmtypes.DefaultEVMDenom, sdk.NewInt(20)),
+		// TODO: can this values be empty strings?
+		types3.NewDescription("moniker", "indentity", "website", "security_contract", "details"),
+		types3.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),
+		sdk.OneInt(),
+	)
+	suite.Require().NoError(err)
+	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgCreate)
+}
+
+func (suite *AnteTestSuite) CreateTestEIP712SubmitProposal(from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins, deposit sdk.Coins) client.TxBuilder {
+	proposal, ok := types5.ContentFromProposalType("My proposal", "My description", types5.ProposalTypeText)
+	suite.Require().True(ok)
+	msgSubmit, err := types5.NewMsgSubmitProposal(proposal, deposit, from)
+	suite.Require().NoError(err)
+	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgSubmit)
+}
+
+func (suite *AnteTestSuite) CreateTestEIP712GrantAllowance(from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins) client.TxBuilder {
+	spendLimit := sdk.NewCoins(sdk.NewInt64Coin(evmtypes.DefaultEVMDenom, 10))
+	threeHours := time.Now().Add(3 * time.Hour)
+	basic := &feegrant.BasicAllowance{
+		SpendLimit: spendLimit,
+		Expiration: &threeHours,
+	}
+	granted := tests.GenerateAddress()
+	grantedAddr := suite.app.AccountKeeper.NewAccountWithAddress(suite.ctx, granted.Bytes())
+	msgGrant, err := feegrant.NewMsgGrantAllowance(basic, from, grantedAddr.GetAddress())
+	suite.Require().NoError(err)
+	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgGrant)
+}
+
+func (suite *AnteTestSuite) CreateTestEIP712MsgEditValidator(from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins) client.TxBuilder {
+	valAddr := sdk.ValAddress(from.Bytes())
+	msgEdit := types3.NewMsgEditValidator(
+		valAddr,
+		types3.NewDescription("moniker", "identity", "website", "security_contract", "details"),
+		nil,
+		nil,
+	)
+	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgEdit)
+}
+
+func (suite *AnteTestSuite) CreateTestEIP712MsgSubmitEvidence(from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins) client.TxBuilder {
+	pk := ed25519.GenPrivKey()
+	msgEvidence, err := evtypes.NewMsgSubmitEvidence(from, &evtypes.Equivocation{
+		Height:           11,
+		Time:             time.Now().UTC(),
+		Power:            100,
+		ConsensusAddress: pk.PubKey().Address().String(),
+	})
+	suite.Require().NoError(err)
+
+	return suite.CreateTestEIP712CosmosTxBuilder(from, priv, chainId, gas, gasAmount, msgEvidence)
+}
+
+// StdSignBytes returns the bytes to sign for a transaction.
+func StdSignBytes(cdc *codec.LegacyAmino, chainID string, accnum uint64, sequence uint64, timeout uint64, fee legacytx.StdFee, msgs []sdk.Msg, memo string, tip *txtypes.Tip) []byte {
+	msgsBytes := make([]json.RawMessage, 0, len(msgs))
+	for _, msg := range msgs {
+		legacyMsg, ok := msg.(legacytx.LegacyMsg)
+		if !ok {
+			panic(fmt.Errorf("expected %T when using amino JSON", (*legacytx.LegacyMsg)(nil)))
+		}
+
+		msgsBytes = append(msgsBytes, json.RawMessage(legacyMsg.GetSignBytes()))
+	}
+
+	var stdTip *legacytx.StdTip
+	if tip != nil {
+		if tip.Tipper == "" {
+			panic(fmt.Errorf("tipper cannot be empty"))
+		}
+
+		stdTip = &legacytx.StdTip{Amount: tip.Amount, Tipper: tip.Tipper}
+	}
+
+	bz, err := cdc.MarshalJSON(legacytx.StdSignDoc{
+		AccountNumber: accnum,
+		ChainID:       chainID,
+		Fee:           json.RawMessage(fee.Bytes()),
+		Memo:          memo,
+		Msgs:          msgsBytes,
+		Sequence:      sequence,
+		TimeoutHeight: timeout,
+		Tip:           stdTip,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return sdk.MustSortJSON(bz)
+}
+
 func (suite *AnteTestSuite) CreateTestEIP712CosmosTxBuilder(
 	from sdk.AccAddress, priv cryptotypes.PrivKey, chainId string, gas uint64, gasAmount sdk.Coins, msg sdk.Msg,
 ) client.TxBuilder {
@@ -283,6 +390,11 @@ func (suite *AnteTestSuite) CreateTestEIP712CosmosTxBuilder(
 
 	// GenerateTypedData TypedData
 	var ethermintCodec codec.ProtoCodecMarshaler
+	registry := codectypes.NewInterfaceRegistry()
+	types.RegisterInterfaces(registry)
+	ethermintCodec = codec.NewProtoCodec(registry)
+	cryptocodec.RegisterInterfaces(registry)
+
 	fee := legacytx.NewStdFee(gas, gasAmount)
 	accNumber := suite.app.AccountKeeper.GetAccount(suite.ctx, from).GetAccountNumber()
 

@@ -2,7 +2,7 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/verses/types"
 )
 
 // GetParams returns the total set of verse parameters.

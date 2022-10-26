@@ -94,6 +94,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	// authclient.Codec = encodingConfig.Codec
 
 	cfg := sdk.GetConfig()
+
 	cfg.Seal()
 
 	rootCmd.AddCommand(

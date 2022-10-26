@@ -1,9 +1,9 @@
-package verse
+package verses
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/verses/types"
 )
 
 // NewHandler defines the verse module handler instance

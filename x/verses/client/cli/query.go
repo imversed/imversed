@@ -5,7 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/verses/types"
 	"github.com/spf13/cobra"
 	"strings"
 )

@@ -28,17 +28,17 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/evmos/ethermint/x/evm/vm/geth"
 	"github.com/imversed/imversed/x/erc20"
 	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
-
 	"github.com/imversed/imversed/x/infr"
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
 
-	"github.com/imversed/imversed/x/verse"
-	versekeeper "github.com/imversed/imversed/x/verse/keeper"
-	versetypes "github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/verses"
+	versekeeper "github.com/imversed/imversed/x/verses/keeper"
+	versetypes "github.com/imversed/imversed/x/verses/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -190,7 +190,7 @@ var (
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
 		infr.AppModuleBasic{},
-		verse.AppModuleBasic{},
+		verses.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -309,7 +309,8 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.6")
+	bApp.SetVersion("v3.8")
+
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	baseAppHelper.Create(bApp)
@@ -411,7 +412,7 @@ func NewImversedApp(
 	app.EvmKeeper = evmkeeper.NewKeeper(
 		appCodec, keys[evmtypes.StoreKey], tkeys[evmtypes.TransientKey], app.GetSubspace(evmtypes.ModuleName),
 		app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.FeeMarketKeeper,
-		tracer,
+		nil, geth.NewEVM, tracer,
 	)
 
 	app.Erc20Keeper = erc20keeper.NewKeeper(
@@ -546,7 +547,7 @@ func NewImversedApp(
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		infr.NewAppModule(appCodec, app.InfrKeeper),
-		verse.NewAppModule(app.VerseKeeper, app.AccountKeeper),
+		verses.NewAppModule(app.VerseKeeper, app.AccountKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -709,7 +710,10 @@ func NewImversedApp(
 	// Please note that changing any of the anteHandler or postHandler chain is
 	// likely to be a state-machine breaking change, which needs a coordinated
 	// upgrade.
+
 	app.setPostHandler()
+
+	app.setUpgradeHandler(app.configurator)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -719,8 +723,6 @@ func NewImversedApp(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
-
-	app.setUpgradeHandler(app.configurator)
 
 	return app
 }
