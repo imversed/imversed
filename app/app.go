@@ -28,10 +28,10 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/evmos/ethermint/x/evm/vm/geth"
 	"github.com/imversed/imversed/x/erc20"
 	erc20keeper "github.com/imversed/imversed/x/erc20/keeper"
 	erc20types "github.com/imversed/imversed/x/erc20/types"
-
 	"github.com/imversed/imversed/x/infr"
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
@@ -404,7 +404,7 @@ func NewImversedApp(
 	app.EvmKeeper = evmkeeper.NewKeeper(
 		appCodec, keys[evmtypes.StoreKey], tkeys[evmtypes.TransientKey], app.GetSubspace(evmtypes.ModuleName),
 		app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.FeeMarketKeeper,
-		tracer,
+		nil, geth.NewEVM, tracer,
 	)
 
 	app.Erc20Keeper = erc20keeper.NewKeeper(
