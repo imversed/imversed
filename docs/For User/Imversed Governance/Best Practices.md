@@ -1,38 +1,10 @@
 # Best Practices
 
-> * If users are creating governance proposals which require community pool funding (such as those of type `CommunityPoolSpendProposal`), refer to [this section](https://docs.imversed.com/users/governance/best_practices.html#community-spend-proposal). 
-> * If users are creating governance proposals concerned with the ERC-20 Module (such as those of type `RegisterCoinProposal`), refer to [this section](https://docs.imversed.com/users/governance/best_practices.html#erc-20-proposal).
-> * If users are creating governance proposals concerned with changing parameters (such as those of type `ParameterChangeProposal`), refer to [this section](https://docs.imversed.com/users/governance/best_practices.html#parameter-change-proposal).
-
-## General Advice: Community Outreach
-
-Engagement is likely to be critical to the success of a proposal. The degree to which you engage with Evmos community should be relative to the potential impact that your proposal may have on the stakeholders. This guide does not cover all ways of engaging: you could bring your idea to a podcast or a hackathon, host an AMA on [Reddit](https://www.reddit.com/r/imversed/) or host a Q&A (questions & answers). We encourage you to experiment and use your strengths to introduce proposal ideas and gather feedback.
-
-There are many different ways to engage. One strategy involves a few stages of engagement before and after submitting a proposal on chain. **Why do it in stages?** It's a more conservative approach to save resources. The idea is to check in with key stakeholders at each stage before investing more resources into developing your proposal.
-
-In the first stage of this strategy, you should engage people (ideally experts) informally about your idea. You'll want to start with the minimal, critical components (name, value to cosmos hub, timeline, any funding needs) and check:
-
-* Does it make sense?
-* Are there critical flaws?
-* Does it need to be reconsidered?
-  
-You should be able engaging with key stakeholders (eg. a large validator operator) with a few short sentences to measure their support. Here's an example:
-
-> "We are considering a proposal for funding to work on (project). We think it will help Evmos to (outcome). Timeline is (x), and we're asking for (y) amount. Do you think that this is a proposal that (large validator) may support?"
-
-**Why a large validator?** They tend to be the de facto decision-makers on Evmos, since their delegators also delegate their voting power. If you can establish a base layer of off-chain support, you can be more confident that it's worth proceeding to the next stage.
-
-> Note: many will likely hesitate to commit support, and that's okay. It will be important to reassure these stakeholders that this isn't a binding a commitment. You're just canvassing the community to get a feel for whether it's worthwhile to proceed. It's also an opportunity to connect with new people and to answer their questions about what it is you're working on. It will be important for them to clearly understand why you think what you're proposing will be valuable to Evmos, and if possible, why it will be valuable to them as long-term stakeholders.
-
-* If you're just developing your idea, [start at Stage 1](https://docs.imversed.com/users/governance/best_practices.html#stage-1-your-idea).
-* If you're already confident about your idea, [skip to Stage 2](https://docs.imversed.com/users/governance/best_practices.html#stage-2-your-draft-proposal).
-* If you've drafted your proposal, engaged with the community, and submitted your proposal to the testnet, [skip to Stage 3](https://docs.imversed.com/users/governance/best_practices.html#stage-3-your-on-chain-proposal).
-
 ## Stage 1: Your Idea
 ### Not yet confident about your idea?
 Great! Governance proposals potentially impact many stakeholders. Introduce your idea with known members of the community before investing resources into drafting a proposal. Don't let negative feedback dissuade you from exploring your idea if you think that it's still important.
 
-If you know people who are very involved with Evmos, send them a private message with a concise overview of what you think will result from your idea or proposed changes. Wait for them to ask questions before providing details. Do the same in semi-private channels where people tend to be respectful (and hopefully supportive).
+If you know people who are very involved with Imversed, send them a private message with a concise overview of what you think will result from your idea or proposed changes. Wait for them to ask questions before providing details. Do the same in semi-private channels where people tend to be respectful (and hopefully supportive).
 
 ### Confident with your idea?
 Great! However, remember that governance proposals potentially impact many stakeholders, which can happen in unexpected ways. Introduce your idea with members of the community before investing resources into drafting a proposal. At this point you should seek out and carefully consider critical feedback in order to protect yourself from [confirmation bias](https://en.wikipedia.org/wiki/Confirmation_bias). This is the ideal time to see a critical flaw, because submitting a flawed proposal will waste resources.
