@@ -1,5 +1,5 @@
 ## Public Available Endpoints
-Below is a list of publicly available endpoints that you can use to connect to the Evmos mainnet and public testnets:
+Below is a list of publicly available endpoints that you can use to connect to the Imversed mainnet and public testnets:
 
 > You can also use [chainlist.org](https://chainlist.org/) to add the node directly to [Metamask](https://docs.imversed.com/users/wallets/metamask.html#automatic-import).
 
