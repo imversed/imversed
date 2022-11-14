@@ -1,3 +1,0 @@
-[submodule "sdk/js-client"]
-	path = sdk/js-client
-	url = git@github.com:imversed/js-client.git
