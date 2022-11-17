@@ -49,7 +49,6 @@ func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
 		},
 	)
 
-
 	app.UpgradeKeeper.SetUpgradeHandler(
 		"v3.9",
 		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
@@ -59,6 +58,13 @@ func (app ImversedApp) setUpgradeHandler(cfg module.Configurator) {
 
 	app.UpgradeKeeper.SetUpgradeHandler(
 		"v3.10",
+		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+			return app.mm.RunMigrations(ctx, cfg, vm)
+		},
+	)
+
+	app.UpgradeKeeper.SetUpgradeHandler(
+		"v3.11",
 		func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 			return app.mm.RunMigrations(ctx, cfg, vm)
 		},

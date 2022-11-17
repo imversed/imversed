@@ -475,8 +475,8 @@ github.com/cosmos/cosmos-proto v1.0.0-alpha7 h1:yqYUOHF2jopwZh4dVQp3xgqwftE5/2hk
 github.com/cosmos/cosmos-proto v1.0.0-alpha7/go.mod h1:dosO4pSAbJF8zWCzCoTWP7nNsjcvSUBQmniFxDg5daw=
 github.com/cosmos/cosmos-sdk v0.44.2/go.mod h1:fwQJdw+aECatpTvQTo1tSfHEsxACdZYU80QCZUPnHr4=
 github.com/cosmos/cosmos-sdk v0.44.3/go.mod h1:bA3+VenaR/l/vDiYzaiwbWvRPWHMBX2jG0ygiFtiBp0=
-github.com/cosmos/cosmos-sdk v0.46.3 h1:2jdJYcSwh4AtFJKGoNGvmEy2mKDWtGaVZphGpvedljQ=
-github.com/cosmos/cosmos-sdk v0.46.3/go.mod h1:AynIAjXwtS3T/ApdhNCz/7/KGMbZSUBbKRTcbukb2ic=
+github.com/cosmos/cosmos-sdk v0.46.4 h1:I4CPfnz7lAPM7cEvvyTxL1h3M/ugbhTNr5ZRcnW8WsU=
+github.com/cosmos/cosmos-sdk v0.46.4/go.mod h1:b5usG7aBEEvhaatYCdV6orFbDUsj4BG1V6UtKwNcJeQ=
 github.com/cosmos/cosmos-sdk/ics23/go v0.8.0 h1:iKclrn3YEOwk4jQHT2ulgzuXyxmzmPczUalMwW4XH9k=
 github.com/cosmos/cosmos-sdk/ics23/go v0.8.0/go.mod h1:2a4dBq88TUoqoWAU5eu0lGvpFP3wWDPgdHPargtyw30=
 github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d/go.mod h1:tSxLoYXyBmiFeKpvmq4dzayMdCjCnu8uqmCysIGBT2Y=
@@ -628,8 +628,8 @@ github.com/ethereum/go-ethereum v1.10.19 h1:EOR5JbL4MD5yeOqv8W2iC1s4NximrTjqFccU
 github.com/ethereum/go-ethereum v1.10.19/go.mod h1:IJBNMtzKcNHPtllYihy6BL2IgK1u+32JriaTbdt4v+w=
 github.com/ettle/strcase v0.1.1/go.mod h1:hzDLsPC7/lwKyBOywSHEP89nt2pDgdy+No1NBA9o9VY=
 github.com/evanphx/json-patch v4.9.0+incompatible/go.mod h1:50XU6AFN0ol/bzJsmQLiYLvXMP4fmwYFNcr97nuDLSk=
-github.com/evmos/ethermint v0.20.0-rc1 h1:qZ8o+PrmSQsQczf0shx1zeEbbu/d8RoKuy3yMuAxFcE=
-github.com/evmos/ethermint v0.20.0-rc1/go.mod h1:slhuvGjkZaRJCapuHaKVIraxRgI7C70yEznP2YokfkA=
+github.com/evmos/ethermint v0.20.0-rc2 h1:SGFfqR1nQOkJAlpYYKMvAscKLmXzu4QShSw/K9lWZ90=
+github.com/evmos/ethermint v0.20.0-rc2/go.mod h1:0mjSWj39t42VnsMYh0G6ahjrnxdtwt9v6EayTL//6nw=
 github.com/facebookgo/ensure v0.0.0-20160127193407-b4ab57deab51/go.mod h1:Yg+htXGokKKdzcwhuNDwVvN+uBxDGXJ7G/VN1d8fa64=
 github.com/facebookgo/ensure v0.0.0-20200202191622-63f1cf65ac4c h1:8ISkoahWXwZR41ois5lSJBSVw4D0OV19Ht/JSTzvSv0=
 github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 h1:JWuenKqqX8nojtoVVWjGfOF9635RETekkoH6Cc9SX0A=
