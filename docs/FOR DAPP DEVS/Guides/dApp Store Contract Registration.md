@@ -16,14 +16,14 @@ To add your contract in the Imversed dApp Store, you need to register a `revenue
 You can register a contract by signing a transaction with the address that originally deployed the contract. You can use the following CLI command, where
 
 * $NONCE is the nonce of transaction that deployed the contract (e.g. 0),
-* $CONTRACT is the hex address of the deployed contract (e.g 0x5f6659B6F712c729c46786bA9562eC50907c67CF) and
-* (optional) $WITHDRAWER is the bech32 address of the address to receive the transaction fees (e.g. evmos1keyy3teyq7t7kuxgeek3v65n0j27k20v2ugysf):
+* $CONTRACT is the hex address of the deployed contract (e.g imv159dctezcw6u077gwthl0ytfgtj2nxufs53c5fg) and
+* (optional) $WITHDRAWER is the bech32 address of the address to receive the transaction fees (e.g. imv159dctezcw6u077gwthl0ytfgtj2nxufs53c5fg):
 
 ```text
 # Register a revenue for your contract
 imversed tx revenue register $CONTRACT $NONCE $WITHDRAWER \
 --from=dev0 \ # contract deployer key
---gas=700000 --gas-prices=10000aevmos \ # can vary depending on the network
+--gas=700000 --gas-prices=10000aivm \ # can vary depending on the network
 ```
 
 After your transaction is submitted successfully, you can query your revenue with :
@@ -33,7 +33,7 @@ After your transaction is submitted successfully, you can query your revenue wit
 imversed q revenue contract $CONTRACT
 ```
 
-Congrats ☄️☄️☄️ Now that you've registered a revenue for your contract, it is part of the Imversed dApp store and you will receive a cut of the transaction fees every time a user interacts with your contract. If you wondering how large your cut is, have a look at the [revenue parameter DeveloperShares](https://docs.imversed.com/x/revenue/spec/07_parameters.html#developer-shares-amount), which is controlled through governance. You can query the parameters using our [OpenAPI documentation](https://api.evmos.org/).
+Congrats ☄️☄️☄️ Now that you've registered a revenue for your contract, it is part of the Imversed dApp store and you will receive a cut of the transaction fees every time a user interacts with your contract. If you wondering how large your cut is, have a look at the [revenue parameter DeveloperShares](https://docs.imversed.com/x/revenue/spec/07_parameters.html#developer-shares-amount), which is controlled through governance. You can query the parameters using our [OpenAPI documentation](https://query-endpoint-canary.imversed.com/).
 
 ### Deployed Factory Pattern
 You can also register a contract which has been deployed by a smart contract instead of an [EOA](https://docs.imversed.com/modules/evm/01_concepts.html#accounts). In this case, you need to provide a sequence of nonces that proves the trace from an original deployer who deployed the factory to the contract that is being registered.
@@ -46,7 +46,7 @@ Registered contracts can also be updated. To update the withdrawer address of yo
 ```text
 # Update withdrawer for your contract
 imversed tx revenue update $CONTRACT $WITHDRAWER \
---gas=700000 --gas-prices=10000aevmos \
+--gas=700000 --gas-prices=10000aivm \
 --from=mm
 ```
 
@@ -58,6 +58,6 @@ Revenues can also be canceled. In order to stop receiving transaction fees for i
 ```text
 # Cancel revenue for your contract
 imversed tx revenue cancel $CONTRACT \
---gas=700000 --gas-prices=10000aevmos \
+--gas=700000 --gas-prices=10000aivm \
 --from=mm
 ```
