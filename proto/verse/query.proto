@@ -4,11 +4,11 @@ package imversed.verse;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "verses/genesis.proto";
-import "verses/verse.proto";
+import "verse/genesis.proto";
+import "verse/verse.proto";
 // this line is used by starport scaffolding # 1
 
-option go_package = "github.com/imversed/imversed/x/verses/types";
+option go_package = "github.com/imversed/imversed/x/verse/types";
 
 // Query defines the gRPC querier service.
 service Query {

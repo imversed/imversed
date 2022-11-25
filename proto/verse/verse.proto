@@ -3,7 +3,7 @@ package imversed.verse;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/imversed/imversed/x/verses/types";
+option go_package = "github.com/imversed/imversed/x/verse/types";
 
 message Verse {
   string owner = 1;
