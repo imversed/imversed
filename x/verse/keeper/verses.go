@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/imversed/imversed/x/verses/types"
+	"github.com/imversed/imversed/x/verse/types"
 )
 
 func (k Keeper) HasVerse(ctx sdk.Context, verse types.Verse) bool {
