@@ -48,7 +48,7 @@ To [submit the proposal](https://docs.imversed.com/users/governance/submitting.h
 imversed tx gov submit-proposal register-coin <path/to/metadata.json> \
   --title=<title> \
   --description=<description> \
-  --deposit="1000000aivm" \
+  --deposit="1000000aimv" \
   --from=<mykey> \
   --chain-id=<testnet_chain_id> \
   --node <address>
@@ -99,7 +99,7 @@ Note that you can register multiple coins in one proposal by extending the "meta
 }
 ```
 
-However, note that if the CLI is used to create a proposal, and description is set using a flag, the text will be escaped (opens new window)which may have undesired effects. If the proposal creator is using markdown or line breaks it's recommended to put the proposal text into a json file and include that file as part of the CLI proposal, as opposed to individual fields in flags. The process of creating a json file containing the proposal can be found here, and the CLI command for submitting the file is below:
+However, note that if the CLI is used to create a proposal, and description is set using a flag, the text will be [escaped](https://en.wikipedia.org/wiki/Escape_sequences_in_C) which may have undesired effects. If the proposal creator is using markdown or line breaks it's recommended to put the proposal text into a json file and include that file as part of the CLI proposal, as opposed to individual fields in flags. The process of creating a json file containing the proposal can be found here, and the CLI command for submitting the file is below:
 
 ```text
 imversed tx gov submit-proposal register-coin --proposal=<path/to/proposal.json>
@@ -114,11 +114,11 @@ Submitting your proposal to the testnet increases the likelihood of engagement a
 A majority of the voting community should probably be aware of the proposal and have considered it before the proposal goes live on-chain. If you're taking a conservative approach, you should have reasonable confidence that your proposal will pass before risking deposit contributions by [submitting the proposal](https://docs.imversed.com/users/governance/submitting.html). Make revisions to your draft proposal after each stage of engagement.
 
 ### The Deposit Period
-The deposit period currently lasts 14 days. If you submitted your transaction with the minimum deposit (64 IVM), your proposal will immediately enter the voting period. If you didn't submit the minimum deposit amount (currently 64 IVM), then this may be an opportunity for others to show their support by contributing (and risking) their IVM as a bond for your proposal. You can request contributions openly and also contact stakeholders directly (particularly stakeholders who are enthusiastic about your proposal). Remember that each contributor is risking their funds, and you can [read more about the conditions for burning deposits here](https://docs.imversed.com/users/governance/process.html#burned-deposits).
+The deposit period currently lasts 14 days. If you submitted your transaction with the minimum deposit (64 IMV), your proposal will immediately enter the voting period. If you didn't submit the minimum deposit amount (currently 64 IMV), then this may be an opportunity for others to show their support by contributing (and risking) their IMV as a bond for your proposal. You can request contributions openly and also contact stakeholders directly (particularly stakeholders who are enthusiastic about your proposal). Remember that each contributor is risking their funds, and you can [read more about the conditions for burning deposits here](https://docs.imversed.com/users/governance/process.html#burned-deposits).
 
 This is a stage where proposals may begin to get broader attention. Most popular explorers currently display proposals that are in the deposit period, but due to proposal spamming, this may change.
 
-A large cross-section of the blockchain/cryptocurrency community exists on Twitter. Having your proposal in the deposit period is a good time to engage the Imversed community to prepare validators to vote and IVM-holders that are staking.
+A large cross-section of the blockchain/cryptocurrency community exists on Twitter. Having your proposal in the deposit period is a good time to engage the Imversed community to prepare validators to vote and IMV-holders that are staking.
 
 ### The Voting Period
 At this point you'll want to track which validator has voted and which has not. You'll want to re-engage directly with top stake-holders, ie. the highest-ranking validator operators, to ensure that:
