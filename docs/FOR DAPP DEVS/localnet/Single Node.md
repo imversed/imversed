@@ -12,10 +12,10 @@ LOGLEVEL="info"
 
 
 # Allocate genesis accounts (cosmos formatted addresses)
-imversed add-genesis-account $KEY 100000000000000000000000000aivm --keyring-backend $KEYRING
+imversed add-genesis-account $KEY 100000000000000000000000000aimv --keyring-backend $KEYRING
 
 # Sign genesis transaction
-imversed gentx $KEY 1000000000000000000000aivm --keyring-backend $KEYRING --chain-id $CHAINID
+imversed gentx $KEY 1000000000000000000000aimv --keyring-backend $KEYRING --chain-id $CHAINID
 ```
 
 The default configuration will generate a single validator localnet with the chain-id `imversed-1` and one predefined account (`dev0`) with some allocated funds at the genesis.
@@ -54,10 +54,10 @@ Before starting the chain, you need to populate the state with at least one acco
 imversed keys add my_validator
 ```
 
-Once you have created a local account, go ahead and grant it some aivm tokens in your chain's genesis file. Doing so will also make sure your chain is aware of this account's existence:
+Once you have created a local account, go ahead and grant it some aimv tokens in your chain's genesis file. Doing so will also make sure your chain is aware of this account's existence:
 
 ```linux
-imversed add-genesis-account my_validator 10000000000aivm
+imversed add-genesis-account my_validator 10000000000aimv
 ```
 
 Now that your account has some tokens, you need to add a validator to your chain.
@@ -68,7 +68,7 @@ For this guide, you will add your local node (created via the `init` command abo
 # Create a gentx
 # NOTE: this command lets you set the number of coins. 
 # Make sure this account has some coins with the genesis.app_state.staking.params.bond_denom denom
-imversed add-genesis-account my_validator 1000000000stake,10000000000aivm
+imversed add-genesis-account my_validator 1000000000stake,10000000000aimv
 ```
 
 A gentx does three things:
