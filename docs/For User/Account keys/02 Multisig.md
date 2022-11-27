@@ -73,10 +73,10 @@ Let's add 10 imversed to the multisig wallet:
 imversed tx bank send \
     test1 \
     imversed1e0fx0q9meawrcq7fmma9x60gk35lpr4xk3884m \
-    10000000000000000000aivm \
+    10000000000000000000aimv \
     --chain-id=imversed_9000-4 \
     --gas=auto \
-    --fees=1000000aivm \
+    --fees=1000000aimv \
     --broadcast-mode=block
 ```
 
@@ -106,7 +106,7 @@ The file `unsignedTx.json` contains the unsigned transaction encoded in JSON.
         "to_address": "imversed157g6rn6t6k5rl0dl57zha2wx72t633axqyvvwq",
         "amount": [
           {
-            "denom": "aivm",
+            "denom": "aimv",
             "amount": "5000000000000000000"
           }
         ]
@@ -122,7 +122,7 @@ The file `unsignedTx.json` contains the unsigned transaction encoded in JSON.
     "fee": {
       "amount": [
         {
-          "denom": "aivm",
+          "denom": "aimv",
           "amount": "1000000"
         }
       ],
@@ -174,7 +174,7 @@ The TX is now signed:
         "to_address": "imversed157g6rn6t6k5rl0dl57zha2wx72t633axqyvvwq",
         "amount": [
           {
-            "denom": "aivm",
+            "denom": "aimv",
             "amount": "5000000000000000000"
           }
         ]
@@ -232,7 +232,7 @@ The TX is now signed:
     "fee": {
       "amount": [
         {
-          "denom": "aivm",
+          "denom": "aimv",
           "amount": "1000000"
         }
       ],
