@@ -16,7 +16,7 @@ There are several categories of Ethereum transactions:
   
 For more information on Ethereum transactions and the transaction lifecycle, [go here](https://ethereum.org/en/developers/docs/transactions/).
 
-Evmos supports the following Ethereum transactions.
+Imversed supports the following Ethereum transactions.
 
 Note: Unprotected legacy transactions are not supported by default.
 
