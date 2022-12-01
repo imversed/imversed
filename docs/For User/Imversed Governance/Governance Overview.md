@@ -7,9 +7,8 @@ Imversed has an on-chain governance mechanism for passing text proposals, changi
 ## On- and off-chain Governance Structure
 
 ### Communication Methods
-Governance practices and decisions are communicated through different types of documents and design artifacts:
+Governance practices and decisions are communicated through different types of documents and design artifacts.
 
-* On-chain governance [proposals](https://www.mintscan.io/evmos/proposals)
 * Architecture Decision records
 * Technical standards / specifications
 
