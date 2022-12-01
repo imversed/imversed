@@ -10,7 +10,7 @@ If you know people who are very involved with Imversed, send them a private mess
 Great! However, remember that governance proposals potentially impact many stakeholders, which can happen in unexpected ways. Introduce your idea with members of the community before investing resources into drafting a proposal. At this point you should seek out and carefully consider critical feedback in order to protect yourself from [confirmation bias](https://en.wikipedia.org/wiki/Confirmation_bias). This is the ideal time to see a critical flaw, because submitting a flawed proposal will waste resources.
 
 ### Are you ready to draft a governance proposal?
-There will likely be differences of opinion about the value of what you're proposing to do and the strategy by which you're planning to do it. If you've considered feedback from broad perspectives and think that what you're doing is valuable and that your strategy should work, and you believe that others feel this way as well, it's likely worth drafting a proposal. However, remember that the largest EVMOS stakers have the biggest vote, so a vocal minority isn't necessarily representative or predictive of the outcome of an on-chain vote.
+There will likely be differences of opinion about the value of what you're proposing to do and the strategy by which you're planning to do it. If you've considered feedback from broad perspectives and think that what you're doing is valuable and that your strategy should work, and you believe that others feel this way as well, it's likely worth drafting a proposal. However, remember that the largest IMV stakers have the biggest vote, so a vocal minority isn't necessarily representative or predictive of the outcome of an on-chain vote.
 
 A conservative approach is to have some confidence that you roughly have initial support from a majority of the voting power before proceeding to drafting your proposal. However, there are likely other approaches, and if your idea is important enough, you may want to pursue it regardless of whether or not you are confident that the voting power will support it.
 
@@ -57,7 +57,7 @@ Assume that many people will stop reading at this point. However, it is importan
    * your reasons for selecting this plan
    * your motivation for delivering this solution/value
 
-4. Funding - amount and denomination proposed eg. 5000 EVMOS
+4. Funding - amount and denomination proposed eg. 5000 IMV
    * the entity controlling the account receiving the funding
    * consider an itemized breakdown of funding per major deliverable
    * consider outlining how the funds will be spent
@@ -70,7 +70,7 @@ Assume that many people will stop reading at this point. However, it is importan
    * what will happen if you do not deliver on time?
      * what is the deadline for the project to be considered failed?
      * do you have a plan to return the funds?
-   * how will you be accountable to Evmos stakeholders?
+   * how will you be accountable to Imversed stakeholders?
      * how will you communicate updates and how often?
      * how can the community observe your progress?
      * how can the community provide feedback?
@@ -133,7 +133,7 @@ A majority of the voting community should probably be aware of the proposal and 
 See the [submitting guide](https://docs.imversed.com/users/governance/submitting.html) for more on submitting proposals.
 
 ### The Deposit Period
-The deposit period currently lasts 3 days. If you submitted your transaction with the minimum deposit (192 EVMOS), your proposal will immediately enter the voting period. If you didn't submit the minimum deposit amount (currently 192 EVMOS), then this may be an opportunity for others to show their support by contributing (and risking) their EVMOS as a bond for your proposal. You can request contributions openly and also contact stakeholders directly (particularly stakeholders who are enthusiastic about your proposal). Remember that each contributor is risking their funds, and you can [read more about the conditions for burning deposits here](https://docs.imversed.com/users/governance/process.html#burned-deposits).
+The deposit period currently lasts 3 days. If you submitted your transaction with the minimum deposit (192 IMV), your proposal will immediately enter the voting period. If you didn't submit the minimum deposit amount (currently 192 IMV), then this may be an opportunity for others to show their support by contributing (and risking) their EVMOS as a bond for your proposal. You can request contributions openly and also contact stakeholders directly (particularly stakeholders who are enthusiastic about your proposal). Remember that each contributor is risking their funds, and you can [read more about the conditions for burning deposits here](https://docs.imversed.com/users/governance/process.html#burned-deposits).
 
 This is a stage where proposals may begin to get broader attention. Most popular explorers currently display proposals that are in the deposit period, but due to proposal spamming, this may change.
 
