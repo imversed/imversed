@@ -3,7 +3,7 @@
 ## Official Chain IDs
 > NOTE: The latest Chain ID (i.e highest Version Number) is the latest version of the software and mainnet.
 
-:::: tabs ::: tab Mainnet
+:::: tabs ::: tab MainnetF
 
 | **Name** | **Chain ID** | **Identifier** | **EIP155 Number** | **Version Number** |
 | --- | --- | --- | --- | --- |
@@ -13,7 +13,7 @@
 
 | **Name** | **Chain ID** | **Identifier** | **EIP155 Number** | **Version Number** |
 | --- | --- | --- | --- | --- |
-| Imversed Testnet | `5555558` | `ivm` | `5555558` | `1` |
+| Imversed Testnet | `5555558` | `imv` | `5555558` | `1` |
 
 ::: ::::
 
