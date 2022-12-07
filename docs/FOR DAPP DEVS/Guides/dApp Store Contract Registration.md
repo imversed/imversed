@@ -17,13 +17,13 @@ You can register a contract by signing a transaction with the address that origi
 
 * $NONCE is the nonce of transaction that deployed the contract (e.g. 0),
 * $CONTRACT is the hex address of the deployed contract (e.g imv159dctezcw6u077gwthl0ytfgtj2nxufs53c5fg) and
-* (optional) $WITHDRAWER is the bech32 address of the address to receive the transaction fees (e.g. imv159dctezcw6u077gwthl0ytfgtj2nxufs53c5fg):
+* (optional) $WITHDRAWER is the bech32 address of the address to receive the transaction fees (e.g. imv1keyy3teyq7t7kuxgeek3v65n0j27k20v2ugysf):
 
 ```text
 # Register a revenue for your contract
 imversed tx revenue register $CONTRACT $NONCE $WITHDRAWER \
 --from=dev0 \ # contract deployer key
---gas=700000 --gas-prices=10000aivm \ # can vary depending on the network
+--gas=700000 --gas-prices=10000aimv \ # can vary depending on the network
 ```
 
 After your transaction is submitted successfully, you can query your revenue with :
@@ -46,7 +46,7 @@ Registered contracts can also be updated. To update the withdrawer address of yo
 ```text
 # Update withdrawer for your contract
 imversed tx revenue update $CONTRACT $WITHDRAWER \
---gas=700000 --gas-prices=10000aivm \
+--gas=700000 --gas-prices=10000aimv \
 --from=mm
 ```
 
@@ -58,6 +58,6 @@ Revenues can also be canceled. In order to stop receiving transaction fees for i
 ```text
 # Cancel revenue for your contract
 imversed tx revenue cancel $CONTRACT \
---gas=700000 --gas-prices=10000aivm \
+--gas=700000 --gas-prices=10000aimv \
 --from=mm
 ```
