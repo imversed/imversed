@@ -12,10 +12,10 @@ This guide will cover the following query methods:
 Upon [installation](https://docs.imversed.com/validators/quickstart/installation.html) and [configuration](https://docs.imversed.com/validators/quickstart/binary.html) of the Imversed Daemon, developers can query account balances using `imversed` with the following CLI command:
 
 ```text
-$ imversed query bank balances $IVMADDRESS --count-total=$COUNTTOTAL --height=$HEIGHT --output=$OUTPUT --node=$NODE
+$ imversed query bank balances $IMVADDRESS --count-total=$COUNTTOTAL --height=$HEIGHT --output=$OUTPUT --node=$NODE
 balances:
 - amount: "1000000000000000000"
-  denom: aivm
+  denom: aimv
 - amount: "100000"
   denom: ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518
 pagination:
@@ -25,13 +25,13 @@ pagination:
 
 where:
 
-* `$IVMADDRESS` is the Imversed address with balances of interest (eg. `imversed1...`).
+* `$IMVADDRESS` is the Imversed address with balances of interest (eg. `imversed1...`).
 * (optional) `$COUNTTOTAL` counts the total number of records in all balances to query for.
 * (optional) `$HEIGHT` is the specific height to query state at (can error if node is pruning state).
 * (optional) `$OUTPUT` is the output format (eg. `text`).
 * (optional if running local node) `$NODE` is the Tendermint RPC node information is requested from (eg. `https://tendermint.bd.imversed.org:26657`).
 
-Details of non-native currencies (ie. not `aivm`) can be queried with the following CLI command:
+Details of non-native currencies (ie. not `aimv`) can be queried with the following CLI command:
 
 ```text
 $ imversed query erc20 token-pair $DENOM --node=$NODE --height=$HEIGHT --output=$OUTPUT
@@ -46,7 +46,7 @@ where `$DENOM` is the denomination of the coin (eg. `ibc/ED07A3391A1...`).
 
 ## JSON-RPC
 
-Developers can query account balances of `aivm` using the [`eth_getBalance`](https://docs.imversed.com/developers/json-rpc/endpoints.html#ethgetbalance) JSON-RPC method in conjunction with [`curl`](https://curl.se/):
+Developers can query account balances of `aimv` using the [`eth_getBalance`](https://docs.imversed.com/developers/json-rpc/endpoints.html#ethgetbalance) JSON-RPC method in conjunction with [`curl`](https://curl.se/):
 
 where:
 
@@ -80,7 +80,7 @@ Developers can use [`grpcurl`](https://github.com/fullstorydev/grpcurl) with the
 
 ```text
 # Request
-grpcurl $OUTPUT -d '{"address":`$IVMADDRESS`}' $NODE cosmos.bank.v1beta1.Query/AllBalances
+grpcurl $OUTPUT -d '{"address":`$IMVADDRESS`}' $NODE cosmos.bank.v1beta1.Query/AllBalances
 
 # Result
 {
@@ -98,7 +98,7 @@ grpcurl $OUTPUT -d '{"address":`$IVMADDRESS`}' $NODE cosmos.bank.v1beta1.Query/A
 
 where:
 
-* `$IVMADDRESS` is the Imversed address with balances of interest (eg. `"imversed1..."`).
+* `$IMVADDRESS` is the Imversed address with balances of interest (eg. `"imversed1..."`).
 * `$NODE` is the Cosmos gRPC node information is requested from (eg. `https://grpc.bd.imversed.org:9090`).
 * (optional) `$OUTPUT` is the output format (eg. `plaintext`).
 
