@@ -23,7 +23,7 @@ Please find the following resources for in-depth information:
 
 - **Testnet Faucet**: Explaination of faucet use to obtain testnet tokens.
 
-- **Localnet**: Instructions on how to configure a local instance of the Evmos blockchain.
+- **Localnet**: Instructions on how to configure a local instance of the Imversed blockchain.
 
   - Single Node: Run a single local node.
 
