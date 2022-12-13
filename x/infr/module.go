@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"math/rand"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -93,13 +94,15 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command { return nil }
 type AppModule struct {
 	AppModuleBasic
 	keeper      keeper.Keeper
+	ak          authkeeper.AccountKeeper
 	originalCdc codec.Codec
 }
 
-func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, keeper keeper.Keeper, accountKeeper authkeeper.AccountKeeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+		ak:             accountKeeper,
 		originalCdc:    cdc,
 	}
 }
@@ -138,7 +141,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.Ra
 	// Initialize global index to index in genesis state
 	cdc.MustUnmarshalJSON(gs, &genState)
 
-	InitGenesis(ctx, am.keeper, genState)
+	InitGenesis(ctx, am.keeper, am.ak, genState)
 
 	return []abci.ValidatorUpdate{}
 }
@@ -158,10 +161,7 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	//deactivated due to feemarket module
-
-	//v := am.keeper.GetParams(ctx)
-	//baseAppHelper.Helper.Set(v.MinGasPrices)
+	_ = am.keeper.BurnCoinsFromModuleAccount(ctx)
 	return []abci.ValidatorUpdate{}
 }
 
