@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/cosmos/cosmos-sdk/x/auth/posthandler"
+	"github.com/imversed/imversed/docs"
 	"io"
 	"net/http"
 	"os"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/imversed/imversed/x/infr/baseAppHelper"
 
-	//"github.com/imversed/imversed/docs"
 	currencymodulekeeper "github.com/imversed/imversed/x/currency/keeper"
 	currencymoduletypes "github.com/imversed/imversed/x/currency/types"
 	poolsmodule "github.com/imversed/imversed/x/pools"
@@ -116,7 +116,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v5/modules/core/keeper"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/evmos/ethermint/client/docs/statik"
+	//_ "github.com/evmos/ethermint/client/docs/statik"
 
 	srvflags "github.com/evmos/ethermint/server/flags"
 	imversed "github.com/evmos/ethermint/types"
@@ -879,7 +879,7 @@ func (app *ImversedApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 	}
 
 	// register app's OpenAPI routes.
-	// apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
+	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
 	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(appName, "/static/openapi.yml"))
 }
 
