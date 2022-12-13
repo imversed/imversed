@@ -20,7 +20,7 @@ Please find the following resources for in-depth information:
     - **[Multi Node](./localnet/multi_node.md)**: Run a local testnet with multiple nodes.
     - **[Testnet](./localnet/testnet_cmd.md)**: Use the testnet command of the Imversed daemon.
 - **Libraries**:
-    - **[ImversedJS](./libraries/imversedjs.md)**: Javascript library for Imversed.
+    - **[ImversedJS](https://www.npmjs.com/package/@imversed/js-client)**: Javascript library for Imversed.
 - **Guides**:
     - **[Wallet Integration](./guides/wallet_integration.md)**: Connect Metamask and Keplr wallets to a UI.
     - **[ERC-20 Registration](./guides/erc_20_registration.md)**: Register interoperable ERC-20s through governance.
@@ -34,7 +34,7 @@ As Imversed lives at the crossroads of Cosmos and Ethereum, there are RPC connec
 - **[Namespaces](./json-rpc/namespaces.md)**: Description of the available JSON-RPC namespaces.
 - **[JSON-RPC Methods](./json-rpc/endpoints.md)**: List of supported JSON-RPC endpoints and methods.
 - **[Events](./json-rpc/events.md)**: Information about the available events and instructions to subscribe to them.
-- **[Cosmos gRPC & REST](https://api.imversed.com/)**: Documentation of the available gRPC implementation on Imversed.
+- **[Cosmos gRPC & REST](https://query-endpoint-canary.imversed.com/)**: Documentation of the available gRPC implementation on Imversed.
 - **[Tendermint RPC](https://docs.tendermint.com/v0.34/rpc/)**: Documentation for the RPC protocols supported by Tendermint.
 
 ### Tutorials For Ethereum Devs
