@@ -8,6 +8,7 @@ import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/imversed/imversed/x/verse/types"
 	"github.com/tendermint/tendermint/libs/log"
+	"math/rand"
 )
 
 // Keeper of this module maintains collections of verse.
@@ -15,6 +16,7 @@ type Keeper struct {
 	storeKey   storetypes.StoreKey
 	cdc        codec.BinaryCodec
 	paramstore paramtypes.Subspace
+	rnd        *rand.Rand
 }
 
 // NewKeeper creates new instances of the verse Keeper
@@ -32,6 +34,7 @@ func NewKeeper(
 		storeKey:   storeKey,
 		cdc:        cdc,
 		paramstore: ps,
+		rnd:        rand.New(rand.NewSource(1)),
 	}
 }
 

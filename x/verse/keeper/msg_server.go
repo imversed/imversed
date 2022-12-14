@@ -20,6 +20,7 @@ func (k Keeper) CreateVerse(
 ) (*types.MsgCreateVerseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	uuid.SetRand(k.rnd)
 	verse := types.Verse{Owner: msg.Sender, Name: uuid.NewString(), Icon: msg.Icon, Description: msg.Description}
 
 	err := k.SetVerse(ctx, verse)
