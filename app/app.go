@@ -36,9 +36,9 @@ import (
 	infrkeeper "github.com/imversed/imversed/x/infr/keeper"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
 
-	"github.com/imversed/imversed/x/verse"
-	versekeeper "github.com/imversed/imversed/x/verse/keeper"
-	versetypes "github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/xverse"
+	versekeeper "github.com/imversed/imversed/x/xverse/keeper"
+	versetypes "github.com/imversed/imversed/x/xverse/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -190,7 +190,7 @@ var (
 		currencymodule.AppModuleBasic{},
 		poolsmodule.AppModuleBasic{},
 		infr.AppModuleBasic{},
-		verse.AppModuleBasic{},
+		xverse.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -548,7 +548,7 @@ func NewImversedApp(
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		infr.NewAppModule(appCodec, app.InfrKeeper, app.AccountKeeper),
-		verse.NewAppModule(app.VerseKeeper, app.AccountKeeper),
+		xverse.NewAppModule(app.VerseKeeper, app.AccountKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that

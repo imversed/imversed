@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/xverse/types"
 	"github.com/spf13/cobra"
 	"strings"
 )

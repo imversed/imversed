@@ -1,4 +1,4 @@
-package verse
+package xverse
 
 import (
 	"context"
@@ -13,9 +13,9 @@ import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/imversed/imversed/x/verse/client/cli"
-	"github.com/imversed/imversed/x/verse/keeper"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/xverse/client/cli"
+	"github.com/imversed/imversed/x/xverse/keeper"
+	"github.com/imversed/imversed/x/xverse/types"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"math/rand"

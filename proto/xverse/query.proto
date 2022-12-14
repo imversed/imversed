@@ -1,38 +1,38 @@
 syntax = "proto3";
-package imversed.verse;
+package imversed.xverse;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "verse/genesis.proto";
-import "verse/verse.proto";
+import "xverse/genesis.proto";
+import "xverse/verse.proto";
 // this line is used by starport scaffolding # 1
 
-option go_package = "github.com/imversed/imversed/x/verse/types";
+option go_package = "github.com/imversed/imversed/x/xverse/types";
 
 // Query defines the gRPC querier service.
 service Query {
   // Queries a verse by index.
   rpc Verse(QueryGetVerseRequest) returns (QueryGetVerseResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/verse/{verse_name}";
+    option (google.api.http).get = "/imversed/imversed/xverse/verse/{verse_name}";
   }
 
   // Queries all verses.
   rpc VerseAll(QueryAllVerseRequest) returns (QueryAllVerseResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/verse";
+    option (google.api.http).get = "/imversed/imversed/xverse/verse";
   }
 
   // Queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/params";
+    option (google.api.http).get = "/imversed/imversed/xverse/params";
   }
 
   rpc HasAsset(QueryHasAssetRequest) returns (QueryHasAssetResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/verse/{verse_name}/{asset_type}/{asset_id}";
+    option (google.api.http).get = "/imversed/imversed/xverse/verse/{verse_name}/{asset_type}/{asset_id}";
   }
 
   rpc GetAssets(QueryGetVerseAssetsRequest) returns (QueryGetVerseAssetsResponse) {
-    option (google.api.http).get = "/imversed/imversed/verse/verse_assets/{verse_name}";
+    option (google.api.http).get = "/imversed/imversed/xverse/verse_assets/{verse_name}";
   }
 
   // this line is used by starport scaffolding # 2

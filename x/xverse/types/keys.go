@@ -6,7 +6,7 @@ var _ binary.ByteOrder
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "verse"
+	ModuleName = "xverse"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
@@ -17,7 +17,7 @@ const (
 
 // prefix bytes
 const (
-	prefixVerse = "Verse/verse"
+	prefixVerse = "Xverse/xverse"
 )
 
 // KVStore key prefixes

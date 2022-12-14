@@ -1,10 +1,10 @@
 syntax = "proto3";
-package imversed.verse;
+package imversed.xverse;
 
-option go_package = "github.com/imversed/imversed/x/verse/types";
+option go_package = "github.com/imversed/imversed/x/xverse/types";
 
 import "gogoproto/gogo.proto";
-import "verse/verse.proto";
+import "xverse/verse.proto";
 
 // GenesisState defines the module's genesis state.
 message GenesisState {

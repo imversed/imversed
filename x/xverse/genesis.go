@@ -1,10 +1,10 @@
-package verse
+package xverse
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/imversed/imversed/x/verse/keeper"
-	"github.com/imversed/imversed/x/verse/types"
+	"github.com/imversed/imversed/x/xverse/keeper"
+	"github.com/imversed/imversed/x/xverse/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis
