@@ -20,7 +20,7 @@ The Imversed supports different clients in order to support Cosmos and Ethereum 
 |Ethereum Websocket          |Subscribe to Ethereum logs and events emitted in smart contracts.                   |N/A |                
 |Tendermint RPC              |Subscribe to Ethereum logs and events emitted in smart contracts.                   |N/A |   
 |Tendermint Websocket        |Query transactions, blocks, consensus state, broadcast transactions, etc.           |N/A |                
-|Command Line Interface (CLI)|Query or send Evmos transactions using your Terminal or Console.                    |N/A |
+|Command Line Interface (CLI)|Query or send Imversed transactions using your Terminal or Console.                    |N/A |
 
 ## Cosmos gRPC
 
