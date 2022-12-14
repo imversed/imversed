@@ -13,7 +13,7 @@ Quickly connect your app or client to Imversed services
 
 ## Public Available Endpoints
 
-Below is a list of publicly available endpoints that you can use to connect to the Ivmersed mainnet and public testnets:
+Below is a list of publicly available endpoints that you can use to connect to the Imversed mainnet and public testnets:
 
 ::: tip
 
