@@ -1,9 +1,9 @@
 syntax = "proto3";
-package imversed.verse;
+package imversed.xverse;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/imversed/imversed/x/verse/types";
+option go_package = "github.com/imversed/imversed/x/xverse/types";
 
 message Verse {
   string owner = 1;
