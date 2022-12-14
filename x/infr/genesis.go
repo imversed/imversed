@@ -19,7 +19,7 @@ func InitGenesis(
 	// ensure infr module account is set on genesis
 	if acc := accountKeeper.GetModuleAccount(ctx, types.ModuleName); acc == nil {
 		// NOTE: shouldn't occur
-		panic("the erc20 module account has not been set")
+		panic("the infr module account has not been set")
 	}
 
 	for _, sc := range data.SmartContracts {
