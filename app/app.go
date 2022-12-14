@@ -202,11 +202,13 @@ var (
 		poolsmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		// erc20 module
 		erc20types.ModuleName: {authtypes.Minter, authtypes.Burner},
+		infrtypes.ModuleName:  {authtypes.Burner},
 	}
 
 	// module accounts that are allowed to receive tokens
 	allowedReceivingModAcc = map[string]bool{
 		distrtypes.ModuleName: true,
+		infrtypes.ModuleName:  true,
 	}
 )
 
@@ -414,7 +416,7 @@ func NewImversedApp(
 
 	app.InfrKeeper = infrkeeper.NewKeeper(
 		keys[infrtypes.StoreKey], appCodec, app.GetSubspace(infrtypes.ModuleName),
-		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper,
+		app.AccountKeeper, app.EvmKeeper, app.Erc20Keeper, app.BankKeeper,
 	)
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(
@@ -535,7 +537,7 @@ func NewImversedApp(
 		// Custom modules
 		currencyModule,
 		poolsmodule.NewAppModule(appCodec, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
-		infr.NewAppModule(appCodec, app.InfrKeeper),
+		infr.NewAppModule(appCodec, app.InfrKeeper, app.AccountKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that

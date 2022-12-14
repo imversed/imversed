@@ -6,6 +6,7 @@ import (
 	erc20types "github.com/imversed/imversed/x/erc20/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/vm"
@@ -17,6 +18,7 @@ import (
 type AccountKeeper interface {
 	GetSequence(sdk.Context, sdk.AccAddress) (uint64, error)
 	GetAccount(sdk.Context, sdk.AccAddress) accounttypes.AccountI
+	GetModuleAddress(moduleName string) sdk.AccAddress
 }
 
 // EVMKeeper defines the expected EVM keeper interface used on erc20
@@ -29,4 +31,10 @@ type EVMKeeper interface {
 
 type Erc20Keeper interface {
 	RegisterERC20(goCtx context.Context, msg *erc20types.MsgRegisterERC20) (*erc20types.MsgRegisterERC20Response, error)
+}
+
+type BankKeeper interface {
+	authtypes.BankKeeper
+	GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin
+	BurnCoins(ctx sdk.Context, moduleName string, amt sdk.Coins) error
 }

@@ -17,6 +17,7 @@ type Keeper struct {
 	paramstore paramtypes.Subspace
 
 	accountKeeper types.AccountKeeper
+	bankKeeper    types.BankKeeper
 	evmKeeper     types.EVMKeeper
 	erc20Keeper   types.Erc20Keeper
 }
@@ -29,6 +30,7 @@ func NewKeeper(
 	ak types.AccountKeeper,
 	ek types.EVMKeeper,
 	er types.Erc20Keeper,
+	bk types.BankKeeper,
 ) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -43,6 +45,7 @@ func NewKeeper(
 		accountKeeper: ak,
 		evmKeeper:     ek,
 		erc20Keeper:   er,
+		bankKeeper:    bk,
 	}
 }
 
