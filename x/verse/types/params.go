@@ -9,7 +9,7 @@ var _ paramtypes.ParamSet = &Params{}
 
 var (
 	KeyTxRenameVerseCost            = []byte("TxRenameVerseCost")
-	DefaultTxRenameVerseCost uint64 = 100 * 1000000
+	DefaultTxRenameVerseCost uint64 = 1 * 1000000
 )
 
 // ParamKeyTable returns the parameter key table.
