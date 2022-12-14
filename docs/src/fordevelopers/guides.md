@@ -179,7 +179,7 @@ The deposit period currently lasts 14 days. If you submitted your transaction wi
 
 This is a stage where proposals may begin to get broader attention. Most popular explorers currently display proposals that are in the deposit period, but due to proposal spamming, this may change.
 
-A large cross-section of the blockchain/cryptocurrency community exists on Twitter. Having your proposal in the deposit period is a good time to engage the Evmos community to prepare validators to vote and Imversed-holders that are staking.
+A large cross-section of the blockchain/cryptocurrency community exists on Twitter. Having your proposal in the deposit period is a good time to engage the Imversed community to prepare validators to vote and Imversed-holders that are staking.
 
 ### The Voting Period
 
@@ -235,9 +235,9 @@ You can register a contract by signing a transaction with the address that origi
 
 ```List
 # Register a feesplit for your contract
-evmosd tx feesplit register $CONTRACT $NONCE $WITHDRAWER \
+imversed tx feesplit register $CONTRACT $NONCE $WITHDRAWER \
 --from=mykey \ # contract deployer key
---gas=700000 --gas-prices=10000aevmos \ # can vary depending on the network
+--gas=700000 --gas-prices=10000aimv \ # can vary depending on the network
 ```
 
 After your transaction is submitted successfully, you can query your feesplit with :
@@ -263,15 +263,15 @@ Registered contracts can also be updated. To update the withdrawer address of yo
 ```list
 # Update withdrawer for your contract
 imversed tx feesplit update $CONTRACT $WITHDRAWER \
---gas=700000 --gas-prices=10000aevmos \
+--gas=700000 --gas-prices=10000aimv \
 --from=mm
 ```
 
 If the specified withdrawer is the same address as the deployer, then the feesplit is updated with an empty withdrawer address, so that all transaction fees are sent to the deployer address.
 ```list
 # Cancel feesplit for your contract
-evmosd tx feesplit cancel $CONTRACT \
---gas=700000 --gas-prices=10000aevmos \
+imversed tx feesplit cancel $CONTRACT \
+--gas=700000 --gas-prices=10000aimv \
 --from=mm
 ```
 
@@ -366,7 +366,7 @@ with the following arguments:
   See below for an example using [Diffusion Finance's](https://diffusion.fi/) router contract:
 
 ```List
-imversed tx gov submit-proposal register-incentive 0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F 0.050000000000000000aevmos 13 --description=$DESCRIPTION --title=$PROPOSALTITLE
+imversed tx gov submit-proposal register-incentive 0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F 0.050000000000000000aimv 13 --description=$DESCRIPTION --title=$PROPOSALTITLE
 ```
 
 However, note that if the CLI is used to create a proposal, and `description` is set using a flag, the text will be [escaped](https://en.wikipedia.org/wiki/Escape_sequences_in_C) which may have undesired effects. If the proposal creator is using markdown or line breaks it's recommended to put the proposal text into a json file and include that file as part of the CLI proposal, as opposed to individual fields in flags. The process of creating a json file containing the proposal can be found here, and the CLI command for submitting the file is below:
@@ -728,7 +728,7 @@ See the sources below for details not covered above:
 
 ```List
 SYNOPSIS
-Learn how to query balances of IBC Cosmos Coins and ERC-20s on Evmos.
+Learn how to query balances of IBC Cosmos Coins and ERC-20s on Imversed.
 ```
 This guide will cover the following query methods:
 
@@ -744,12 +744,12 @@ This guide will cover the following query methods:
 
 ## `imversed` & Tendermint RPC
 
-Upon installation and configuration of the Imversed Daemon, developers can query account balances using evmosd with the following CLI command:
+Upon installation and configuration of the Imversed Daemon, developers can query account balances using imversed with the following CLI command:
 ```List
-$ evmosd query bank balances $EVMOSADDRESS --count-total=$COUNTTOTAL --height=$HEIGHT --output=$OUTPUT --node=$NODE
+$ imversed query bank balances $IMVADDRESS --count-total=$COUNTTOTAL --height=$HEIGHT --output=$OUTPUT --node=$NODE
 balances:
 - amount: "1000000000000000000"
-  denom: aevmos
+  denom: aimv
 - amount: "100000"
   denom: ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518
 pagination:
@@ -759,7 +759,7 @@ pagination:
 
 where:
 
-- `$EVMOSADDRESS` is the Imversed address with balances of interest (eg. imversed1...).
+- `$IMVADDRESS` is the Imversed address with balances of interest (eg. imversed1...).
 
 - (optional) `$COUNTTOTAL` counts the total number of records in all balances to query for.
 
@@ -794,7 +794,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":[`$ETHA
 
 where:
 
-- $ETHADDRESS is the Etherum hex-address the balance is to be queried from. Note that Evmos addresses (those beginning with evmos1...) can be converte.d to Ethereum addresses using libraries such as evmosjs.
+- $ETHADDRESS is the Etherum hex-address the balance is to be queried from. Note that Imversed addresses (those beginning with imversed1...) can be converte.d to Ethereum addresses using libraries such as imversedjs.
 
 - $BLOCK is the block number or block hash (eg. "0x0"). The reasoning for this parameter is due to EIP-1898 (opens new window).
 
@@ -805,7 +805,7 @@ where:
 Developers can use [grpcurl](https://github.com/fullstorydev/grpcurl) with the `AllBalances` endpoint to query account balance by address for all denominations:
 
 # Request
-grpcurl $OUTPUT -d '{"address":`$EVMOSADDRESS`}' $NODE cosmos.bank.v1beta1.Query/AllBalances
+grpcurl $OUTPUT -d '{"address":`$IMVADDRESS`}' $NODE cosmos.bank.v1beta1.Query/AllBalances
 
 ```List
 # Result
@@ -823,7 +823,7 @@ grpcurl $OUTPUT -d '{"address":`$EVMOSADDRESS`}' $NODE cosmos.bank.v1beta1.Query
 ```
 where:
 
-- `$EVMOSADDRESS` is the Imversed address with balances of interest (eg. `"imversed1..."`).
+- `$IMVADDRESS` is the Imversed address with balances of interest (eg. `"imversed1..."`).
 
 - `$NODE` is the Cosmos gRPC node information is requested from (eg. `https://grpc.bd.imversed.org:9090`).
 
