@@ -14,7 +14,7 @@ Connect your Metamask wallet with Imversed.
 
 ```
 
-The [MetaMask](https://metamask.io/) browser extension is a wallet for accessing Ethereum-enabled applications and managing user identities. It can be used to connect to Evmos through the official testnet or via a locally-running Imversed node.
+The [MetaMask](https://metamask.io/) browser extension is a wallet for accessing Ethereum-enabled applications and managing user identities. It can be used to connect to Imversed through the official testnet or via a locally-running Imversed node.
 
 ::: tip
 
