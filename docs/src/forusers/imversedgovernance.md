@@ -175,7 +175,7 @@ Great! However, remember that governance proposals potentially impact many stake
 
 ### Are you ready to draft a governance proposal?
 
-There will likely be differences of opinion about the value of what you're proposing to do and the strategy by which you're planning to do it. If you've considered feedback from broad perspectives and think that what you're doing is valuable and that your strategy should work, and you believe that others feel this way as well, it's likely worth drafting a proposal. However, remember that the largest EVMOS stakers have the biggest vote, so a vocal minority isn't necessarily representative or predictive of the outcome of an on-chain vote.
+There will likely be differences of opinion about the value of what you're proposing to do and the strategy by which you're planning to do it. If you've considered feedback from broad perspectives and think that what you're doing is valuable and that your strategy should work, and you believe that others feel this way as well, it's likely worth drafting a proposal. However, remember that the largest IVM stakers have the biggest vote, so a vocal minority isn't necessarily representative or predictive of the outcome of an on-chain vote.
 
 A conservative approach is to have some confidence that you roughly have initial support from a majority of the voting power before proceeding to drafting your proposal. However, there are likely other approaches, and if your idea is important enough, you may want to pursue it regardless of whether or not you are confident that the voting power will support it.
 
@@ -476,7 +476,7 @@ Example of code will be coming soon
 
 ### Real Example
 
-This is a governance protocol which [Flux Protocol](https://www.fluxprotocol.org/), the provider of a cross-chain oracle which provides smart contracts with access to economically secure data feeds, submitted to cover costs of the subsidizied FPO (First Party Oracle) solution which they deployed on the Evmos mainnet.
+This is a governance protocol which [Flux Protocol](https://www.fluxprotocol.org/), the provider of a cross-chain oracle which provides smart contracts with access to economically secure data feeds, submitted to cover costs of the subsidizied FPO (First Party Oracle) solution which they deployed on the Imversed mainnet.
 
 Users can query the proposal details with the Imversed command-line interface using this command:
 
@@ -551,7 +551,7 @@ Use the `imversed tx gov --help` flag to get more info about the governance comm
 
 5. `--gas-prices` is the flat-rate per unit of gas value for a validator to process your transaction
 
-6. `--chain-id evmos_90001-2` is Imversed Mainnet. For current and past chain-id's, please look at the Chain ID documentation.
+6. `--chain-id imversed_5555555-1` is Imversed Mainnet. For current and past chain-id's, please look at the Chain ID documentation.
 
     - the testnet chain ID is `coming soon` (https://testnet.mintscan.io/imversed). For current and past testnet information, please look at the testnet repository(link will be coming soon)
 
