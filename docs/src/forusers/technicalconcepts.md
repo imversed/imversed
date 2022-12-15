@@ -155,12 +155,12 @@ You can query an account address using the CLI, gRPC or
 
 ```List
 # NOTE: the --output (-o) flag will define the output format in JSON or YAML (text)
-evmosd q auth account $(evmosd keys show mykey -a) -o text
+imversed q auth account $(imversed keys show mykey -a) -o text
 |
   '@type': /ethermint.types.v1.EthAccount
   base_account:
     account_number: "0"
-    address: evmos1z3t55m0l9h0eupuz3dp5t5cypyv674jj7mz2jw
+    address: imv1z3t55m0l9h0eupuz3dp5t5cypyv674jj7mz2jw
     pub_key:
       '@type': /ethermint.crypto.v1.ethsecp256k1.PubKey
       key: AsV5oddeB+hkByIJo/4lZiVUgXTzNfBPKC73cZ4K1YD2
@@ -172,7 +172,7 @@ evmosd q auth account $(evmosd keys show mykey -a) -o text
 
 ```List
 # GET /cosmos/auth/v1beta1/accounts/{address}
-curl -X GET "http://localhost:10337/cosmos/auth/v1beta1/accounts/evmos14au322k9munkmx5wrchz9q30juf5wjgz2cfqku" -H "accept: application/json"
+curl -X GET "http://localhost:10337/cosmos/auth/v1beta1/accounts/imv14au322k9munkmx5wrchz9q30juf5wjgz2cfqku" -H "accept: application/json"
 ```
 
 ### SON-RPC
@@ -318,7 +318,7 @@ In Ethereum, pending blocks are generated as they are queued for production by m
 
 Imversed is designed quite differently on this front as there is no concept of a "pending state". Imversed uses [Tendermint Core](https://docs.tendermint.com/) BFT consensus which provides instant finality for transaction. For this reason, Ethermint does not require a pending state mechanism, as all (if not most) of the transactions will be committed to the next block (avg. block time on Cosmos chains is ~8s). However, this causes a few hiccups in terms of the Ethereum Web3-compatible queries that can be made to pending state.
 
-Another significant difference with Ethereum, is that blocks are produced by validators or block producers, who include transactions from their local mempool into blocks in a first-in-first-out (FIFO) fashion. Transactions on Evmos cannot be ordered or cherry picked out from the Tendermint node [mempool](https://docs.tendermint.com/master/tendermint-core/mempool/).
+Another significant difference with Ethereum, is that blocks are produced by validators or block producers, who include transactions from their local mempool into blocks in a first-in-first-out (FIFO) fashion. Transactions on Imversed cannot be ordered or cherry picked out from the Tendermint node [mempool](https://docs.tendermint.com/master/tendermint-core/mempool/).
 
 ## Pending State Queries
 
