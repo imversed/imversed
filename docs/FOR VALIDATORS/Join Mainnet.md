@@ -20,14 +20,14 @@ We recommend saving the mainnet `chain-id` into your `imversed`'s `client.toml`.
 > See the Official [Chain IDs](https://docs.imversed.com/users/technical_concepts/chain_id.html#official-chain-ids) for reference.
 
 ```text
-imversed config chain-id imversed_9001-2
+imversed config chain-id imversed_5555555-1
 ```
 
 ## Initialize Node
 We need to initialize the node to create all the necessary validator and node configuration files:
 
 ```text
-imversed init <your_custom_moniker> --chain-id imversed_9001-2
+imversed init <your_custom_moniker> --chain-id imversed_5555555-1
 ```
 
 > Monikers can contain only ASCII characters. Using Unicode characters will render your node unreachable.
@@ -40,7 +40,7 @@ By default, the `init` command creates your `~/.imversed` (i.e `$HOME`) director
 Download the `genesis.json` file from the [`archive`](https://archive.imversed.org/mainnet/genesis.json) and copy it over to the `config` directory: ~/.imversed/config/genesis.json. This is a genesis file with the chain-id and genesis accounts balances.
 
 ```text
-wget https://archive.imversed.org/mainnet/genesis.json
+wget https://static.fdvr.co/imversed/canary/genesis.json
 mv genesis.json ~/.imversed/config/
 ```
 
