@@ -42,7 +42,7 @@ Check the `genesis.json` file from the [`archive`](https://archive.imversed.dev/
 
 ```text
 sudo apt install -y unzip wget
-wget -P ~/.imversed/config https://archive.imversed.dev/imversed_5555558-1/genesis.json
+wget -P ~/.imversed/config https://storage.googleapis.com/static.fdvr.co/imversed/testnet/genesis.json
 ```
 Then verify the correctness of the genesis configuration file:
 
@@ -98,7 +98,7 @@ Claim your testnet tImversed on the [faucet](https://docs.imversed.com/developer
 
 ```text
 imversed tx staking create-validator \
-  --amount=1000000000000atimversed \
+  --amount=1000000000000aimv \
   --pubkey=$(imversed tendermint show-validator) \
   --moniker="ImversedWhale" \
   --chain-id=<chain_id> \
@@ -107,7 +107,7 @@ imversed tx staking create-validator \
   --commission-max-change-rate="0.01" \
   --min-self-delegation="1000000" \
   --gas="auto" \
-  --gas-prices="0.025atimversed" \
+  --gas-prices="0.025aimv" \
   --from=<key_name>
 ```
 
