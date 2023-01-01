@@ -239,7 +239,7 @@ The `traceTransaction` debugging method will attempt to run the transaction in t
 * trace configuration
   ```text
     # Request
-    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params":[<transaction hash>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" https://eth.bd.imversed.org:8545
+    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params":[<transaction hash>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" 
     # Result
     {"jsonrpc":"2.0","id":1,"result":[{"result":["68410", "51470"]}]}
   ```
@@ -252,7 +252,7 @@ The `traceBlockByNumber` endpoint accepts a block number, and will replay the bl
 * trace configuration
   ```text
   # Request
-    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceBlockByNumber","params":[<block number>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" https://eth.bd.imversed.org:8545
+    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceBlockByNumber","params":[<block number>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" 
     # Result
     {"jsonrpc":"2.0","id":1,"result":[{"result":["68410", "51470"]}]}
   ```
@@ -265,7 +265,7 @@ The `traceBlockByNumber` endpoint accepts a block hash, and will replay the bloc
 * trace configuration
   ```text
     # Request
-    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceBlockByNumber","params":[<block hash>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" https://eth.bd.imversed.org:8545
+    curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceBlockByNumber","params":[<block hash>, {"tracer": "{data: [], fault: function(log) {}, step: function(log) { if(log.op.toString() == \"CALL\") this.data.push(log.stack.peek(0)); }, result: function() { return this.data; }}"}],"id":1}' -H "Content-Type: application/json" 
     # Result
     {"jsonrpc":"2.0","id":1,"result":[{"result":["68410", "51470"]}]}
   ```
