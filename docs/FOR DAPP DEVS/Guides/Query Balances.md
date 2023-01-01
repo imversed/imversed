@@ -52,7 +52,7 @@ where:
 
 * `$ETHADDRESS` is the Etherum hex-address the balance is to be queried from. Note that Imversed addresses (those beginning with `imversed1...`) can be converte.d to Ethereum addresses using libraries such as [imversedjs](https://docs.imversed.com/developers/libraries/imversedjs.html).
 * `$BLOCK` is the block number or block hash (eg. `"0x0"`). The reasoning for this parameter is due to [EIP-1898](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1898.md).
-* (optional if running local node) `$NODE` is the JSON-RPC node information is requested from (eg. `https://eth.bd.imversed.org:8545`).
+* (optional if running local node) `$NODE` is the JSON-RPC node information is requested from.
 
 Developers can also query account balances of `x/erc20`-module registered coins using the [`eth_call`](https://docs.imversed.com/developers/json-rpc/endpoints.html#ethcall) JSON-RPC method in conjunction with [`curl`](https://curl.se/):
 
@@ -72,7 +72,7 @@ where:
   method signature and encoded parameters. `balanceOf` is a required method in every ERC-20 contract, and the encoded parameter is the address which is having its balance queried. For additional information, see the [Ethereum Contract ABI](https://docs.soliditylang.org/en/v0.8.13/abi-spec.html).
 * `$BLOCK` is the block number or block hash (eg. `"0x0"`). The reasoning for this parameter is due to
   [EIP-1898](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1898.md).
-* (optional if running local node) $NODE is the JSON-RPC node information is requested from (eg. `https://eth.bd.imversed.org:8545`).
+* (optional if running local node) $NODE is the JSON-RPC node information is requested from.
 
 ## gRPC
 
