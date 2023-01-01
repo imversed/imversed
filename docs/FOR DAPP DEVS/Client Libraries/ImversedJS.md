@@ -61,7 +61,7 @@ async function mintNFT(denomId: string, nftId: string, name: string, uri: string
         fee: {
             amount: [{
                 amount: '200',
-                denom: 'nimv'
+                denom: 'aimv'
             }],
             gas: '200000'
         }
