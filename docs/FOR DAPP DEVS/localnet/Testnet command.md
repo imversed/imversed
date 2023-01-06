@@ -38,7 +38,7 @@ You should see something similar to the following:
 
 ```text
 acquiring test network lock
-preparing test network with chain-id "imv_1276974-1"
+preparing test network with chain-id "imversed_5555558-1"
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
