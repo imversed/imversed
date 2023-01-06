@@ -50,7 +50,7 @@ Imversedd keys unsafe-export-eth-key mykey
 
 Go back to the browser and select the `Private Key` option. Then paste the private key exported from the `unsafe-export-eth-key` command.
 
-Your account balance should show up as `1 tIMV` and do transfers as usual.
+Your account balance should show up as `1 IMV` and do transfers as usual.
 
 > If it takes some time to load the balance of the account, change the network to `Main Ethereum Network` (or any other than `Localhost 8545` or `Goerli`) and then switch back to `Imversed`.
 
