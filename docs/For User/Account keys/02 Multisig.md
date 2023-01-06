@@ -74,7 +74,7 @@ imversed tx bank send \
     test1 \
     imversed1e0fx0q9meawrcq7fmma9x60gk35lpr4xk3884m \
     10000000000000000000aimv \
-    --chain-id=imversed_9000-4 \
+    --chain-id=imversed_5555555-1 \
     --gas=auto \
     --fees=1000000aimv \
     --broadcast-mode=block
@@ -87,10 +87,10 @@ We want to send 5 IMV from our multisig account to `imversed1rgjxswhuxhcrhmyxlva
 imversed tx bank send \
     imversed1rgjxswhuxhcrhmyxlval0qa70vxwvqn2e0srft \
     imversed157g6rn6t6k5rl0dl57zha2wx72t633axqyvvwq \
-    5000000000000000000aimversed \
+    5000000000000000000aimv \
     --gas=200000 \
-    --fees=1000000aimversed \
-    --chain-id=imversed_9000-4 \
+    --fees=1000000aimv \
+    --chain-id=imversed_5555555-1 \
     --generate-only > unsignedTx.json
 ```
 
@@ -145,7 +145,7 @@ imversed tx sign \
     --multisig=imversed1e0fx0q9meawrcq7fmma9x60gk35lpr4xk3884m \
     --from=test1 \
     --output-document=test1sig.json \
-    --chain-id=imversed_9000-4
+    --chain-id=imversed_5555555-1
 ```
 ```linux
 imversed tx sign \
@@ -153,7 +153,7 @@ imversed tx sign \
     --multisig=imversed1e0fx0q9meawrcq7fmma9x60gk35lpr4xk3884m \
     --from=test2 \
     --output-document=test2sig.json \
-    --chain-id=imversed_9000-4
+    --chain-id=imversed_5555555-1
 ```
 
 ### Step 4: Create multisignature
@@ -251,6 +251,6 @@ The TX is now signed:
 
 ```linux
 imversed tx broadcast signedTx.json \
-    --chain-id=imversed_9000-4 \
+    --chain-id=imversed_5555555-1 \
     --broadcast-mode=block
 ```
