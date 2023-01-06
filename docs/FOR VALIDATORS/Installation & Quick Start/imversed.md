@@ -84,13 +84,13 @@ imversed config
 ```
 We can make changes to the default settings upon our choices, so it allows users to set the configuration beforehand all at once, so it would be ready with the same config afterward.
 
-For example, the chain identifier can be changed to `imversed_9000-4` from a blank name by using:
+For example, the chain identifier can be changed to `imversed_5555555-1` from a blank name by using:
 
 ```text
-imversed config "chain-id" imversed_9000-4
+imversed config "chain-id"  imversed_5555555-1
 imversed config
 {
- "chain-id": "imversed_9000-4",
+ "chain-id": " imversed_5555555-1",
  "keyring-backend": "os",
  "output": "text",
  "node": "tcp://localhost:26657",
@@ -110,7 +110,7 @@ Alternatively, we can directly make the changes to the config values in one plac
 
 # The network chain ID
 
-chain-id = "imversed_9000-4"
+chain-id = "imversed_5555555-1"
 
 # The keyring's backend, where the keys are stored (os|file|kwallet|pass|test|memory)
 
@@ -129,12 +129,12 @@ node = "tcp://localhost:26657"
 broadcast-mode = "sync"
 ```
 
-After the necessary changes are made in the `client.toml`, then save. For example, if we directly change the chain-id from `imversed_9000-2` to `imversedtest_9000-1`, and output to number, it would change instantly as shown below.
+After the necessary changes are made in the `client.toml`, then save. For example, if we directly change the chain-id from `imversed_5555555-1` to `imversedtest_5555555-6`, and output to number, it would change instantly as shown below.
 
 ```text
 imversed config
 {
- "chain-id": "imversedtest_9000-1",
+ "chain-id": "imversedtest_5555555-6",
  "keyring-backend": "os",
  "output": "number",
  "node": "tcp://localhost:26657",
