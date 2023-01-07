@@ -196,8 +196,8 @@ imversed tx gov submit-proposal \
    * if this number isn't high enough and there isn't enough gas to process your transaction, the transaction will fail
    * the transaction will only use the amount of gas needed to process the transaction
 5. `--gas-prices` is the flat-rate per unit of gas value for a validator to process your transaction
-6. `--chain-id imversed_555555-1` is Imversed Mainnet. For current and past chain-id's, please look at the Chain ID documentation.
-   * the testnet chain ID is [imversed_555555-1](https://txe.imversed.com/) 
+6. `--chain-id imversed_5555555-1` is Imversed Mainnet. For current and past chain-id's, please look at the Chain ID documentation.
+   * the testnet chain ID is imversed_5555558-1
 7. `--node` is using a full node to send the transaction to the Imversed Mainnet
 
 ### Verifying your transaction
