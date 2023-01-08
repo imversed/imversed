@@ -25,23 +25,22 @@ You can also use [chainlist.org](https://chainlist.org/) to add the node directl
 
 |                     Address                    | Category | Maintainer |
 |----------------------------------------------- |----------|------------|
-|`https://jsonrpc-endpoint-test.imversed.com:443`|          |            |                
-|`https://query-endpoint-test.imversed.com:443`  |          |            |                
-|`https://tx-endpoint-test.imversed.com:443`     |          |            |                
-|`https://grpc-endpoint-test.imversed.com:443`   |          |            |                
-|`https://query-endpoint-canary.imversed.com:443`|          |            |                
-|`https://tx-endpoint-canary.imversed.com:443`   |          |            |                
-|`https://grpc-endpoint-canary.imversed.com:443` |          |            |                
+|`https://txe.imversed.network/`|          |            |                
+|`https://rpc.imversed.network:443`  |          |            |                
+|`https://grpc.imversed.network:443`     |          |            |                
+|`https://rest.imversed.network:443`   |          |            |                
+|`https://jsonrpc.imversed.network:443`|          |            |                
+|`https://connect.imversed.network:443`   |          |            |                
+|`https://ws-jsonrpc.imversed.network:443` |          |            |                
              
 
 ::: ::: tab Testnet
 
 |                     Address                    | Category | Maintainer |
 |----------------------------------------------- |----------|------------|
-|`https://jsonrpc-endpoint-test.imversed.com:443`|          |            |                
-|`https://query-endpoint-test.imversed.com:443`  |          |            |                
-|`https://tx-endpoint-test.imversed.com:443`     |          |            |                
-|`https://grpc-endpoint-test.imversed.com:443`   |          |            |                
-|`https://query-endpoint-canary.imversed.com:443`|          |            |                
-|`https://tx-endpoint-canary.imversed.com:443`   |          |            |                
-|`https://grpc-endpoint-canary.imversed.com:443` |          |            |    
+|`https://txe-test.imversed.network/`|          |            |                
+|`https://rpc-test.imversed.network:443`  |          |            |                
+|`https://grpc-test.imversed.network:443`     |          |            |                
+|`https://rest-test.imversed.network:443`  |          |            |                
+|`https://jsonrpc-test.imversed.network:443`|          |            |                
+|`https://ws-jsonrpc-test.imversed.network:443`   |          |            |    
