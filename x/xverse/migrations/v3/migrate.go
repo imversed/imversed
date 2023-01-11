@@ -9,17 +9,21 @@ import (
 	"github.com/imversed/imversed/x/xverse/types"
 )
 
-// MigrateStore migrates the BaseFee value from the store to the params for
+// MigrateStore migrates verse and create smart-contract mapping in KVStore for
 // In-Place Store migration logic.
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
+	// get verse store
 	store := ctx.KVStore(storeKey)
 
+	// get iterator for verse store
 	storeIter := store.Iterator(nil, nil)
 	defer storeIter.Close()
 
+	// get prefixed store for smart-contract mapping
 	contractStore := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefixContract)
 
 	for ; storeIter.Valid(); storeIter.Next() {
+		// get old verse
 		oldBz := storeIter.Value()
 		var oldVerse v2.Verse
 		err := cdc.Unmarshal(oldBz, &oldVerse)
@@ -27,6 +31,7 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			return err
 		}
 
+		// migrate verse
 		newVerse := types.Verse{
 			Owner:             oldVerse.Owner,
 			Name:              oldVerse.Name,
@@ -37,6 +42,7 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			AuthenticatedKeys: nil,
 		}
 
+		// add all contracts that bounded to verse in contract -> mapping
 		for _, v := range newVerse.SmartContracts {
 			contract := types.Contract{
 				Hash:  v,
@@ -46,8 +52,8 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			contractStore.Set(types.ContractKey(contract.Hash), b)
 		}
 
+		// set migrated verse
 		bz := cdc.MustMarshal(&newVerse)
-
 		store.Set(storeIter.Key(), bz)
 	}
 	return nil
