@@ -1,0 +1,15 @@
+syntax = "proto3";
+package imversed.xverse;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/imversed/imversed/x/xverse/types";
+
+// Mapping verse/contract for tx permission checking
+message Contract {
+  // Contract address
+  string hash = 1;
+
+  // Verse name
+  string verse = 2;
+}
