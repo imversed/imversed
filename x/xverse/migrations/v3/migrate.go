@@ -2,6 +2,7 @@ package v3
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	v2 "github.com/imversed/imversed/x/xverse/migrations/v2/types"
@@ -15,6 +16,8 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 
 	storeIter := store.Iterator(nil, nil)
 	defer storeIter.Close()
+
+	contractStore := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefixContract)
 
 	for ; storeIter.Valid(); storeIter.Next() {
 		oldBz := storeIter.Value()
@@ -32,6 +35,15 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			SmartContracts:    oldVerse.SmartContracts,
 			Oracle:            "",
 			AuthenticatedKeys: nil,
+		}
+
+		for _, v := range newVerse.SmartContracts {
+			contract := types.Contract{
+				Hash:  v,
+				Verse: newVerse.Name,
+			}
+			b := cdc.MustMarshal(&contract)
+			contractStore.Set(types.ContractKey(contract.Hash), b)
 		}
 
 		bz := cdc.MustMarshal(&newVerse)
