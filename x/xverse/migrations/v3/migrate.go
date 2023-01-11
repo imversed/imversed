@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	v2 "github.com/imversed/imversed/x/xverse/migrations/v2/types"
 	"github.com/imversed/imversed/x/xverse/types"
+	"strings"
 )
 
 // MigrateStore migrates verse and create smart-contract mapping in KVStore for
@@ -31,13 +32,19 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 			return err
 		}
 
+		// loverCase-ing contracts hass
+		var toLowerSmartContracts []string
+		for _, v := range oldVerse.SmartContracts {
+			toLowerSmartContracts = append(toLowerSmartContracts, strings.ToLower(v))
+		}
+
 		// migrate verse
 		newVerse := types.Verse{
 			Owner:             oldVerse.Owner,
 			Name:              oldVerse.Name,
 			Icon:              oldVerse.Icon,
 			Description:       oldVerse.Description,
-			SmartContracts:    oldVerse.SmartContracts,
+			SmartContracts:    toLowerSmartContracts,
 			Oracle:            "",
 			AuthenticatedKeys: nil,
 		}

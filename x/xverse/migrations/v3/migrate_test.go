@@ -17,6 +17,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -119,7 +120,7 @@ func (suite *KeeperSuite) TestMigration() {
 		suite.NoError(err)
 
 		// key has '/' in the end, so contract hash checked by its length, and no check for last '/' symbol
-		for i, v := range []byte(contracts[index]) {
+		for i, v := range []byte(strings.ToLower(contracts[index])) {
 			suite.True(v == key[i])
 		}
 	}
