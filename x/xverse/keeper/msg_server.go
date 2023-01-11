@@ -54,6 +54,15 @@ func (k Keeper) AddAssetToVerse(
 			return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("verse already contains asset: %s", msg.AssetId))
 		}
 		verse.SmartContracts = append(verse.SmartContracts, msg.AssetId)
+
+		err := k.SetContract(ctx, types.Contract{
+			Hash:  msg.AssetId,
+			Verse: verse.Name,
+		})
+
+		if err != nil {
+			return nil, err
+		}
 	default:
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("invalid assert type: %s", msg.AssetType))
 	}
@@ -89,6 +98,11 @@ func (k Keeper) RemoveAssetFromVerse(
 		// remove asset from slice
 		verse.SmartContracts[slices.Index(verse.SmartContracts, msg.AssetId)] = verse.SmartContracts[len(verse.SmartContracts)-1]
 		verse.SmartContracts = verse.SmartContracts[:len(verse.SmartContracts)-1]
+
+		err := k.removeContract(ctx, msg.AssetId)
+		if err != nil {
+			return nil, err
+		}
 	default:
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("invalid assert type: %s", msg.AssetType))
 	}
@@ -119,6 +133,8 @@ func (k Keeper) RenameVerse(
 	if err != nil {
 		return nil, err
 	}
+
+	k.updateVerseInContracts(ctx, msg.VerseOldName, msg.VerseNewName)
 
 	return &types.MsgRenameVerseResponse{}, nil
 }
