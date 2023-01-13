@@ -14,7 +14,7 @@ const (
 	// RouterKey is the message route for slashing
 	RouterKey = ModuleName
 
-	// SmartContractKeyPrefix is the prefix to retrieve all Currency
+	// SmartContractKeyPrefix is the prefix to retrieve all smartcontracts
 	SmartContractKeyPrefix = "Smart_contract/address/"
 )
 

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// MigrateStore migrates the BaseFee value from the store to the params for
+// MigrateStore migrates the hashes of all smart-contracts to lower-case for
 // In-Place Store migration logic.
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
 	store := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefix(types.SmartContractKeyPrefix))

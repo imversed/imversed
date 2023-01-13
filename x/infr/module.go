@@ -175,7 +175,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 }
 
 // Simulation part
-// GenerateGenesisState creates a randomized GenState of the fee market module.
+
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	fmt.Println("Unresolved simulation function GenerateGenesisState")
 }
@@ -186,7 +186,6 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 	return nil
 }
 
-// RandomizedParams creates randomized feegrant param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
 	fmt.Println("Unresolved simulation function RandomizedParams")
 	return nil
