@@ -14,10 +14,10 @@ import (
 // In-Place Store migration logic.
 func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
 	// get verse store
-	store := ctx.KVStore(storeKey)
+	verseStore := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefixVerse)
 
 	// get iterator for verse store
-	storeIter := store.Iterator(nil, nil)
+	storeIter := sdk.KVStorePrefixIterator(verseStore, []byte{})
 	defer storeIter.Close()
 
 	// get prefixed store for smart-contract mapping
@@ -61,7 +61,7 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 
 		// set migrated verse
 		bz := cdc.MustMarshal(&newVerse)
-		store.Set(storeIter.Key(), bz)
+		verseStore.Set(storeIter.Key(), bz)
 	}
 	return nil
 }
