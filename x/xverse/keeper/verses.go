@@ -22,6 +22,8 @@ func (k Keeper) SetVerse(ctx sdk.Context, verse types.Verse) error {
 	b := k.cdc.MustMarshal(&verse)
 	store.Set(types.VerseKey(verse.Name), b)
 
+	mappingStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixCreatorToVerse(verse.Owner))
+	mappingStore.Set(types.OwnerKey(verse.Name), []byte{})
 	return nil
 }
 
@@ -58,6 +60,10 @@ func (k Keeper) UpdateVerseName(ctx sdk.Context, oldName string, newName string)
 
 	renameCost := k.GetParams(ctx).TxRenameVerseCost
 	ctx.GasMeter().ConsumeGas(renameCost, "txRenameVerse")
+
+	mappingStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixCreatorToVerse(verse.Owner))
+	mappingStore.Set(types.OwnerKey(newName), []byte{})
+	mappingStore.Delete(types.OwnerKey(oldName))
 
 	return nil
 }

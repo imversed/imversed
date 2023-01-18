@@ -68,7 +68,6 @@ func OwnerKey(
 
 	addressBytes := []byte(address)
 	key = append(key, addressBytes...)
-	key = append(key, []byte("/")...)
 
 	return key
 }
