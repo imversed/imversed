@@ -63,5 +63,23 @@ func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Binar
 		bz := cdc.MustMarshal(&newVerse)
 		verseStore.Set(storeIter.Key(), bz)
 	}
+
+	return addCreatorToVersesMapping(ctx, storeKey, cdc)
+}
+
+func addCreatorToVersesMapping(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.BinaryCodec) error {
+
+	// get prefixed store for creator-verses mapping
+	verseStore := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefixVerse)
+	storeIter := sdk.KVStorePrefixIterator(verseStore, []byte{})
+
+	for ; storeIter.Valid(); storeIter.Next() {
+		bz := storeIter.Value()
+		var verse types.Verse
+		cdc.MustUnmarshal(bz, &verse)
+		mappingStore := prefix.NewStore(ctx.KVStore(storeKey), types.KeyPrefixCreatorToVerse(verse.Owner))
+		mappingStore.Set(types.OwnerKey(verse.Name), []byte{})
+	}
+
 	return nil
 }

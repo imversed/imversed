@@ -19,6 +19,7 @@ const (
 const (
 	prefixVerse           = "Xverse/xverse"
 	prefixContractToVerse = "Xverse/contracts"
+	prefixCreatorToVerses = "Xverse/creatorMapping"
 )
 
 // KVStore key prefixes
@@ -45,8 +46,28 @@ func ContractKey(
 ) []byte {
 	var key []byte
 
-	nameBytes := []byte(hash)
-	key = append(key, nameBytes...)
+	hashBytes := []byte(hash)
+	key = append(key, hashBytes...)
+	key = append(key, []byte("/")...)
+
+	return key
+}
+
+// KeyPrefixCreatorToVerse prefix for mapping storage
+func KeyPrefixCreatorToVerse(address string) []byte {
+	key := []byte(prefixCreatorToVerses)
+	key = append(key, []byte("/")...)
+	key = append(key, []byte(address)...)
+	return key
+}
+
+func OwnerKey(
+	address string,
+) []byte {
+	var key []byte
+
+	addressBytes := []byte(address)
+	key = append(key, addressBytes...)
 	key = append(key, []byte("/")...)
 
 	return key
