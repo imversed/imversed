@@ -125,3 +125,38 @@ func (suite *KeeperSuite) TestMigration() {
 		}
 	}
 }
+
+func (suite *KeeperSuite) TestOwnerVersesMappingMigration() {
+	skey := suite.app.GetKey(types.ModuleName)
+	cdc := suite.app.AppCodec()
+	store := prefix.NewStore(suite.ctx.KVStore(skey), types.KeyPrefixVerse)
+	// Phase 1: fill store old verses
+	for i := 0; i < 9; i++ {
+		verse := v2.Verse{
+			Name: strconv.Itoa(i),
+			// mock 3 only owners
+			Owner:          strconv.Itoa(i % 3),
+			SmartContracts: nil,
+		}
+		b := cdc.MustMarshal(&verse)
+		store.Set(types.VerseKey(verse.Name), b)
+	}
+
+	suite.NoError(v3.MigrateStore(suite.ctx, skey, cdc))
+
+	for i := 0; i < 3; i++ {
+		mappingStore := prefix.NewStore(suite.ctx.KVStore(skey), types.KeyPrefixCreatorToVerse(strconv.Itoa(i)))
+		iterator := sdk.KVStorePrefixIterator(mappingStore, []byte{})
+
+		j := 0
+		for ; iterator.Valid(); iterator.Next() {
+			verse := string(iterator.Key())
+			name, err := strconv.Atoi(string(verse))
+			suite.NoError(err)
+			suite.True(name < 9)
+			j++
+		}
+		suite.True(j == 3)
+		iterator.Close()
+	}
+}
