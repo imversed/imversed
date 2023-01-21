@@ -5,6 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	infrtypes "github.com/imversed/imversed/x/infr/types"
 	"github.com/imversed/imversed/x/xverse/types"
@@ -27,6 +28,9 @@ func NewTxCmd() *cobra.Command {
 		AddAssetToVerseCmd(),
 		RenameVerseCmd(),
 		RemoveAssetFromVerseCmd(),
+		AddOracleToVerse(),
+		AddKeyToVerse(),
+		RemoveKeyFromVerse(),
 	)
 	return txCmd
 }
@@ -209,6 +213,149 @@ func RemoveAssetFromVerseCmd() *cobra.Command {
 				AssetType:    splitted[0],
 				AssetId:      splitted[1],
 				VerseCreator: verseResp.Verse.Owner,
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// AddOracleToVerse add oracle key for existed verse
+func AddOracleToVerse() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "add-oracle [bech32-key] [verse_name]",
+		Short: "Add oracle to existed verse",
+		Long:  "Add oracle to existed verse",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			queryClient := types.NewQueryClient(cliCtx)
+
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[1],
+			}
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			_, err = queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgRemoveAssetFromVerse{
+				Sender:    sender.String(),
+				VerseName: args[1],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// AddKeyToVerse add to verse for interaction with assets
+func AddKeyToVerse() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "add-key [bech32-key] [verse_name]",
+		Short: "Add key to existed verse",
+		Long:  "Add key to existed verse",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			queryClient := types.NewQueryClient(cliCtx)
+
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[1],
+			}
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			_, err = queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgAuthorizeKeyToVerse{
+				Sender:    sender.String(),
+				VerseName: args[1],
+				Address:   args[0],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// RemoveKeyFromVerse remove key from verse for restrict interaction with assets
+func RemoveKeyFromVerse() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "remove-key [bech32-key] [verse_name]",
+		Short: "Remove key from existed verse",
+		Long:  "Remove key from existed verse",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			queryClient := types.NewQueryClient(cliCtx)
+
+			verseParams := &types.QueryGetVerseRequest{
+				VerseName: args[1],
+			}
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			_, err = queryClient.Verse(context.Background(), verseParams)
+			if err != nil {
+				return err
+			}
+
+			msg := &types.MsgDeauthorizeKeyToVerse{
+				Sender:    sender.String(),
+				VerseName: args[1],
+				Address:   args[0],
 			}
 
 			if err := msg.ValidateBasic(); err != nil {

@@ -10,6 +10,7 @@ import (
 	"golang.org/x/exp/slices"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"strings"
 )
 
 var _ types.MsgServer = &Keeper{}
@@ -47,6 +48,8 @@ func (k Keeper) AddAssetToVerse(
 	if verse.Owner != msg.VerseCreator {
 		return nil, status.Error(codes.Unauthenticated, "verse creator in msg and chain are not same")
 	}
+
+	msg.AssetId = strings.ToLower(msg.AssetId)
 
 	switch msg.AssetType {
 	case types.ContractType:
@@ -89,6 +92,8 @@ func (k Keeper) RemoveAssetFromVerse(
 	if verse.Owner != msg.VerseCreator {
 		return nil, status.Error(codes.Unauthenticated, "verse creator in msg and chain are not same")
 	}
+
+	msg.AssetId = strings.ToLower(msg.AssetId)
 
 	switch msg.AssetType {
 	case types.ContractType:
@@ -137,4 +142,108 @@ func (k Keeper) RenameVerse(
 	k.updateVerseInContracts(ctx, msg.VerseOldName, msg.VerseNewName)
 
 	return &types.MsgRenameVerseResponse{}, nil
+}
+
+func (k Keeper) AddOracleToVerse(
+	goCtx context.Context,
+	msg *types.MsgAddOracleToVerse,
+) (*types.MsgAddOracleToVerseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msg.VerseName)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseName)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Oracle)
+	if err != nil {
+		return nil, err
+	}
+
+	if verse.Owner != msg.GetSigners()[0].String() {
+		return nil, status.Error(codes.Unauthenticated, "sender in msg and verse owner are not same")
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Oracle)
+	if err != nil {
+		return nil, err
+	}
+
+	verse.Oracle = msg.Oracle
+
+	err = k.UpdateVerse(ctx, verse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgAddOracleToVerseResponse{}, nil
+}
+
+func (k Keeper) AuthorizeKeyToVerse(
+	goCtx context.Context,
+	msg *types.MsgAuthorizeKeyToVerse,
+) (*types.MsgAuthorizeKeyToVerseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msg.VerseName)
+
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseName)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	if verse.Oracle != msg.GetSigners()[0].String() && verse.Owner != msg.GetSigners()[0].String() {
+		return nil, status.Error(codes.Unauthenticated, "sender has not authorized to add keys")
+	}
+
+	if slices.Contains(verse.AuthenticatedKeys, msg.Address) {
+		return nil, status.Error(codes.AlreadyExists, "address already authorized")
+	}
+
+	verse.AuthenticatedKeys = append(verse.AuthenticatedKeys, msg.Address)
+
+	err = k.UpdateVerse(ctx, verse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgAuthorizeKeyToVerseResponse{}, nil
+}
+
+func (k Keeper) DeauthorizeKeyToVerse(
+	goCtx context.Context,
+	msg *types.MsgDeauthorizeKeyToVerse,
+) (*types.MsgDeauthorizeKeyToVerseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msg.VerseName)
+
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseName)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	if verse.Oracle != msg.GetSigners()[0].String() && verse.Owner != msg.GetSigners()[0].String() {
+		return nil, status.Error(codes.Unauthenticated, "sender has not authorized to add keys")
+	}
+
+	if !slices.Contains(verse.AuthenticatedKeys, msg.Address) {
+		return nil, status.Error(codes.NotFound, "address not authorized")
+	}
+
+	// remove key from authorized keys
+	verse.AuthenticatedKeys[slices.Index(verse.AuthenticatedKeys, msg.Address)] = verse.AuthenticatedKeys[len(verse.AuthenticatedKeys)-1]
+	verse.AuthenticatedKeys = verse.AuthenticatedKeys[:len(verse.AuthenticatedKeys)-1]
+
+	err = k.UpdateVerse(ctx, verse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgDeauthorizeKeyToVerseResponse{}, nil
 }
