@@ -12,4 +12,5 @@ var (
 	ErrContractAlreadyMapped = sdkerrors.Register(ModuleName, 4, "contract already mapped")
 	ErrContractNotFound      = sdkerrors.Register(ModuleName, 5, "contract not found")
 	ErrNotAuthenticated      = sdkerrors.Register(ModuleName, 6, "key not authorized")
+	ErrVerseNotfound         = sdkerrors.Register(ModuleName, 7, "verse not found")
 )

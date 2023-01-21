@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"context"
+	sdkerrors "cosmossdk.io/errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/uuid"
 	"github.com/imversed/imversed/x/xverse/types"
 	"golang.org/x/exp/slices"
@@ -83,7 +83,7 @@ func (k Keeper) RemoveAssetFromVerse(
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	verse, found := k.GetVerse(ctx, msg.VerseName)
 	if !found {
-		return nil, sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", msg.VerseName)
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name %s does not exists", msg.VerseName)
 	}
 	// There are maybe correct-signed, but malicious tx with false msg.VerseCreator
 	if verse.Owner != msg.VerseCreator {
@@ -122,7 +122,7 @@ func (k Keeper) RenameVerse(
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	verse, found := k.GetVerse(ctx, msg.VerseOldName)
 	if !found {
-		return nil, sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", msg.VerseOldName)
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseOldName)
 	}
 	if verse.Owner != msg.VerseCreator {
 		return nil, status.Error(codes.Unauthenticated, "verse creator in msg and chain are not same")

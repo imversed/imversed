@@ -1,9 +1,9 @@
 package keeper
 
 import (
+	sdkerrors "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/imversed/imversed/x/xverse/types"
 )
 
@@ -15,7 +15,7 @@ func (k Keeper) HasVerse(ctx sdk.Context, verse types.Verse) bool {
 // SetVerse set a specific verse in the store from its index
 func (k Keeper) SetVerse(ctx sdk.Context, verse types.Verse) error {
 	if k.HasVerse(ctx, verse) {
-		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s has already exists", verse.Name)
+		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name \"%s\" has already exists", verse.Name)
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)
@@ -30,7 +30,7 @@ func (k Keeper) SetVerse(ctx sdk.Context, verse types.Verse) error {
 // UpdateVerse set a specific verse in the store from its index
 func (k Keeper) UpdateVerse(ctx sdk.Context, verse types.Verse) error {
 	if !k.HasVerse(ctx, verse) {
-		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", verse.Name)
+		return sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name %s does not exists", verse.Name)
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)
@@ -48,7 +48,7 @@ func (k Keeper) UpdateVerseName(ctx sdk.Context, oldName string, newName string)
 	}
 	verse, found = k.GetVerse(ctx, oldName)
 	if !found {
-		return sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "verse with name %s does not exists", oldName)
+		return sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name %s does not exists", oldName)
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixVerse)
