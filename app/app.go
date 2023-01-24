@@ -311,7 +311,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.12")
+	bApp.SetVersion("v3.13")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	baseAppHelper.Create(bApp)
