@@ -432,7 +432,7 @@ func NewImversedApp(
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(
 		evmkeeper.NewMultiEvmHooks(
-			app.Erc20Keeper.Hooks(), app.InfrKeeper.Hooks(),
+			app.Erc20Keeper.Hooks(), app.InfrKeeper.Hooks(), app.VerseKeeper.Hooks(),
 		),
 	)
 

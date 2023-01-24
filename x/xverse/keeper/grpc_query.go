@@ -59,6 +59,37 @@ func (k Keeper) VerseAll(c context.Context, req *types.QueryAllVerseRequest) (*t
 	return &types.QueryAllVerseResponse{Verse: verses, Pagination: pageRes}, nil
 }
 
+func (k Keeper) VersesByOwner(c context.Context, req *types.QueryGetVersesByOwnerRequest) (*types.QueryGetVersesByOwnerResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	var verses []types.Verse
+	ctx := sdk.UnwrapSDKContext(c)
+
+	store := ctx.KVStore(k.storeKey)
+
+	mappingStore := prefix.NewStore(store, types.KeyPrefixCreatorToVerse(req.OwnerAddress))
+
+	pageRes, err := query.Paginate(mappingStore, req.Pagination, func(key []byte, value []byte) error {
+		verseName := string(key)
+
+		verse, found := k.GetVerse(ctx, verseName)
+		if !found {
+			return status.Error(codes.InvalidArgument, "not found")
+		}
+
+		verses = append(verses, verse)
+		return nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryGetVersesByOwnerResponse{Verses: verses, Pagination: pageRes}, nil
+}
+
 func (k Keeper) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
