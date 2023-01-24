@@ -4,6 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/imversed/imversed/x/infr/types"
+	"strings"
 )
 
 // GetSmartContractMetadata - get registered smart-contract metadata
@@ -14,7 +15,7 @@ func (k Keeper) GetSmartContractMetadata(ctx sdk.Context, address string) (types
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SmartContractKeyPrefix))
 	var smartcontract types.SmartContract
-	bz := store.Get([]byte(address))
+	bz := store.Get([]byte(strings.ToLower(address)))
 	if len(bz) == 0 {
 		return types.SmartContract{}, false
 	}
@@ -26,6 +27,7 @@ func (k Keeper) GetSmartContractMetadata(ctx sdk.Context, address string) (types
 // SetSmartContractMetadata set metadata for smart-contract
 func (k Keeper) SetSmartContractMetadata(ctx sdk.Context, sc types.SmartContract) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SmartContractKeyPrefix))
+	sc.Address = strings.ToLower(sc.Address)
 	key := []byte(sc.Address)
 	bz := k.cdc.MustMarshal(&sc)
 	store.Set(key, bz)
