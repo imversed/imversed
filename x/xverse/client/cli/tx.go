@@ -257,9 +257,10 @@ func AddOracleToVerse() *cobra.Command {
 				return err
 			}
 
-			msg := &types.MsgRemoveAssetFromVerse{
+			msg := &types.MsgAddOracleToVerse{
 				Sender:    sender.String(),
 				VerseName: args[1],
+				Oracle:    args[0],
 			}
 
 			if err := msg.ValidateBasic(); err != nil {
