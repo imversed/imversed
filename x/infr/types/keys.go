@@ -1,6 +1,9 @@
 package types
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"strings"
+)
 
 var _ binary.ByteOrder
 
@@ -28,9 +31,9 @@ func InfrSmartContractKey(
 ) []byte {
 	var key []byte
 
+	address = strings.ToLower(address)
 	denomBytes := []byte(address)
 	key = append(key, denomBytes...)
-	key = append(key, []byte("/")...)
 
 	return key
 }

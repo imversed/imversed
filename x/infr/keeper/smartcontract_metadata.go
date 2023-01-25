@@ -15,7 +15,7 @@ func (k Keeper) GetSmartContractMetadata(ctx sdk.Context, address string) (types
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SmartContractKeyPrefix))
 	var smartcontract types.SmartContract
-	bz := store.Get([]byte(strings.ToLower(address)))
+	bz := store.Get(types.InfrSmartContractKey(address))
 	if len(bz) == 0 {
 		return types.SmartContract{}, false
 	}
@@ -28,9 +28,8 @@ func (k Keeper) GetSmartContractMetadata(ctx sdk.Context, address string) (types
 func (k Keeper) SetSmartContractMetadata(ctx sdk.Context, sc types.SmartContract) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.SmartContractKeyPrefix))
 	sc.Address = strings.ToLower(sc.Address)
-	key := []byte(sc.Address)
 	bz := k.cdc.MustMarshal(&sc)
-	store.Set(key, bz)
+	store.Set(types.InfrSmartContractKey(sc.Address), bz)
 }
 
 // GetAllSmartContractsMetadata - get all smartcontracts metadata
