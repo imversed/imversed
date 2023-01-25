@@ -1,6 +1,9 @@
 package types
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"strings"
+)
 
 var _ binary.ByteOrder
 
@@ -14,7 +17,7 @@ const (
 	// RouterKey is the message route for slashing
 	RouterKey = ModuleName
 
-	// SmartContractKeyPrefix is the prefix to retrieve all Currency
+	// SmartContractKeyPrefix is the prefix to retrieve all smartcontracts
 	SmartContractKeyPrefix = "Smart_contract/address/"
 )
 
@@ -28,9 +31,9 @@ func InfrSmartContractKey(
 ) []byte {
 	var key []byte
 
+	address = strings.ToLower(address)
 	denomBytes := []byte(address)
 	key = append(key, denomBytes...)
-	key = append(key, []byte("/")...)
 
 	return key
 }

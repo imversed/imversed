@@ -311,7 +311,7 @@ func NewImversedApp(
 	)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 
-	bApp.SetVersion("v3.12")
+	bApp.SetVersion("v3.13")
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	baseAppHelper.Create(bApp)
@@ -432,7 +432,7 @@ func NewImversedApp(
 
 	app.EvmKeeper = app.EvmKeeper.SetHooks(
 		evmkeeper.NewMultiEvmHooks(
-			app.Erc20Keeper.Hooks(), app.InfrKeeper.Hooks(),
+			app.Erc20Keeper.Hooks(), app.InfrKeeper.Hooks(), app.VerseKeeper.Hooks(),
 		),
 	)
 

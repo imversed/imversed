@@ -15,6 +15,15 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// Set all the verse
 	for _, elem := range genState.VerseList {
 		_ = k.SetVerse(ctx, elem)
+		for _, v := range elem.SmartContracts {
+			err := k.SetContract(ctx, types.Contract{
+				Hash:  v,
+				Verse: elem.Name,
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
 	}
 }
 

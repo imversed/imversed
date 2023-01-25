@@ -14,6 +14,12 @@ service Msg {
   rpc RemoveAssetFromVerse(MsgRemoveAssetFromVerse) returns (MsgRemoveAssetFromVerseResponse);
 
   rpc RenameVerse(MsgRenameVerse) returns (MsgRenameVerseResponse);
+
+  rpc AddOracleToVerse(MsgAddOracleToVerse) returns (MsgAddOracleToVerseResponse);
+
+  rpc AuthorizeKeyToVerse(MsgAuthorizeKeyToVerse) returns (MsgAuthorizeKeyToVerseResponse);
+
+  rpc DeauthorizeKeyToVerse(MsgDeauthorizeKeyToVerse) returns (MsgDeauthorizeKeyToVerseResponse);
 }
 
 message MsgCreateVerse {
@@ -70,5 +76,38 @@ message MsgRemoveAssetFromVerse {
 }
 
 message MsgRemoveAssetFromVerseResponse {
+}
+
+message MsgAddOracleToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string oracle = 3;
+}
+
+message MsgAddOracleToVerseResponse {
+}
+
+message MsgAuthorizeKeyToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string address = 3;
+}
+
+message MsgAuthorizeKeyToVerseResponse {
+}
+
+message MsgDeauthorizeKeyToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string address = 3;
+}
+
+message MsgDeauthorizeKeyToVerseResponse {
 }
 // this line is used by starport scaffolding # proto/tx/message

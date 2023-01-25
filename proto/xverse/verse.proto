@@ -15,4 +15,8 @@ message Verse {
   string description = 4;
 
   repeated string smart_contracts = 5;
+
+  string oracle = 6;
+
+  repeated string authenticated_keys = 7;
 }
