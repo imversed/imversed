@@ -35,6 +35,10 @@ service Query {
     option (google.api.http).get = "/imversed/imversed/xverse/verse_assets/{verse_name}";
   }
 
+  rpc VersesByOwner(QueryGetVersesByOwnerRequest) returns (QueryGetVersesByOwnerResponse) {
+    option (google.api.http).get = "/imversed/imversed/xverse/verses_by_owner/{owner_address}";
+  }
+
   // this line is used by starport scaffolding # 2
 }
 
@@ -82,5 +86,17 @@ message QueryGetVerseAssetsRequest {
 
 message QueryGetVerseAssetsResponse {
   repeated string assets = 1;
+}
+
+message QueryGetVersesByOwnerRequest {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+
+  string owner_address = 2;
+}
+
+message QueryGetVersesByOwnerResponse {
+  repeated Verse verses = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 // this line is used by starport scaffolding # 3

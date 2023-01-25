@@ -26,6 +26,7 @@ func GetQueryCmd() *cobra.Command {
 		GetParamsCmd(),
 		HasAssetCmd(),
 		GetAssetsCmd(),
+		GetVersesByOwner(),
 	)
 	return cmd
 }
@@ -193,6 +194,43 @@ func GetAssetsCmd() *cobra.Command {
 		},
 	}
 
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+// GetVersesByOwner returns all verses by owner
+func GetVersesByOwner() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "versesbyowner [address]",
+		Short: "Gets all verses by owner",
+		Long:  "Gets all verses by owner",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			req := &types.QueryGetVersesByOwnerRequest{
+				OwnerAddress: args[0],
+				Pagination:   pageReq,
+			}
+
+			res, err := queryClient.VersesByOwner(context.Background(), req)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
 	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }

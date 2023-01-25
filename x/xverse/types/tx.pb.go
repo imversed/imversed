@@ -459,6 +459,294 @@ func (m *MsgRemoveAssetFromVerseResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRemoveAssetFromVerseResponse proto.InternalMessageInfo
 
+type MsgAddOracleToVerse struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	VerseName string `protobuf:"bytes,2,opt,name=verse_name,json=verseName,proto3" json:"verse_name,omitempty"`
+	Oracle    string `protobuf:"bytes,3,opt,name=oracle,proto3" json:"oracle,omitempty"`
+}
+
+func (m *MsgAddOracleToVerse) Reset()         { *m = MsgAddOracleToVerse{} }
+func (m *MsgAddOracleToVerse) String() string { return proto.CompactTextString(m) }
+func (*MsgAddOracleToVerse) ProtoMessage()    {}
+func (*MsgAddOracleToVerse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{8}
+}
+func (m *MsgAddOracleToVerse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddOracleToVerse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddOracleToVerse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddOracleToVerse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddOracleToVerse.Merge(m, src)
+}
+func (m *MsgAddOracleToVerse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddOracleToVerse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddOracleToVerse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddOracleToVerse proto.InternalMessageInfo
+
+func (m *MsgAddOracleToVerse) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgAddOracleToVerse) GetVerseName() string {
+	if m != nil {
+		return m.VerseName
+	}
+	return ""
+}
+
+func (m *MsgAddOracleToVerse) GetOracle() string {
+	if m != nil {
+		return m.Oracle
+	}
+	return ""
+}
+
+type MsgAddOracleToVerseResponse struct {
+}
+
+func (m *MsgAddOracleToVerseResponse) Reset()         { *m = MsgAddOracleToVerseResponse{} }
+func (m *MsgAddOracleToVerseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAddOracleToVerseResponse) ProtoMessage()    {}
+func (*MsgAddOracleToVerseResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{9}
+}
+func (m *MsgAddOracleToVerseResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddOracleToVerseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddOracleToVerseResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddOracleToVerseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddOracleToVerseResponse.Merge(m, src)
+}
+func (m *MsgAddOracleToVerseResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddOracleToVerseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddOracleToVerseResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddOracleToVerseResponse proto.InternalMessageInfo
+
+type MsgAuthorizeKeyToVerse struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	VerseName string `protobuf:"bytes,2,opt,name=verse_name,json=verseName,proto3" json:"verse_name,omitempty"`
+	Address   string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+}
+
+func (m *MsgAuthorizeKeyToVerse) Reset()         { *m = MsgAuthorizeKeyToVerse{} }
+func (m *MsgAuthorizeKeyToVerse) String() string { return proto.CompactTextString(m) }
+func (*MsgAuthorizeKeyToVerse) ProtoMessage()    {}
+func (*MsgAuthorizeKeyToVerse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{10}
+}
+func (m *MsgAuthorizeKeyToVerse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAuthorizeKeyToVerse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAuthorizeKeyToVerse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAuthorizeKeyToVerse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAuthorizeKeyToVerse.Merge(m, src)
+}
+func (m *MsgAuthorizeKeyToVerse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAuthorizeKeyToVerse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAuthorizeKeyToVerse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAuthorizeKeyToVerse proto.InternalMessageInfo
+
+func (m *MsgAuthorizeKeyToVerse) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgAuthorizeKeyToVerse) GetVerseName() string {
+	if m != nil {
+		return m.VerseName
+	}
+	return ""
+}
+
+func (m *MsgAuthorizeKeyToVerse) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+type MsgAuthorizeKeyToVerseResponse struct {
+}
+
+func (m *MsgAuthorizeKeyToVerseResponse) Reset()         { *m = MsgAuthorizeKeyToVerseResponse{} }
+func (m *MsgAuthorizeKeyToVerseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAuthorizeKeyToVerseResponse) ProtoMessage()    {}
+func (*MsgAuthorizeKeyToVerseResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{11}
+}
+func (m *MsgAuthorizeKeyToVerseResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAuthorizeKeyToVerseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAuthorizeKeyToVerseResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAuthorizeKeyToVerseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAuthorizeKeyToVerseResponse.Merge(m, src)
+}
+func (m *MsgAuthorizeKeyToVerseResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAuthorizeKeyToVerseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAuthorizeKeyToVerseResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAuthorizeKeyToVerseResponse proto.InternalMessageInfo
+
+type MsgDeauthorizeKeyToVerse struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	VerseName string `protobuf:"bytes,2,opt,name=verse_name,json=verseName,proto3" json:"verse_name,omitempty"`
+	Address   string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+}
+
+func (m *MsgDeauthorizeKeyToVerse) Reset()         { *m = MsgDeauthorizeKeyToVerse{} }
+func (m *MsgDeauthorizeKeyToVerse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeauthorizeKeyToVerse) ProtoMessage()    {}
+func (*MsgDeauthorizeKeyToVerse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{12}
+}
+func (m *MsgDeauthorizeKeyToVerse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeauthorizeKeyToVerse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeauthorizeKeyToVerse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeauthorizeKeyToVerse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeauthorizeKeyToVerse.Merge(m, src)
+}
+func (m *MsgDeauthorizeKeyToVerse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeauthorizeKeyToVerse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeauthorizeKeyToVerse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeauthorizeKeyToVerse proto.InternalMessageInfo
+
+func (m *MsgDeauthorizeKeyToVerse) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgDeauthorizeKeyToVerse) GetVerseName() string {
+	if m != nil {
+		return m.VerseName
+	}
+	return ""
+}
+
+func (m *MsgDeauthorizeKeyToVerse) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+type MsgDeauthorizeKeyToVerseResponse struct {
+}
+
+func (m *MsgDeauthorizeKeyToVerseResponse) Reset()         { *m = MsgDeauthorizeKeyToVerseResponse{} }
+func (m *MsgDeauthorizeKeyToVerseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeauthorizeKeyToVerseResponse) ProtoMessage()    {}
+func (*MsgDeauthorizeKeyToVerseResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_61a919e3cd847515, []int{13}
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeauthorizeKeyToVerseResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeauthorizeKeyToVerseResponse.Merge(m, src)
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeauthorizeKeyToVerseResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeauthorizeKeyToVerseResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgCreateVerse)(nil), "imversed.xverse.MsgCreateVerse")
 	proto.RegisterType((*MsgCreateVerseResponse)(nil), "imversed.xverse.MsgCreateVerseResponse")
@@ -468,42 +756,56 @@ func init() {
 	proto.RegisterType((*MsgRenameVerseResponse)(nil), "imversed.xverse.MsgRenameVerseResponse")
 	proto.RegisterType((*MsgRemoveAssetFromVerse)(nil), "imversed.xverse.MsgRemoveAssetFromVerse")
 	proto.RegisterType((*MsgRemoveAssetFromVerseResponse)(nil), "imversed.xverse.MsgRemoveAssetFromVerseResponse")
+	proto.RegisterType((*MsgAddOracleToVerse)(nil), "imversed.xverse.MsgAddOracleToVerse")
+	proto.RegisterType((*MsgAddOracleToVerseResponse)(nil), "imversed.xverse.MsgAddOracleToVerseResponse")
+	proto.RegisterType((*MsgAuthorizeKeyToVerse)(nil), "imversed.xverse.MsgAuthorizeKeyToVerse")
+	proto.RegisterType((*MsgAuthorizeKeyToVerseResponse)(nil), "imversed.xverse.MsgAuthorizeKeyToVerseResponse")
+	proto.RegisterType((*MsgDeauthorizeKeyToVerse)(nil), "imversed.xverse.MsgDeauthorizeKeyToVerse")
+	proto.RegisterType((*MsgDeauthorizeKeyToVerseResponse)(nil), "imversed.xverse.MsgDeauthorizeKeyToVerseResponse")
 }
 
 func init() { proto.RegisterFile("xverse/tx.proto", fileDescriptor_61a919e3cd847515) }
 
 var fileDescriptor_61a919e3cd847515 = []byte{
-	// 471 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x94, 0x4f, 0x6e, 0xd3, 0x40,
-	0x14, 0xc6, 0x33, 0x4d, 0x1a, 0xc8, 0x0b, 0x34, 0xd2, 0x08, 0x15, 0x13, 0x81, 0x53, 0x52, 0x24,
-	0x2a, 0x55, 0x72, 0x10, 0x9c, 0xa0, 0x54, 0x20, 0xb1, 0x48, 0x91, 0xa2, 0x8a, 0x4a, 0x2c, 0xa8,
-	0x5c, 0xcf, 0x93, 0xb1, 0x54, 0x7b, 0xac, 0x19, 0xd3, 0x26, 0xb7, 0xe8, 0x96, 0x53, 0x70, 0x0d,
-	0x76, 0x74, 0xc9, 0x12, 0x25, 0x17, 0x41, 0x7e, 0x63, 0x1b, 0x27, 0x19, 0x4a, 0x77, 0xec, 0xec,
-	0xef, 0xfb, 0xe5, 0xfd, 0x8f, 0xa1, 0x37, 0xbd, 0x40, 0xa5, 0x71, 0x94, 0x4d, 0xbd, 0x54, 0xc9,
-	0x4c, 0xf2, 0x5e, 0x14, 0x93, 0x22, 0x3c, 0xe3, 0x0c, 0x3f, 0xc1, 0xd6, 0x58, 0x87, 0x87, 0x0a,
-	0xfd, 0x0c, 0x3f, 0xe4, 0x0a, 0xdf, 0x86, 0xb6, 0xc6, 0x44, 0xa0, 0x72, 0xd8, 0x0e, 0xdb, 0xeb,
-	0x4c, 0x8a, 0x37, 0xce, 0xa1, 0x15, 0x05, 0x32, 0x71, 0x9a, 0xa4, 0xd2, 0x33, 0xdf, 0x81, 0xae,
-	0x40, 0x1d, 0xa8, 0x28, 0xcd, 0x22, 0x99, 0x38, 0x2d, 0xb2, 0xea, 0xd2, 0xd0, 0x81, 0xed, 0xe5,
-	0xf8, 0x13, 0xd4, 0xa9, 0x4c, 0x34, 0x0e, 0x7f, 0x30, 0xe0, 0x63, 0x1d, 0x1e, 0x08, 0x71, 0xa0,
-	0x35, 0x66, 0xc7, 0xf2, 0xe6, 0xf4, 0x4f, 0x00, 0xa8, 0xe2, 0xd3, 0xc4, 0x8f, 0xd1, 0xd9, 0x20,
-	0xaf, 0x43, 0xca, 0x91, 0x1f, 0x63, 0x6e, 0xfb, 0x79, 0x98, 0xd3, 0x6c, 0x96, 0x62, 0x51, 0x63,
-	0x87, 0x94, 0xe3, 0x59, 0x8a, 0xfc, 0x11, 0xdc, 0x35, 0x76, 0x24, 0x8a, 0x2a, 0xef, 0xd0, 0xfb,
-	0x3b, 0xc1, 0x77, 0xe1, 0xbe, 0xb1, 0x82, 0xbc, 0x48, 0xa9, 0x9c, 0x4d, 0xf2, 0xef, 0x91, 0x78,
-	0x68, 0xb4, 0x1c, 0x32, 0xd9, 0x4b, 0xa8, 0x6d, 0x20, 0x12, 0x0b, 0x68, 0xf8, 0x18, 0xfa, 0xeb,
-	0x0d, 0x55, 0xfd, 0x7e, 0x65, 0x34, 0xea, 0x09, 0xe6, 0x0d, 0xdc, 0xdc, 0xeb, 0x5a, 0xb6, 0x8d,
-	0xf5, 0x6c, 0xfc, 0x19, 0x6c, 0x19, 0x48, 0x9e, 0x0b, 0x33, 0x94, 0x66, 0x8d, 0x7a, 0x7f, 0x2e,
-	0x68, 0x2e, 0x15, 0x95, 0xe0, 0xa5, 0xa1, 0x5a, 0x35, 0xea, 0x08, 0x2f, 0x73, 0xaa, 0xd8, 0x52,
-	0xad, 0xb4, 0xaa, 0xea, 0x6f, 0x0c, 0x1e, 0x92, 0x15, 0xcb, 0x0b, 0xa4, 0xbe, 0xde, 0x2a, 0x19,
-	0xff, 0xbf, 0x55, 0x2d, 0xcf, 0x65, 0xd3, 0xb2, 0x85, 0xa7, 0x30, 0xf8, 0x4b, 0xc1, 0x65, 0x53,
-	0x2f, 0xaf, 0x9a, 0xd0, 0x1c, 0xeb, 0x90, 0x9f, 0x40, 0xb7, 0x7e, 0xf9, 0x03, 0x6f, 0xe5, 0xdf,
-	0xe1, 0x2d, 0x9f, 0x6e, 0xff, 0xf9, 0x3f, 0x80, 0x32, 0x01, 0x0f, 0xa0, 0xb7, 0x7a, 0xd7, 0xbb,
-	0xb6, 0xdf, 0xae, 0x40, 0xfd, 0xfd, 0x5b, 0x40, 0x55, 0x12, 0x05, 0x0f, 0xac, 0x6b, 0xd9, 0xb3,
-	0x05, 0xb1, 0x91, 0xfd, 0x17, 0xb7, 0x25, 0xab, 0x9c, 0x27, 0xd0, 0xad, 0x1f, 0xf0, 0xc0, 0x1e,
-	0xa0, 0x02, 0xec, 0x13, 0xb3, 0xdc, 0xd9, 0xeb, 0x37, 0xdf, 0xe7, 0x2e, 0xbb, 0x9e, 0xbb, 0xec,
-	0xd7, 0xdc, 0x65, 0x57, 0x0b, 0xb7, 0x71, 0xbd, 0x70, 0x1b, 0x3f, 0x17, 0x6e, 0xe3, 0xe3, 0x7e,
-	0x18, 0x65, 0x9f, 0xbf, 0x9c, 0x79, 0x81, 0x8c, 0x47, 0x65, 0xb0, 0x3f, 0x0f, 0xd3, 0x51, 0xf9,
-	0x89, 0x9b, 0xa5, 0xa8, 0xcf, 0xda, 0xf4, 0x99, 0x7b, 0xf5, 0x3b, 0x00, 0x00, 0xff, 0xff, 0xdd,
-	0xaf, 0xa1, 0x1f, 0xf9, 0x04, 0x00, 0x00,
+	// 601 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x95, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xc7, 0xe3, 0xe6, 0xa3, 0x64, 0x02, 0x0d, 0xda, 0x42, 0x30, 0x86, 0x3a, 0xc1, 0xad, 0x44,
+	0x51, 0x51, 0xc2, 0xc7, 0x13, 0x84, 0x02, 0x12, 0x42, 0x69, 0xa5, 0xa8, 0xa2, 0x12, 0x07, 0x2a,
+	0xd7, 0x3b, 0xa4, 0x16, 0xb1, 0xd7, 0xf2, 0x3a, 0x6d, 0xc2, 0x53, 0x70, 0xe5, 0x29, 0x78, 0x0d,
+	0x6e, 0xf4, 0xc8, 0xb1, 0x4a, 0x5e, 0x04, 0x79, 0xfd, 0x81, 0x93, 0x6c, 0x4a, 0xa4, 0x4a, 0xf4,
+	0x96, 0x9d, 0xf9, 0x65, 0xfe, 0xff, 0x99, 0xb5, 0xc7, 0x50, 0x1d, 0x9e, 0xa2, 0xcf, 0xb1, 0x15,
+	0x0c, 0x9b, 0x9e, 0xcf, 0x02, 0x46, 0xaa, 0xb6, 0x23, 0x22, 0xb4, 0x19, 0x65, 0x8c, 0x4f, 0xb0,
+	0xd6, 0xe1, 0xbd, 0x5d, 0x1f, 0xcd, 0x00, 0x3f, 0x84, 0x11, 0x52, 0x83, 0x12, 0x47, 0x97, 0xa2,
+	0xaf, 0x2a, 0x0d, 0x65, 0xbb, 0xdc, 0x8d, 0x4f, 0x84, 0x40, 0xc1, 0xb6, 0x98, 0xab, 0xe6, 0x45,
+	0x54, 0xfc, 0x26, 0x0d, 0xa8, 0x50, 0xe4, 0x96, 0x6f, 0x7b, 0x81, 0xcd, 0x5c, 0xb5, 0x20, 0x52,
+	0xd9, 0x90, 0xa1, 0x42, 0x6d, 0xba, 0x7e, 0x17, 0xb9, 0xc7, 0x5c, 0x8e, 0xc6, 0x2f, 0x05, 0x48,
+	0x87, 0xf7, 0xda, 0x94, 0xb6, 0x39, 0xc7, 0xe0, 0x80, 0x5d, 0x2e, 0xbf, 0x01, 0x20, 0x1c, 0x1f,
+	0xb9, 0xa6, 0x83, 0xea, 0x8a, 0xc8, 0x95, 0x45, 0x64, 0xcf, 0x74, 0x30, 0x4c, 0x9b, 0x61, 0x99,
+	0xa3, 0x60, 0xe4, 0x61, 0xec, 0xb1, 0x2c, 0x22, 0x07, 0x23, 0x0f, 0xc9, 0x7d, 0xb8, 0x11, 0xa5,
+	0x6d, 0x1a, 0xbb, 0x5c, 0x15, 0xe7, 0x77, 0x94, 0x6c, 0xc2, 0xad, 0x28, 0x65, 0x85, 0x26, 0x99,
+	0xaf, 0x16, 0x45, 0xfe, 0xa6, 0x08, 0xee, 0x46, 0xb1, 0x10, 0x8a, 0xd4, 0x13, 0xa8, 0x14, 0x41,
+	0x22, 0x18, 0x43, 0xc6, 0x43, 0xd0, 0xe6, 0x1b, 0x4a, 0xfb, 0xfd, 0xae, 0x88, 0x51, 0x77, 0x31,
+	0x6c, 0xe0, 0xf2, 0x5e, 0xe7, 0xd4, 0x56, 0xe6, 0xd5, 0xc8, 0x16, 0xac, 0x45, 0x10, 0xeb, 0xd3,
+	0x68, 0x28, 0xf9, 0x0c, 0xb5, 0xdf, 0xa7, 0x62, 0x2e, 0x29, 0xe5, 0xe2, 0x59, 0x44, 0x15, 0x32,
+	0xd4, 0x1e, 0x9e, 0x85, 0x54, 0x7c, 0x4b, 0x19, 0x6b, 0xa9, 0xeb, 0x1f, 0x0a, 0xdc, 0x13, 0x29,
+	0x87, 0x9d, 0xa2, 0xe8, 0xeb, 0xad, 0xcf, 0x9c, 0xeb, 0xbb, 0xaa, 0xe9, 0xb9, 0x14, 0x25, 0xb7,
+	0xf0, 0x08, 0xea, 0x0b, 0x0c, 0xa7, 0x4d, 0x51, 0x58, 0x8f, 0x2e, 0x6a, 0xdf, 0x37, 0xad, 0x3e,
+	0x5e, 0xf1, 0xd1, 0xab, 0x41, 0x89, 0x89, 0x3a, 0x71, 0x2f, 0xf1, 0xc9, 0xd8, 0x80, 0x07, 0x12,
+	0x95, 0xd4, 0x84, 0x2d, 0x66, 0xde, 0x1e, 0x04, 0x27, 0xcc, 0xb7, 0xbf, 0xe2, 0x7b, 0x1c, 0x5d,
+	0xd1, 0x87, 0x0a, 0xab, 0x26, 0xa5, 0x3e, 0x72, 0x1e, 0x1b, 0x49, 0x8e, 0x46, 0x03, 0x74, 0xb9,
+	0x54, 0x6a, 0xe6, 0x0b, 0xa8, 0x1d, 0xde, 0x7b, 0x8d, 0xe6, 0xff, 0xb0, 0x63, 0x40, 0x63, 0x91,
+	0x58, 0x62, 0xe8, 0xc5, 0x45, 0x11, 0xf2, 0x1d, 0xde, 0x23, 0x87, 0x50, 0xc9, 0x2e, 0xa7, 0x7a,
+	0x73, 0x66, 0x81, 0x35, 0xa7, 0xb7, 0x8b, 0xf6, 0xf8, 0x1f, 0x40, 0x22, 0x40, 0x2c, 0xa8, 0xce,
+	0xae, 0x9e, 0x4d, 0xd9, 0x7f, 0x67, 0x20, 0x6d, 0x67, 0x09, 0x28, 0x15, 0xf1, 0xe1, 0x8e, 0xf4,
+	0xcd, 0xd9, 0x96, 0x15, 0x91, 0x91, 0xda, 0xb3, 0x65, 0xc9, 0x54, 0xf3, 0x10, 0x2a, 0xd9, 0x1d,
+	0x53, 0x97, 0x17, 0x48, 0x01, 0xf9, 0xc4, 0x24, 0xab, 0x80, 0x7c, 0x86, 0xdb, 0x73, 0xaf, 0xcc,
+	0xd6, 0x82, 0x69, 0x4c, 0x51, 0xda, 0xd3, 0x65, 0xa8, 0x54, 0x87, 0xc1, 0xba, 0xec, 0xad, 0x90,
+	0xfa, 0x94, 0x80, 0x5a, 0x6b, 0x49, 0x30, 0x15, 0x1c, 0xc0, 0x5d, 0xf9, 0x93, 0xff, 0x44, 0x56,
+	0x49, 0x8a, 0x6a, 0xcf, 0x97, 0x46, 0x13, 0xd9, 0x57, 0x6f, 0x7e, 0x8e, 0x75, 0xe5, 0x7c, 0xac,
+	0x2b, 0x17, 0x63, 0x5d, 0xf9, 0x36, 0xd1, 0x73, 0xe7, 0x13, 0x3d, 0xf7, 0x7b, 0xa2, 0xe7, 0x3e,
+	0xee, 0xf4, 0xec, 0xe0, 0x64, 0x70, 0xdc, 0xb4, 0x98, 0xd3, 0x4a, 0xca, 0xfe, 0xfd, 0x31, 0x6c,
+	0x25, 0x5f, 0xf5, 0x91, 0x87, 0xfc, 0xb8, 0x24, 0xbe, 0xec, 0x2f, 0xff, 0x04, 0x00, 0x00, 0xff,
+	0xff, 0x10, 0xce, 0x79, 0x81, 0xec, 0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -523,6 +825,9 @@ type MsgClient interface {
 	AddAssetToVerse(ctx context.Context, in *MsgAddAssetToVerse, opts ...grpc.CallOption) (*MsgAddAssetToVerseResponse, error)
 	RemoveAssetFromVerse(ctx context.Context, in *MsgRemoveAssetFromVerse, opts ...grpc.CallOption) (*MsgRemoveAssetFromVerseResponse, error)
 	RenameVerse(ctx context.Context, in *MsgRenameVerse, opts ...grpc.CallOption) (*MsgRenameVerseResponse, error)
+	AddOracleToVerse(ctx context.Context, in *MsgAddOracleToVerse, opts ...grpc.CallOption) (*MsgAddOracleToVerseResponse, error)
+	AuthorizeKeyToVerse(ctx context.Context, in *MsgAuthorizeKeyToVerse, opts ...grpc.CallOption) (*MsgAuthorizeKeyToVerseResponse, error)
+	DeauthorizeKeyToVerse(ctx context.Context, in *MsgDeauthorizeKeyToVerse, opts ...grpc.CallOption) (*MsgDeauthorizeKeyToVerseResponse, error)
 }
 
 type msgClient struct {
@@ -569,6 +874,33 @@ func (c *msgClient) RenameVerse(ctx context.Context, in *MsgRenameVerse, opts ..
 	return out, nil
 }
 
+func (c *msgClient) AddOracleToVerse(ctx context.Context, in *MsgAddOracleToVerse, opts ...grpc.CallOption) (*MsgAddOracleToVerseResponse, error) {
+	out := new(MsgAddOracleToVerseResponse)
+	err := c.cc.Invoke(ctx, "/imversed.xverse.Msg/AddOracleToVerse", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AuthorizeKeyToVerse(ctx context.Context, in *MsgAuthorizeKeyToVerse, opts ...grpc.CallOption) (*MsgAuthorizeKeyToVerseResponse, error) {
+	out := new(MsgAuthorizeKeyToVerseResponse)
+	err := c.cc.Invoke(ctx, "/imversed.xverse.Msg/AuthorizeKeyToVerse", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeauthorizeKeyToVerse(ctx context.Context, in *MsgDeauthorizeKeyToVerse, opts ...grpc.CallOption) (*MsgDeauthorizeKeyToVerseResponse, error) {
+	out := new(MsgDeauthorizeKeyToVerseResponse)
+	err := c.cc.Invoke(ctx, "/imversed.xverse.Msg/DeauthorizeKeyToVerse", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreateVerse(context.Context, *MsgCreateVerse) (*MsgCreateVerseResponse, error)
@@ -576,6 +908,9 @@ type MsgServer interface {
 	AddAssetToVerse(context.Context, *MsgAddAssetToVerse) (*MsgAddAssetToVerseResponse, error)
 	RemoveAssetFromVerse(context.Context, *MsgRemoveAssetFromVerse) (*MsgRemoveAssetFromVerseResponse, error)
 	RenameVerse(context.Context, *MsgRenameVerse) (*MsgRenameVerseResponse, error)
+	AddOracleToVerse(context.Context, *MsgAddOracleToVerse) (*MsgAddOracleToVerseResponse, error)
+	AuthorizeKeyToVerse(context.Context, *MsgAuthorizeKeyToVerse) (*MsgAuthorizeKeyToVerseResponse, error)
+	DeauthorizeKeyToVerse(context.Context, *MsgDeauthorizeKeyToVerse) (*MsgDeauthorizeKeyToVerseResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -593,6 +928,15 @@ func (*UnimplementedMsgServer) RemoveAssetFromVerse(ctx context.Context, req *Ms
 }
 func (*UnimplementedMsgServer) RenameVerse(ctx context.Context, req *MsgRenameVerse) (*MsgRenameVerseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenameVerse not implemented")
+}
+func (*UnimplementedMsgServer) AddOracleToVerse(ctx context.Context, req *MsgAddOracleToVerse) (*MsgAddOracleToVerseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddOracleToVerse not implemented")
+}
+func (*UnimplementedMsgServer) AuthorizeKeyToVerse(ctx context.Context, req *MsgAuthorizeKeyToVerse) (*MsgAuthorizeKeyToVerseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthorizeKeyToVerse not implemented")
+}
+func (*UnimplementedMsgServer) DeauthorizeKeyToVerse(ctx context.Context, req *MsgDeauthorizeKeyToVerse) (*MsgDeauthorizeKeyToVerseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeauthorizeKeyToVerse not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -671,6 +1015,60 @@ func _Msg_RenameVerse_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_AddOracleToVerse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddOracleToVerse)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddOracleToVerse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/imversed.xverse.Msg/AddOracleToVerse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddOracleToVerse(ctx, req.(*MsgAddOracleToVerse))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AuthorizeKeyToVerse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAuthorizeKeyToVerse)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AuthorizeKeyToVerse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/imversed.xverse.Msg/AuthorizeKeyToVerse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AuthorizeKeyToVerse(ctx, req.(*MsgAuthorizeKeyToVerse))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeauthorizeKeyToVerse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeauthorizeKeyToVerse)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeauthorizeKeyToVerse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/imversed.xverse.Msg/DeauthorizeKeyToVerse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeauthorizeKeyToVerse(ctx, req.(*MsgDeauthorizeKeyToVerse))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "imversed.xverse.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -690,6 +1088,18 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenameVerse",
 			Handler:    _Msg_RenameVerse_Handler,
+		},
+		{
+			MethodName: "AddOracleToVerse",
+			Handler:    _Msg_AddOracleToVerse_Handler,
+		},
+		{
+			MethodName: "AuthorizeKeyToVerse",
+			Handler:    _Msg_AuthorizeKeyToVerse_Handler,
+		},
+		{
+			MethodName: "DeauthorizeKeyToVerse",
+			Handler:    _Msg_DeauthorizeKeyToVerse_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1006,6 +1416,207 @@ func (m *MsgRemoveAssetFromVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgAddOracleToVerse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddOracleToVerse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddOracleToVerse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Oracle) > 0 {
+		i -= len(m.Oracle)
+		copy(dAtA[i:], m.Oracle)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Oracle)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VerseName) > 0 {
+		i -= len(m.VerseName)
+		copy(dAtA[i:], m.VerseName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAddOracleToVerseResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddOracleToVerseResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddOracleToVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAuthorizeKeyToVerse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAuthorizeKeyToVerse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAuthorizeKeyToVerse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VerseName) > 0 {
+		i -= len(m.VerseName)
+		copy(dAtA[i:], m.VerseName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAuthorizeKeyToVerseResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAuthorizeKeyToVerseResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAuthorizeKeyToVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeauthorizeKeyToVerse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeauthorizeKeyToVerse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeauthorizeKeyToVerse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VerseName) > 0 {
+		i -= len(m.VerseName)
+		copy(dAtA[i:], m.VerseName)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.VerseName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeauthorizeKeyToVerseResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeauthorizeKeyToVerseResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeauthorizeKeyToVerseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -1153,6 +1764,96 @@ func (m *MsgRemoveAssetFromVerse) Size() (n int) {
 }
 
 func (m *MsgRemoveAssetFromVerseResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgAddOracleToVerse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Oracle)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAddOracleToVerseResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgAuthorizeKeyToVerse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAuthorizeKeyToVerseResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgDeauthorizeKeyToVerse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.VerseName)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgDeauthorizeKeyToVerseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2120,6 +2821,594 @@ func (m *MsgRemoveAssetFromVerseResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgRemoveAssetFromVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAddOracleToVerse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddOracleToVerse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddOracleToVerse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Oracle", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Oracle = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAddOracleToVerseResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddOracleToVerseResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddOracleToVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAuthorizeKeyToVerse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAuthorizeKeyToVerse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAuthorizeKeyToVerse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAuthorizeKeyToVerseResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAuthorizeKeyToVerseResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAuthorizeKeyToVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeauthorizeKeyToVerse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeauthorizeKeyToVerse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeauthorizeKeyToVerse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerseName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerseName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeauthorizeKeyToVerseResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeauthorizeKeyToVerseResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeauthorizeKeyToVerseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
