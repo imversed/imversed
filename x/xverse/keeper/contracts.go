@@ -5,17 +5,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/imversed/imversed/x/xverse/types"
-	"strings"
 )
 
 func (k Keeper) HasContract(ctx sdk.Context, contract types.Contract) bool {
-	contract.Hash = strings.ToLower(contract.Hash)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixContract)
 	return store.Has(types.ContractKey(contract.Hash))
 }
 
 func (k Keeper) SetContract(ctx sdk.Context, contract types.Contract) error {
-	contract.Hash = strings.ToLower(contract.Hash)
 	if k.HasContract(ctx, contract) {
 		return sdkerrors.Wrapf(types.ErrContractAlreadyMapped, "contract with hash %s has already mapped to verse", contract.Hash)
 	}
@@ -28,7 +25,6 @@ func (k Keeper) SetContract(ctx sdk.Context, contract types.Contract) error {
 }
 
 func (k Keeper) GetContract(ctx sdk.Context, hash string) (val types.Contract, found bool) {
-	hash = strings.ToLower(hash)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefixContract)
 
 	b := store.Get(types.ContractKey(hash))
@@ -43,7 +39,6 @@ func (k Keeper) GetContract(ctx sdk.Context, hash string) (val types.Contract, f
 // removeContract removes mapping for contract <-> verse pair.
 // Must be used only in RemoveAsset method
 func (k Keeper) removeContract(ctx sdk.Context, hash string) error {
-	hash = strings.ToLower(hash)
 	if _, found := k.GetContract(ctx, hash); !found {
 		return sdkerrors.Wrapf(types.ErrContractNotFound, "contract with hash %s was not mapped", hash)
 	}

@@ -1,6 +1,9 @@
 package types
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"strings"
+)
 
 var _ binary.ByteOrder
 
@@ -44,6 +47,7 @@ func VerseKey(
 func ContractKey(
 	hash string,
 ) []byte {
+	hash = strings.ToLower(hash)
 	var key []byte
 
 	hashBytes := []byte(hash)
