@@ -22,6 +22,8 @@ const (
 	TypeMsgAddOracleToVerse     = "add_oracle_to_verse"
 	TypeAuthorizeKeyToVerse     = "authorize_key_to_verse"
 	TypeDeauthorizeKeyToVerse   = "deauthorize_key_to_verse"
+	TypeUpdateIcon              = "update_icon"
+	TypeUpdateDescription       = "update_description"
 	NameLength                  = 50
 	NameRegex                   = "^[A-Za-z0-9]*$"
 	DescriptionLength           = 2000
@@ -273,7 +275,7 @@ func (msg *MsgAddOracleToVerse) ValidateBasic() error {
 
 	_, err = sdk.AccAddressFromBech32(msg.Oracle)
 	if err != nil {
-		return sdkerrors.Wrap(err, "invalid sender address")
+		return sdkerrors.Wrap(err, "invalid oracle address")
 	}
 
 	return nil
@@ -312,7 +314,7 @@ func (msg *MsgAuthorizeKeyToVerse) ValidateBasic() error {
 
 	_, err = sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
-		return sdkerrors.Wrap(err, "invalid sender address")
+		return sdkerrors.Wrap(err, "invalid key address")
 	}
 	return nil
 }
@@ -350,7 +352,7 @@ func (msg *MsgDeauthorizeKeyToVerse) ValidateBasic() error {
 
 	_, err = sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
-		return sdkerrors.Wrap(err, "invalid sender address")
+		return sdkerrors.Wrap(err, "invalid key address")
 	}
 	return nil
 }
@@ -362,6 +364,73 @@ func (msg *MsgDeauthorizeKeyToVerse) GetSignBytes() []byte {
 
 // GetSigners defines whose signature is required
 func (msg *MsgDeauthorizeKeyToVerse) GetSigners() []sdk.AccAddress {
+	var signers []sdk.AccAddress
+
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+	signers = append(signers, addr)
+
+	return signers
+}
+
+// Route should return the name of the module
+func (msg *MsgUpdateVerseIcon) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg *MsgUpdateVerseIcon) Type() string { return TypeUpdateIcon }
+
+// ValidateBasic runs stateless checks on the message
+func (msg *MsgUpdateVerseIcon) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgUpdateVerseIcon) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg *MsgUpdateVerseIcon) GetSigners() []sdk.AccAddress {
+	var signers []sdk.AccAddress
+
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+	signers = append(signers, addr)
+
+	return signers
+}
+
+// Route should return the name of the module
+func (msg *MsgUpdateVerseDescription) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg *MsgUpdateVerseDescription) Type() string { return TypeUpdateDescription }
+
+// ValidateBasic runs stateless checks on the message
+func (msg *MsgUpdateVerseDescription) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgUpdateVerseDescription) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg *MsgUpdateVerseDescription) GetSigners() []sdk.AccAddress {
 	var signers []sdk.AccAddress
 
 	addr, err := sdk.AccAddressFromBech32(msg.Sender)
