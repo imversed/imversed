@@ -247,3 +247,53 @@ func (k Keeper) DeauthorizeKeyToVerse(
 
 	return &types.MsgDeauthorizeKeyToVerseResponse{}, nil
 }
+
+func (k Keeper) UpdateVerseIcon(
+	goCtx context.Context,
+	msg *types.MsgUpdateVerseIcon,
+) (*types.MsgUpdateVerseIconResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msg.VerseName)
+
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseName)
+	}
+
+	if verse.Owner != msg.GetSigners()[0].String() {
+		return nil, status.Error(codes.Unauthenticated, "sender has not authorized to add keys")
+	}
+
+	verse.Icon = msg.Icon
+
+	err := k.UpdateVerse(ctx, verse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgUpdateVerseIconResponse{}, nil
+}
+
+func (k Keeper) UpdateVerseDescription(
+	goCtx context.Context,
+	msg *types.MsgUpdateVerseDescription,
+) (*types.MsgUpdateVerseDescriptionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msg.VerseName)
+
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msg.VerseName)
+	}
+
+	if verse.Owner != msg.GetSigners()[0].String() {
+		return nil, status.Error(codes.Unauthenticated, "sender has not authorized to add keys")
+	}
+
+	verse.Description = msg.Description
+
+	err := k.UpdateVerse(ctx, verse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgUpdateVerseDescriptionResponse{}, nil
+}

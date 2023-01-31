@@ -370,3 +370,67 @@ func RemoveKeyFromVerse() *cobra.Command {
 	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
+
+// UpdateVerseIcon update verse icon
+func UpdateVerseIcon() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-icon [icon] [verse_name]",
+		Short: "Update verse icon",
+		Long:  "Update verse icon",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			msg := &types.MsgUpdateVerseIcon{
+				Sender:    sender.String(),
+				VerseName: args[1],
+				Icon:      args[0],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// UpdateVerseDescription update verse description
+func UpdateVerseDescription() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-description [description] [verse_name]",
+		Short: "Update verse description",
+		Long:  "Update verse description",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			msg := &types.MsgUpdateVerseDescription{
+				Sender:      sender.String(),
+				VerseName:   args[1],
+				Description: args[0],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
