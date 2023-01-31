@@ -19,6 +19,12 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
 		&MsgCreateVerse{},
+		&MsgRenameVerse{},
+		&MsgAddAssetToVerse{},
+		&MsgRemoveAssetFromVerse{},
+		&MsgAddOracleToVerse{},
+		&MsgUpdateVerseDescription{},
+		&MsgUpdateVerseIcon{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

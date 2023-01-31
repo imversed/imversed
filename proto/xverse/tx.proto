@@ -20,6 +20,10 @@ service Msg {
   rpc AuthorizeKeyToVerse(MsgAuthorizeKeyToVerse) returns (MsgAuthorizeKeyToVerseResponse);
 
   rpc DeauthorizeKeyToVerse(MsgDeauthorizeKeyToVerse) returns (MsgDeauthorizeKeyToVerseResponse);
+
+  rpc UpdateVerseIcon(MsgUpdateVerseIcon) returns (MsgUpdateVerseIconResponse);
+
+  rpc UpdateVerseDescription(MsgUpdateVerseDescription) returns (MsgUpdateVerseDescriptionResponse);
 }
 
 message MsgCreateVerse {
@@ -109,5 +113,27 @@ message MsgDeauthorizeKeyToVerse {
 }
 
 message MsgDeauthorizeKeyToVerseResponse {
+}
+
+message MsgUpdateVerseIcon {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string icon = 3;
+}
+
+message MsgUpdateVerseDescription {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string description = 4;
+}
+
+message MsgUpdateVerseDescriptionResponse {
+}
+
+message MsgUpdateVerseIconResponse {
 }
 // this line is used by starport scaffolding # proto/tx/message
