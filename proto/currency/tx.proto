@@ -12,6 +12,7 @@ option go_package = "github.com/imversed/imversed/x/currency/types";
 service Msg {
   rpc Issue(MsgIssue) returns (MsgIssueResponse);
   rpc Mint(MsgMint) returns (MsgMintResponse);
+  rpc Burn(MsgBurn) returns (MsgBurnResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -30,6 +31,14 @@ message MsgMint {
 }
 
 message MsgMintResponse {
+}
+
+message MsgBurn {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false, (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+}
+
+message MsgBurnResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

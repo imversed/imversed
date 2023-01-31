@@ -214,6 +214,7 @@ var (
 	allowedReceivingModAcc = map[string]bool{
 		distrtypes.ModuleName: true,
 		infrtypes.ModuleName:  true,
+		govtypes.ModuleName:   true,
 	}
 )
 

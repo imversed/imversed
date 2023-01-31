@@ -56,3 +56,22 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 
 	return &types.MsgMintResponse{}, nil
 }
+
+func (m msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBurnResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := m.Keeper.Burn(ctx, msg.Coin, sender); err != nil {
+		return nil, err
+	}
+
+	if err := ctx.EventManager().EmitTypedEvents(msg); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgBurnResponse{}, nil
+}
