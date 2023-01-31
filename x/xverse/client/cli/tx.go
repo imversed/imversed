@@ -31,6 +31,8 @@ func NewTxCmd() *cobra.Command {
 		AddOracleToVerse(),
 		AddKeyToVerse(),
 		RemoveKeyFromVerse(),
+		UpdateVerseDescription(),
+		UpdateVerseIcon(),
 	)
 	return txCmd
 }
