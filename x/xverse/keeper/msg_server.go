@@ -22,7 +22,19 @@ func (k Keeper) CreateVerse(
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	uuid.SetRand(k.rnd)
+
 	verse := types.Verse{Owner: msg.Sender, Name: uuid.NewString(), Icon: msg.Icon, Description: msg.Description}
+
+	found := k.HasVerse(ctx, verse)
+
+	for i := 0; i < 100 && found; i++ {
+		verse.Name = uuid.NewString()
+		found = k.HasVerse(ctx, verse)
+	}
+
+	if found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseAlreadyExists, "failed to create verse after 100 times", verse.Name)
+	}
 
 	err := k.SetVerse(ctx, verse)
 
