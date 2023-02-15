@@ -104,3 +104,31 @@ func (k Keeper) MigrationAddIcon(ctx sdk.Context) error {
 	}
 	return nil
 }
+
+func (k Keeper) Burn(ctx sdk.Context, coin sdk.Coin, owner sdk.AccAddress) error {
+	denom := coin.Denom
+	currency, found := k.GetCurrency(ctx, denom)
+	if !found {
+		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "currency with denom %s does not exists", denom)
+	}
+
+	expected, err := sdk.AccAddressFromBech32(currency.Owner)
+	if err != nil {
+		return err
+	}
+
+	if !owner.Equals(expected) {
+		return sdkerrors.Wrapf(types.ErrInvalidCurrency, "sender is not owner")
+	}
+
+	coins := sdk.NewCoins(coin)
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, owner, types.ModuleName, coins); err != nil {
+		return err
+	}
+
+	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, coins); err != nil {
+		return err
+	}
+
+	return nil
+}
