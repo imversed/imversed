@@ -11,6 +11,8 @@ import (
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	ethermint "github.com/evmos/ethermint/types"
 	"github.com/evmos/ethermint/x/evm/types"
+
+	imvtypes "github.com/imversed/imversed/types"
 )
 
 // NewDynamicFeeChecker returns a `TxFeeChecker` that applies a dynamic fee to
@@ -34,7 +36,9 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 		}
 
 		params := k.GetParams(ctx)
-		denom := params.EvmDenom
+		denomEvm := params.EvmDenom
+		denomImv := imvtypes.DefaultBondDenom
+		denomRes := denomEvm
 		ethCfg := params.ChainConfig.EthereumConfig(k.ChainID())
 
 		baseFee := k.GetBaseFee(ctx, ethCfg)
@@ -58,13 +62,19 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 
 		gas := feeTx.GetGas()
 		feeCoins := feeTx.GetFee()
-		fee := feeCoins.AmountOfNoDenomValidation(denom)
+		feeEvm := feeCoins.AmountOfNoDenomValidation(denomEvm)
+		feeImv := feeCoins.AmountOfNoDenomValidation(denomImv)
 
-		feeCap := fee.Quo(sdkmath.NewIntFromUint64(gas))
+		feeCap := feeEvm.Quo(sdkmath.NewIntFromUint64(gas))
 		baseFeeInt := sdkmath.NewIntFromBigInt(baseFee)
 
 		if feeCap.LT(baseFeeInt) {
-			return nil, 0, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFee, "insufficient gas prices; got: %s required: %s", feeCap, baseFeeInt)
+			// fallback to imv fee
+			feeCap = feeImv.Quo(sdkmath.NewIntFromUint64(gas))
+			if feeCap.LT(baseFeeInt) {
+				return nil, 0, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFee, "insufficient gas prices; got: %s required: %s", feeCap, baseFeeInt)
+			}
+			denomRes = denomImv
 		}
 
 		// calculate the effective gas price using the EIP-1559 logic.
@@ -73,7 +83,7 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 		// NOTE: create a new coins slice without having to validate the denom
 		effectiveFee := sdk.Coins{
 			{
-				Denom:  denom,
+				Denom:  denomRes,
 				Amount: effectivePrice.Mul(sdkmath.NewIntFromUint64(gas)),
 			},
 		}
