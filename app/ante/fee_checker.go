@@ -2,6 +2,7 @@ package ante
 
 import (
 	"fmt"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"math"
 
 	sdkmath "cosmossdk.io/math"
@@ -21,7 +22,7 @@ import (
 // - when `ExtensionOptionDynamicFeeTx` is omitted, `tipFeeCap` defaults to `MaxInt64`.
 // - when london hardfork is not enabled, it fallbacks to SDK default behavior (validator min-gas-prices).
 // - Tx priority is set to `effectiveGasPrice / DefaultPriorityReduction`.
-func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
+func NewDynamicFeeChecker(k DynamicFeeEVMKeeper, sk stakingkeeper.Keeper) authante.TxFeeChecker {
 	return func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
 		feeTx, ok := tx.(sdk.FeeTx)
 		if !ok {
@@ -34,7 +35,9 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 		}
 
 		params := k.GetParams(ctx)
-		denom := params.EvmDenom
+		denomEvm := params.EvmDenom
+		denomSt := sk.BondDenom(ctx)
+		denomRes := denomEvm
 		ethCfg := params.ChainConfig.EthereumConfig(k.ChainID())
 
 		baseFee := k.GetBaseFee(ctx, ethCfg)
@@ -58,13 +61,19 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 
 		gas := feeTx.GetGas()
 		feeCoins := feeTx.GetFee()
-		fee := feeCoins.AmountOfNoDenomValidation(denom)
+		feeEvm := feeCoins.AmountOfNoDenomValidation(denomEvm)
+		feeImv := feeCoins.AmountOfNoDenomValidation(denomSt)
 
-		feeCap := fee.Quo(sdkmath.NewIntFromUint64(gas))
+		feeCap := feeEvm.Quo(sdkmath.NewIntFromUint64(gas))
 		baseFeeInt := sdkmath.NewIntFromBigInt(baseFee)
 
 		if feeCap.LT(baseFeeInt) {
-			return nil, 0, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFee, "insufficient gas prices; got: %s required: %s", feeCap, baseFeeInt)
+			// fallback to imv fee
+			feeCap = feeImv.Quo(sdkmath.NewIntFromUint64(gas))
+			if feeCap.LT(baseFeeInt) {
+				return nil, 0, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFee, "insufficient gas prices; got: %s required: %s", feeCap, baseFeeInt)
+			}
+			denomRes = denomSt
 		}
 
 		// calculate the effective gas price using the EIP-1559 logic.
@@ -73,7 +82,7 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 		// NOTE: create a new coins slice without having to validate the denom
 		effectiveFee := sdk.Coins{
 			{
-				Denom:  denom,
+				Denom:  denomRes,
 				Amount: effectivePrice.Mul(sdkmath.NewIntFromUint64(gas)),
 			},
 		}

@@ -763,7 +763,7 @@ func (app *ImversedApp) setAnteHandler(txConfig client.TxConfig, maxGasWanted ui
 		FeeMarketKeeper:        app.FeeMarketKeeper,
 		MaxTxGasWanted:         maxGasWanted,
 		ExtensionOptionChecker: ethermint.HasDynamicFeeExtensionOption,
-		TxFeeChecker:           ante.NewDynamicFeeChecker(app.EvmKeeper),
+		TxFeeChecker:           ante.NewDynamicFeeChecker(app.EvmKeeper, app.StakingKeeper),
 	})
 	if err != nil {
 		panic(err)
