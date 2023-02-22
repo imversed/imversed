@@ -2,6 +2,7 @@ package ante
 
 import (
 	"fmt"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"math"
 
 	sdkmath "cosmossdk.io/math"
@@ -11,8 +12,6 @@ import (
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	ethermint "github.com/evmos/ethermint/types"
 	"github.com/evmos/ethermint/x/evm/types"
-
-	imvtypes "github.com/imversed/imversed/types"
 )
 
 // NewDynamicFeeChecker returns a `TxFeeChecker` that applies a dynamic fee to
@@ -23,7 +22,7 @@ import (
 // - when `ExtensionOptionDynamicFeeTx` is omitted, `tipFeeCap` defaults to `MaxInt64`.
 // - when london hardfork is not enabled, it fallbacks to SDK default behavior (validator min-gas-prices).
 // - Tx priority is set to `effectiveGasPrice / DefaultPriorityReduction`.
-func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
+func NewDynamicFeeChecker(k DynamicFeeEVMKeeper, sk stakingkeeper.Keeper) authante.TxFeeChecker {
 	return func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
 		feeTx, ok := tx.(sdk.FeeTx)
 		if !ok {
@@ -37,7 +36,7 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 
 		params := k.GetParams(ctx)
 		denomEvm := params.EvmDenom
-		denomImv := imvtypes.DefaultBondDenom
+		denomSt := sk.BondDenom(ctx)
 		denomRes := denomEvm
 		ethCfg := params.ChainConfig.EthereumConfig(k.ChainID())
 
@@ -63,7 +62,7 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 		gas := feeTx.GetGas()
 		feeCoins := feeTx.GetFee()
 		feeEvm := feeCoins.AmountOfNoDenomValidation(denomEvm)
-		feeImv := feeCoins.AmountOfNoDenomValidation(denomImv)
+		feeImv := feeCoins.AmountOfNoDenomValidation(denomSt)
 
 		feeCap := feeEvm.Quo(sdkmath.NewIntFromUint64(gas))
 		baseFeeInt := sdkmath.NewIntFromBigInt(baseFee)
@@ -74,7 +73,7 @@ func NewDynamicFeeChecker(k DynamicFeeEVMKeeper) authante.TxFeeChecker {
 			if feeCap.LT(baseFeeInt) {
 				return nil, 0, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFee, "insufficient gas prices; got: %s required: %s", feeCap, baseFeeInt)
 			}
-			denomRes = denomImv
+			denomRes = denomSt
 		}
 
 		// calculate the effective gas price using the EIP-1559 logic.
