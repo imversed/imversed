@@ -5,6 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/imversed/imversed/x/xverse/types"
+	"strings"
 )
 
 func (k Keeper) HasVerse(ctx sdk.Context, verse types.Verse) bool {
@@ -98,4 +99,36 @@ func (k Keeper) GetAllVerses(ctx sdk.Context) (list []types.Verse) {
 	}
 
 	return
+}
+
+// Add Dao to verse and update lowercased smartContracts filed by daosubcontracts
+func (k Keeper) AddDao(ctx sdk.Context, verse *types.Verse, msgDao *types.MsgAddDaoToVerse) error {
+	if !k.HasVerse(ctx, *verse) {
+		return sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name %s does not exists", verse.Name)
+	}
+
+	verse.Dao = strings.ToLower(msgDao.DaoContract)
+
+	err := k.SetContract(ctx, types.Contract{
+		Hash:  msgDao.DaoContract,
+		Verse: verse.Name,
+	})
+	if err != nil {
+		return err
+	}
+
+	verse.SmartContracts = append(verse.SmartContracts, msgDao.DaoContract)
+	for _, sub := range msgDao.DaoSubContracts {
+		err := k.SetContract(ctx, types.Contract{
+			Hash:  sub,
+			Verse: verse.Name,
+		})
+		if err != nil {
+			return err
+		}
+		verse.SmartContracts = append(verse.SmartContracts, strings.ToLower(sub))
+	}
+
+	verse.DaoHeight = ctx.BlockHeight()
+	return nil
 }

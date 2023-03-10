@@ -24,6 +24,8 @@ service Msg {
   rpc UpdateVerseIcon(MsgUpdateVerseIcon) returns (MsgUpdateVerseIconResponse);
 
   rpc UpdateVerseDescription(MsgUpdateVerseDescription) returns (MsgUpdateVerseDescriptionResponse);
+
+  rpc AddDaoToVerse(MsgAddDaoToVerse) returns (MsgAddDaoToVerseResponse);
 }
 
 message MsgCreateVerse {
@@ -135,5 +137,18 @@ message MsgUpdateVerseDescriptionResponse {
 }
 
 message MsgUpdateVerseIconResponse {
+}
+
+message MsgAddDaoToVerse {
+  string sender = 1;
+
+  string verse_name = 2;
+
+  string dao_contract = 3;
+
+  repeated string dao_sub_contracts = 4;
+}
+
+message MsgAddDaoToVerseResponse {
 }
 // this line is used by starport scaffolding # proto/tx/message

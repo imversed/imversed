@@ -309,3 +309,33 @@ func (k Keeper) UpdateVerseDescription(
 
 	return &types.MsgUpdateVerseDescriptionResponse{}, nil
 }
+
+func (k Keeper) AddDaoToVerse(goCtx context.Context, msgVerse *types.MsgAddDaoToVerse) (*types.MsgAddDaoToVerseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	verse, found := k.GetVerse(ctx, msgVerse.VerseName)
+	if !found {
+		return nil, sdkerrors.Wrapf(types.ErrVerseNotfound, "verse with name \"%s\" does not exists", msgVerse.VerseName)
+	}
+
+	if verse.Owner != msgVerse.Sender {
+		return nil, status.Error(codes.Unauthenticated, "sender has not authorized to add DAO")
+	}
+
+	if verse.Dao != "" {
+		return nil, status.Error(codes.AlreadyExists, "verse already has a DAO")
+	}
+
+	err := k.AddDao(ctx, &verse, msgVerse)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.UpdateVerse(ctx, verse)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgAddDaoToVerseResponse{}, nil
+}

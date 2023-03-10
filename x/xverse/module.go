@@ -40,7 +40,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
 
 // ConsensusVersion returns the consensus state-breaking version for the module.
 func (AppModuleBasic) ConsensusVersion() uint64 {
-	return 3
+	return 4
 }
 
 // RegisterInterfaces registers interfaces and implementations of the verse module.
@@ -129,7 +129,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 
 	m := keeper.NewMigrator(am.keeper)
 
-	err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3)
+	err := cfg.RegisterMigration(types.ModuleName, 3, m.Migrate3to4)
 	if err != nil {
 		panic(err)
 	}

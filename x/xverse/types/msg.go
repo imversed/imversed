@@ -24,6 +24,7 @@ const (
 	TypeDeauthorizeKeyToVerse   = "deauthorize_key_to_verse"
 	TypeUpdateIcon              = "update_icon"
 	TypeUpdateDescription       = "update_description"
+	TypeAddDaoToVerse           = "add_dao_to_verse"
 	NameLength                  = 50
 	NameRegex                   = "^[A-Za-z0-9]*$"
 	DescriptionLength           = 2000
@@ -431,6 +432,50 @@ func (msg *MsgUpdateVerseDescription) GetSignBytes() []byte {
 
 // GetSigners defines whose signature is required
 func (msg *MsgUpdateVerseDescription) GetSigners() []sdk.AccAddress {
+	var signers []sdk.AccAddress
+
+	addr, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil
+	}
+	signers = append(signers, addr)
+
+	return signers
+}
+
+// Route should return the name of the module
+func (msg *MsgAddDaoToVerse) Route() string { return RouterKey }
+
+// Type should return the action
+func (msg *MsgAddDaoToVerse) Type() string { return TypeAddDaoToVerse }
+
+// ValidateBasic runs stateless checks on the message
+func (msg *MsgAddDaoToVerse) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid sender address")
+	}
+
+	if !common.IsHexAddress(msg.DaoContract) {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid contract hex address '%s'", msg.DaoContract)
+	}
+
+	for _, sub := range msg.DaoSubContracts {
+		if !common.IsHexAddress(sub) {
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sub contract hex address '%s'", sub)
+		}
+	}
+
+	return nil
+}
+
+// GetSignBytes encodes the message for signing
+func (msg *MsgAddDaoToVerse) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners defines whose signature is required
+func (msg *MsgAddDaoToVerse) GetSigners() []sdk.AccAddress {
 	var signers []sdk.AccAddress
 
 	addr, err := sdk.AccAddressFromBech32(msg.Sender)

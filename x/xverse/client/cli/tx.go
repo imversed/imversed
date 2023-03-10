@@ -33,6 +33,7 @@ func NewTxCmd() *cobra.Command {
 		RemoveKeyFromVerse(),
 		UpdateVerseDescription(),
 		UpdateVerseIcon(),
+		AddDaoToVerse(),
 	)
 	return txCmd
 }
@@ -423,6 +424,43 @@ func UpdateVerseDescription() *cobra.Command {
 				Sender:      sender.String(),
 				VerseName:   args[1],
 				Description: args[0],
+			}
+
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(cliCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+// AddDaoToVerse add dao to verse
+func AddDaoToVerse() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "add-dao [verse_name] [dao_main] [dao_subs...]",
+		Short: "Add dao to verse",
+		Long:  "Add dao to verse",
+		Args:  cobra.MinimumNArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := cliCtx.GetFromAddress()
+
+			msg := &types.MsgAddDaoToVerse{
+				Sender:      sender.String(),
+				VerseName:   args[0],
+				DaoContract: args[1],
+			}
+
+			args = args[2:]
+			for _, arg := range args {
+				msg.DaoSubContracts = append(msg.DaoSubContracts, arg)
 			}
 
 			if err := msg.ValidateBasic(); err != nil {

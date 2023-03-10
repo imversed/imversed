@@ -19,4 +19,8 @@ message Verse {
   string oracle = 6;
 
   repeated string authenticated_keys = 7;
+
+  string dao = 8;
+
+  int64 dao_height = 9;
 }
